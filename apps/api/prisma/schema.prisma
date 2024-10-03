@@ -1,0 +1,139 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name     String
+  email    String @unique
+  password String
+
+  tenant   Tenant?
+  customer Customer?
+}
+
+model Tenant {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  properties Property[]
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userid String @unique
+  user   User   @relation(fields: [userid], references: [id], onDelete: Cascade)
+
+  bookings Booking[]
+  reviews  Review[]
+}
+
+model Property {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name        String
+  address     String
+  description String   @db.VarChar(1000)
+  pictureUrl  String
+  room        Room[]
+  reviews     Review[]
+
+  location Location?
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [userId], onDelete: Cascade)
+
+  @@unique([name, address], name: "uniqueProperty")
+}
+
+model Location {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lat       Float
+  lng       Float
+
+  propertyId String   @unique
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+model Room {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  type         String
+  description  String @db.VarChar(1000)
+  pictureUrl   String
+  price        Int
+  roomCapacity Int
+
+  bookings Booking[]
+
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@unique([type, propertyId], name: "uniqueRoom")
+}
+
+model Booking {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  startDate DateTime
+  endDate   DateTime
+
+  review Review[]
+
+  roomId String
+  room   Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@unique([startDate, endDate, roomId], name: "uniqueBooking")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  customerId String
+  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  bookingId String
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  propertyId String
+  property   Property? @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  review String
+  star   Int
+
+  @@unique([customerId, propertyId], name: "uniqueReview")
+}
