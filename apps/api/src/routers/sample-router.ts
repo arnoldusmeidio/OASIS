@@ -1,4 +1,4 @@
-import { getSampleData, getSampleDataById, createSampleData } from "@/controllers/sample.controller";
+import { getSampleData, getSampleDataById, createSampleData } from "@/controllers/sample-controller";
 import { Router } from "express";
 
 const router = Router();
