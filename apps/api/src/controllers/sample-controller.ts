@@ -22,10 +22,10 @@ export async function getSampleDataById(req: Request, res: Response) {
 }
 
 export async function createSampleData(req: Request, res: Response) {
-   const { name, email, password } = req.body;
+   const { name, email, password, accountProvider } = req.body;
 
    const newSampleData = await prisma.user.create({
-      data: { name, email, password },
+      data: { name, email, password, accountProvider },
    });
 
    return res.status(201).send(newSampleData);

@@ -18,12 +18,20 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name     String
-  email    String @unique
-  password String
+  name       String
+  email      String  @unique
+  password   String?
+  pictureUrl String?
+
+  accountProvider AccountProvider
 
   tenant   Tenant?
   customer Customer?
+}
+
+enum AccountProvider {
+  CREDENTIALS
+  GOOGLE
 }
 
 model Tenant {
