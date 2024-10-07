@@ -12,6 +12,7 @@ async function inputData() {
          email: "budi123@mail.com",
          password: hashedPassword,
          tenant: { create: {} },
+         accountProvider: "CREDENTIALS",
       },
    });
 
@@ -21,6 +22,7 @@ async function inputData() {
          email: "joko123@mail.com",
          password: hashedPassword,
          tenant: { create: {} },
+         accountProvider: "CREDENTIALS",
       },
    });
 
@@ -30,6 +32,7 @@ async function inputData() {
          email: "alex123@mail.com",
          password: hashedPassword,
          customer: { create: {} },
+         accountProvider: "CREDENTIALS",
       },
    });
 
