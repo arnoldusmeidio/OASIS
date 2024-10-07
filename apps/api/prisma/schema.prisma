@@ -107,6 +107,8 @@ model Booking {
   startDate DateTime
   endDate   DateTime
 
+  bookingNumber String
+
   review Review[]
 
   roomId String
@@ -115,7 +117,7 @@ model Booking {
   customerId String
   customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
 
-  @@unique([startDate, endDate, roomId], name: "uniqueBooking")
+  @@unique([startDate, endDate, roomId, bookingNumber], name: "uniqueBooking")
 }
 
 model Review {
