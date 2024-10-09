@@ -3,6 +3,7 @@ import prisma from "@/prisma";
 import crypto from "crypto";
 import { RequestWithUserId } from "@/types";
 import { Resend } from "resend";
+import { bookingSchema } from "@/schemas/booking-schema";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -26,44 +27,49 @@ export async function getSampleDataById(req: Request, res: Response) {
    return res.status(200).send(sample);
 }
 
-export async function createBooking(req: RequestWithUserId, res: Response, next: NextFunction) {
+export async function createBooking(req: Request, res: Response, next: NextFunction) {
    try {
       const id = (req as RequestWithUserId).user?.id;
       const user = await prisma.user.findUnique({
          where: { id },
-         include: { customer: true },
       });
+
+      console.log(user!.id);
 
       if (!user) return res.status(400).json({ message: "Failed to get user", ok: false });
 
-      //const parsedData = req.body
-      const { startDate, endDate, roomId, customerId } = req.body;
+      const { roomId } = req.params;
+
+      const validRoomId = await prisma.room.findUnique({
+         where: { id: roomId },
+      });
+
+      if (!validRoomId) {
+         return res.status(404).json({
+            message: "Room not found",
+            ok: false,
+         });
+      }
+
+      // const parsedData = bookingSchema.parse(req.body);
+      // const { startDate, endDate } = parsedData;
+      const { startDate, endDate } = req.body;
 
       const bookingNumber = crypto.randomBytes(3).toString("hex");
+
+      if (endDate < startDate) return res.status(400).json({ message: "Invalid Datetime", ok: false });
 
       const newBooking = await prisma.booking.create({
          data: {
             startDate: new Date(startDate),
             endDate: new Date(endDate),
             bookingNumber,
-            roomId: roomId,
-            customerId: customerId,
+            roomId: validRoomId.id,
+            customerId: user.id,
          },
       });
 
       if (!newBooking) return res.status(400).json({ message: "Failed to create booking", ok: false });
-
-      const token = crypto.randomBytes(20).toString("hex");
-      const confirmationLink = `http://localhost:${process.env.PORT}/api/v1/auth/confirm-email?token=${token}`;
-
-      const { data, error } = await resend.emails.send({
-         from: "Oasis <oasis@resend.dev>",
-         to: [user.email],
-         subject: "Email Confirmation (Oasis)",
-         html: `<strong>Hello, ${
-            user.name
-         }!</strong><p> Please confirm your email by clicking on the following link: <a href="${confirmationLink}">Confirmation Link</a></p>`,
-      });
 
       return res.status(201).json({ data: newBooking, ok: true });
    } catch (error) {

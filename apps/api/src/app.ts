@@ -4,6 +4,7 @@ import cors from "cors";
 import authRouter from "./routers/auth-router";
 import sampleRouter from "./routers/sample-router";
 import userRouter from "./routers/user-router";
+import bookingRouter from "./routers/booking-router";
 import { verifyToken } from "./middlewares/auth-middleware";
 import { notFoundMiddleware } from "./middlewares/not-found-middleware";
 import { error } from "./middlewares/error-middleware";
@@ -35,6 +36,9 @@ const createApp = () => {
 
    // User Route
    app.use("/api/v1/users", verifyToken, userRouter);
+
+   // Booking Route
+   app.use("/api/v1/bookings", verifyToken, bookingRouter);
 
    // Not found handler
    app.use(notFoundMiddleware);
