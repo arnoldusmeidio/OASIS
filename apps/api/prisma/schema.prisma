@@ -113,7 +113,8 @@ model Booking {
   startDate DateTime
   endDate   DateTime
 
-  bookingNumber String
+  bookingNumber String        @unique
+  paymentStatus PaymentStatus
 
   review Review[]
 
@@ -124,6 +125,11 @@ model Booking {
   customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
 
   @@unique([startDate, endDate, roomId, bookingNumber], name: "uniqueBooking")
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
 }
 
 model Review {
