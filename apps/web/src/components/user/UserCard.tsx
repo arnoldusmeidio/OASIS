@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader } from "../ui/card";
 
 export default function UserCard() {
    const { user } = useUserStore();
-   const role = user?.tenant ? "Tenant" : "Customer";
+   const role = user?.tenant ? "Tenant" : user?.customer ? "Customer" : "-";
 
    return (
       <Card className="w-full shadow-md">

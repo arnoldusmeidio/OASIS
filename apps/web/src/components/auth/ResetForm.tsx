@@ -1,49 +1,43 @@
 "use client";
 
 import * as z from "zod";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { emailVerificationSchema } from "@/schemas/auth-schema";
+import { resetSchema } from "@/schemas/auth-schema";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { toast } from "sonner";
 
 import CardWrapper from "@/components/auth/CardWrapper";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-export default function RegisterForm() {
+export default function ResetForm() {
    const [error, setError] = useState<string | undefined>("");
    const [success, setSuccess] = useState<string | undefined>("");
 
-   const searchParams = useSearchParams();
-   const errorMessage = searchParams.get("error");
-
-   useEffect(() => {
-      if (errorMessage) setError(errorMessage);
-   }, []);
-
    const router = useRouter();
 
-   const form = useForm<z.infer<typeof emailVerificationSchema>>({
-      resolver: zodResolver(emailVerificationSchema),
-      mode: "onBlur",
+   const form = useForm<z.infer<typeof resetSchema>>({
+      resolver: zodResolver(resetSchema),
       defaultValues: {
          email: "",
       },
+      mode: "onBlur",
    });
 
    const {
       formState: { isSubmitting },
    } = form;
 
-   const onSubmit = async (values: z.infer<typeof emailVerificationSchema>) => {
+   const onSubmit = async (values: z.infer<typeof resetSchema>) => {
       try {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/auth/email-verification`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/auth/user/password`, {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
@@ -59,6 +53,7 @@ export default function RegisterForm() {
          } else {
             setError("");
             setSuccess(data.message);
+            toast.success(data.message);
             form.reset();
             router.refresh();
          }
@@ -70,12 +65,10 @@ export default function RegisterForm() {
 
    return (
       <CardWrapper
-         headerLabel="Create an account"
-         backButtonLabel="Already have an account"
+         headerLabel="Forgot your password?"
+         backButtonLabel="Back to login"
          backButtonHref="/login"
-         showSocial
          showBackButton
-         socialLabel="Signup with Google"
       >
          <Form {...form}>
             <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
@@ -97,7 +90,7 @@ export default function RegisterForm() {
                <FormError message={error} />
                <FormSuccess message={success} />
                <Button className="w-full" type="submit" disabled={isSubmitting}>
-                  Create account
+                  Send reset email
                </Button>
             </form>
          </Form>

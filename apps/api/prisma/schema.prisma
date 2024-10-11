@@ -34,24 +34,44 @@ enum AccountProvider {
   GOOGLE
 }
 
-model Tenant {
+model VerificationToken {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  email     String
+  token     String   @unique
+  expires   DateTime
 
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([email, token])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String
+  token     String   @unique
+  expires   DateTime
+
+  @@unique([email, token])
+}
+
+model Tenant {
+  id        String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [id], references: [id], onDelete: Cascade)
 
   properties Property[]
 }
 
 model Customer {
-  id        String   @id @default(uuid())
+  id        String   @id
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  userid String @unique
-  user   User   @relation(fields: [userid], references: [id], onDelete: Cascade)
+  user User @relation(fields: [id], references: [id], onDelete: Cascade)
 
   bookings Booking[]
   reviews  Review[]
@@ -72,7 +92,7 @@ model Property {
   location Location?
 
   tenantId String
-  tenant   Tenant @relation(fields: [tenantId], references: [userId], onDelete: Cascade)
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@unique([name, address], name: "uniqueProperty")
 }

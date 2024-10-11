@@ -5,16 +5,17 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { RegisterSchema } from "@/schemas";
+import { registerSchema } from "@/schemas/auth-schema";
 
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
-import CardWrapper from "./CardWrapper";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import FormError from "../FormError";
-import FormSuccess from "../FormSuccess";
+import CardWrapper from "@/components/auth/CardWrapper";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import FormError from "@/components/FormError";
+import FormSuccess from "@/components/FormSuccess";
 import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 interface RoleProps {
    role: string;
@@ -35,8 +36,8 @@ export default function CredentialForm({ role }: RoleProps) {
       router.refresh();
    }
 
-   const form = useForm<z.infer<typeof RegisterSchema>>({
-      resolver: zodResolver(RegisterSchema),
+   const form = useForm<z.infer<typeof registerSchema>>({
+      resolver: zodResolver(registerSchema),
       mode: "onBlur",
       defaultValues: {
          name: "",
@@ -50,37 +51,39 @@ export default function CredentialForm({ role }: RoleProps) {
       formState: { isSubmitting },
    } = form;
 
-   const onSubmit = async (values: z.infer<typeof RegisterSchema>) => {
+   const onSubmit = async (values: z.infer<typeof registerSchema>) => {
       try {
          const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/auth/register`, {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
             },
-            body: JSON.stringify({ ...values, role }),
+            body: JSON.stringify({ ...values, role, token }),
             credentials: "include",
          });
          const data = await response.json();
 
          if (!data.ok) {
             setSuccess("");
-            setError("data.message");
+            setError(data.message);
          } else {
             setError("");
             setSuccess(data.message);
+            toast.success(data.message);
             form.reset();
-
             router.push("/login");
             router.refresh();
          }
       } catch (error) {
          console.error(error);
+         setError("Something went wrong!");
       }
    };
 
    return (
       <CardWrapper
          headerLabel={role == "customer" ? "Create a customer account" : "Create a tenant account"}
+         showBackButton
          backButtonLabel="Already have an account"
          backButtonHref="/login"
       >

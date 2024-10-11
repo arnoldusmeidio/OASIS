@@ -6,19 +6,17 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { UpdateRoleSchema } from "@/schemas";
+import { updateRoleSchema } from "@/schemas/auth-schema";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import RoleCardWrapper from "@/components/auth/RoleCardWrapper";
-import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function SelectRolePage() {
    const router = useRouter();
 
-   const { toast } = useToast();
-
-   const form = useForm<z.infer<typeof UpdateRoleSchema>>({
-      resolver: zodResolver(UpdateRoleSchema),
+   const form = useForm<z.infer<typeof updateRoleSchema>>({
+      resolver: zodResolver(updateRoleSchema),
       defaultValues: {
          role: "customer",
       },
@@ -28,7 +26,7 @@ export default function SelectRolePage() {
       formState: { isSubmitting },
    } = form;
 
-   const onSubmit = async (values: z.infer<typeof UpdateRoleSchema>) => {
+   const onSubmit = async (values: z.infer<typeof updateRoleSchema>) => {
       try {
          const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users/role`, {
             method: "PUT",
@@ -40,20 +38,16 @@ export default function SelectRolePage() {
          });
          const data = await response.json();
          if (!data.ok) {
-            toast({
-               variant: "destructive",
-               description: `${data.message}`,
-            });
+            toast.error(data.message);
          } else {
-            toast({
-               description: `${data.message}`,
-            });
+            toast.success(data.message);
             form.reset();
             router.push("/");
             router.refresh();
          }
       } catch (error) {
          console.error(error);
+         toast.error("Something went wrong!");
       }
    };
 

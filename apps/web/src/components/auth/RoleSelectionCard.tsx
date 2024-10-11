@@ -1,7 +1,7 @@
 // "use client";
 
 import Image from "next/image";
-import { Card, CardContent, CardHeader } from "../ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface RoleCard {
    roleType: string;

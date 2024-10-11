@@ -13,6 +13,10 @@
 /.next/
 /out/
 
+# playground
+/src/app/playground
+/src/app/playground-form-append
+
 # production
 /build
 
