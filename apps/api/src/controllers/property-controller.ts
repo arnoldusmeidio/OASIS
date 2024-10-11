@@ -31,38 +31,17 @@ export async function Pagination(req: Request, res: Response, next: NextFunction
 
 export async function createProperty(req: Request, res: Response, next: NextFunction) {
    try {
-      const {
-         name,
-         address,
-         propertydescription,
-         pictureUrl,
-         room,
-         reviews,
-         type,
-         roomDescription,
-         roomCapacity,
-         price,
-         bookings,
-         tenantId,
-      } = req.body;
+      const { propertyName, propertyAddress, propertyDescription, propertyImage, room, tenantId } = req.body;
 
       await prisma.property.create({
          data: {
-            name,
-            address,
-            description: propertydescription,
-            pictureUrl,
+            name: propertyName,
+            address: propertyAddress,
+            description: propertyDescription,
+            pictureUrl: propertyImage,
             room: {
-               create: {
-                  type,
-                  description: roomDescription,
-                  pictureUrl,
-                  price,
-                  roomCapacity,
-                  bookings,
-               },
+               create: room,
             },
-            reviews,
             tenantId,
          },
       });
