@@ -5,11 +5,9 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { loginSchema } from "@/schemas/auth-schema";
+import { emailVerificationSchema } from "@/schemas/auth-schema";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Checkbox } from "@/components/ui/checkbox";
-import { toast } from "sonner";
 
 import CardWrapper from "@/components/auth/CardWrapper";
 import { Input } from "@/components/ui/input";
@@ -17,9 +15,8 @@ import { Button } from "@/components/ui/button";
 import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 
-export default function LoginForm() {
+export default function ChangeEmailForm() {
    const [error, setError] = useState<string | undefined>("");
    const [success, setSuccess] = useState<string | undefined>("");
 
@@ -32,23 +29,21 @@ export default function LoginForm() {
 
    const router = useRouter();
 
-   const form = useForm<z.infer<typeof loginSchema>>({
-      resolver: zodResolver(loginSchema),
+   const form = useForm<z.infer<typeof emailVerificationSchema>>({
+      resolver: zodResolver(emailVerificationSchema),
+      mode: "onBlur",
       defaultValues: {
          email: "",
-         password: "",
-         rememberMe: false,
       },
-      mode: "onBlur",
    });
 
    const {
       formState: { isSubmitting },
    } = form;
 
-   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+   const onSubmit = async (values: z.infer<typeof emailVerificationSchema>) => {
       try {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/auth/login`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/auth/user/email`, {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
@@ -57,15 +52,14 @@ export default function LoginForm() {
             credentials: "include",
          });
          const data = await response.json();
+
          if (!data.ok) {
             setSuccess("");
             setError(data.message);
          } else {
             setError("");
             setSuccess(data.message);
-            toast.success(data.message, { duration: 1500 });
             form.reset();
-            router.push("/");
             router.refresh();
          }
       } catch (error) {
@@ -75,14 +69,7 @@ export default function LoginForm() {
    };
 
    return (
-      <CardWrapper
-         headerLabel="Welcome back"
-         backButtonLabel="Don't have an account?"
-         backButtonHref="/register"
-         showSocial
-         showBackButton
-         socialLabel="Login with Google"
-      >
+      <CardWrapper headerLabel="Change your email">
          <Form {...form}>
             <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
                <div className="space-y-4">
@@ -99,42 +86,11 @@ export default function LoginForm() {
                         </FormItem>
                      )}
                   />
-                  <FormField
-                     control={form.control}
-                     name="password"
-                     render={({ field }) => (
-                        <FormItem>
-                           <FormLabel>Password</FormLabel>
-                           <FormControl>
-                              <Input {...field} disabled={isSubmitting} placeholder="********" type="password" />
-                           </FormControl>
-                           <Button size={"sm"} variant={"link"} asChild className="px-0 font-normal">
-                              <Link href={"/reset"}>Forgot password?</Link>
-                           </Button>
-                           <FormMessage />
-                        </FormItem>
-                     )}
-                  />
-                  <FormField
-                     control={form.control}
-                     name="rememberMe"
-                     render={({ field }) => (
-                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md">
-                           <FormControl>
-                              <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                           </FormControl>
-                           <div className="space-y-1 leading-none">
-                              <FormLabel>Remember Me</FormLabel>
-                              <FormMessage />
-                           </div>
-                        </FormItem>
-                     )}
-                  />
                </div>
                <FormError message={error} />
                <FormSuccess message={success} />
                <Button className="w-full" type="submit" disabled={isSubmitting}>
-                  Login
+                  Change email
                </Button>
             </form>
          </Form>

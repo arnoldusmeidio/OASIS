@@ -1,15 +1,13 @@
 "use client";
 
 import * as z from "zod";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { loginSchema } from "@/schemas/auth-schema";
+import { newPasswordSchema } from "@/schemas/auth-schema";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Checkbox } from "@/components/ui/checkbox";
-import { toast } from "sonner";
 
 import CardWrapper from "@/components/auth/CardWrapper";
 import { Input } from "@/components/ui/input";
@@ -17,27 +15,22 @@ import { Button } from "@/components/ui/button";
 import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
+import { toast } from "sonner";
 
-export default function LoginForm() {
+export default function NewPasswordForm() {
+   const searchParams = useSearchParams();
+   const token = searchParams.get("token");
+
    const [error, setError] = useState<string | undefined>("");
    const [success, setSuccess] = useState<string | undefined>("");
 
-   const searchParams = useSearchParams();
-   const errorMessage = searchParams.get("error");
-
-   useEffect(() => {
-      if (errorMessage) setError(errorMessage);
-   }, []);
-
    const router = useRouter();
 
-   const form = useForm<z.infer<typeof loginSchema>>({
-      resolver: zodResolver(loginSchema),
+   const form = useForm<z.infer<typeof newPasswordSchema>>({
+      resolver: zodResolver(newPasswordSchema),
       defaultValues: {
-         email: "",
          password: "",
-         rememberMe: false,
+         confirmPassword: "",
       },
       mode: "onBlur",
    });
@@ -46,14 +39,14 @@ export default function LoginForm() {
       formState: { isSubmitting },
    } = form;
 
-   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+   const onSubmit = async (values: z.infer<typeof newPasswordSchema>) => {
       try {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/auth/login`, {
-            method: "POST",
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/auth/user/password`, {
+            method: "PUT",
             headers: {
                "Content-Type": "application/json",
             },
-            body: JSON.stringify(values),
+            body: JSON.stringify({ ...values, token }),
             credentials: "include",
          });
          const data = await response.json();
@@ -63,9 +56,9 @@ export default function LoginForm() {
          } else {
             setError("");
             setSuccess(data.message);
-            toast.success(data.message, { duration: 1500 });
+            toast.success(data.message);
             form.reset();
-            router.push("/");
+            router.push("/login");
             router.refresh();
          }
       } catch (error) {
@@ -76,29 +69,14 @@ export default function LoginForm() {
 
    return (
       <CardWrapper
-         headerLabel="Welcome back"
-         backButtonLabel="Don't have an account?"
-         backButtonHref="/register"
-         showSocial
+         headerLabel="Enter a new password"
+         backButtonLabel="Back to login"
+         backButtonHref="/login"
          showBackButton
-         socialLabel="Login with Google"
       >
          <Form {...form}>
             <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
                <div className="space-y-4">
-                  <FormField
-                     control={form.control}
-                     name="email"
-                     render={({ field }) => (
-                        <FormItem>
-                           <FormLabel>Email</FormLabel>
-                           <FormControl>
-                              <Input {...field} disabled={isSubmitting} placeholder="john.doe@email.com" type="email" />
-                           </FormControl>
-                           <FormMessage />
-                        </FormItem>
-                     )}
-                  />
                   <FormField
                      control={form.control}
                      name="password"
@@ -108,25 +86,20 @@ export default function LoginForm() {
                            <FormControl>
                               <Input {...field} disabled={isSubmitting} placeholder="********" type="password" />
                            </FormControl>
-                           <Button size={"sm"} variant={"link"} asChild className="px-0 font-normal">
-                              <Link href={"/reset"}>Forgot password?</Link>
-                           </Button>
                            <FormMessage />
                         </FormItem>
                      )}
                   />
                   <FormField
                      control={form.control}
-                     name="rememberMe"
+                     name="confirmPassword"
                      render={({ field }) => (
-                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md">
+                        <FormItem>
+                           <FormLabel>Confirm Password</FormLabel>
                            <FormControl>
-                              <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                              <Input {...field} disabled={isSubmitting} placeholder="********" type="password" />
                            </FormControl>
-                           <div className="space-y-1 leading-none">
-                              <FormLabel>Remember Me</FormLabel>
-                              <FormMessage />
-                           </div>
+                           <FormMessage />
                         </FormItem>
                      )}
                   />
@@ -134,7 +107,7 @@ export default function LoginForm() {
                <FormError message={error} />
                <FormSuccess message={success} />
                <Button className="w-full" type="submit" disabled={isSubmitting}>
-                  Login
+                  Update password
                </Button>
             </form>
          </Form>

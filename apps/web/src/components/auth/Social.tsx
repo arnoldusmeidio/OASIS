@@ -2,7 +2,7 @@
 
 import { FcGoogle } from "react-icons/fc";
 
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
 interface LabelProps {
