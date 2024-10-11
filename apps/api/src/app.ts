@@ -9,6 +9,7 @@ import { verifyToken } from "./middlewares/auth-middleware";
 import { notFoundMiddleware } from "./middlewares/not-found-middleware";
 import { error } from "./middlewares/error-middleware";
 import cookieParser from "cookie-parser";
+import { getAllPropertyBeta } from "./controllers/sample-controller";
 
 const createApp = () => {
    const app = express();
@@ -39,6 +40,9 @@ const createApp = () => {
 
    // Booking Route
    app.use("/api/v1/bookings", verifyToken, bookingRouter);
+
+   // Playground Route for testing
+   app.use("/api/v1/playgrounds", getAllPropertyBeta);
 
    // Not found handler
    app.use(notFoundMiddleware);

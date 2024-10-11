@@ -7,50 +7,6 @@ import { bookingSchema } from "@/schemas/booking-schema";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function getBookings(req: RequestWithUserId, res: Response) {
-   const id = (req as RequestWithUserId).user?.id;
-   const user = await prisma.user.findUnique({
-      where: { id, customer: { id } },
-   });
-
-   if (!user) return res.status(400).json({ message: "Failed to aunthenticate user", ok: false });
-
-   const bookings = await prisma.booking.findMany({
-      where: { customerId: user.id },
-   });
-
-   if (!bookings) {
-      return res.send(200).json({ data: bookings, message: "No bookings found", ok: true });
-   }
-
-   return res.status(200).json({ data: bookings, ok: true });
-}
-
-export async function getBookingsByBookingNumber(req: Request, res: Response) {
-   const id = (req as RequestWithUserId).user?.id;
-   const user = await prisma.user.findUnique({
-      where: { id, customer: { id } },
-   });
-
-   if (!user) return res.status(400).json({ message: "Failed to aunthenticate user", ok: false });
-
-   const { bookingNumber } = req.params;
-
-   const bookings = await prisma.booking.findUnique({
-      where: { bookingNumber, customerId: user.id },
-   });
-
-   const sample = await prisma.user.findUnique({
-      where: { id },
-   });
-
-   if (!sample) {
-      return res.send(404);
-   }
-
-   return res.status(200).send(sample);
-}
-
 export async function createBooking(req: Request, res: Response, next: NextFunction) {
    try {
       const id = (req as RequestWithUserId).user?.id;

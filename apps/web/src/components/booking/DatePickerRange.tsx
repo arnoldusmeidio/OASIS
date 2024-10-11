@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { useParams } from "next/navigation";
 
 export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLDivElement>) {
    const [date, setDate] = useState<DateRange | undefined>();
@@ -19,11 +20,16 @@ export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLD
    const { toast } = useToast();
    const form = useForm();
 
+   const params = useParams<any>();
+   const roomId = params.slug; // get the room id from url
+   if (!roomId) {
+      return <h1>No Room Id provided</h1>;
+   }
    async function onSubmit() {
       //console.log(date);
       console.log(JSON.stringify({ date }));
       try {
-         const res = await fetch("http://localhost:8000/api/v1/bookings/0de06306-6aee-4237-a471-ea4129541b2a", {
+         const res = await fetch(`http://localhost:8000/api/v1/bookings/${roomId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ date }),
