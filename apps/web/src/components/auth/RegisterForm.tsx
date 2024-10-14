@@ -75,7 +75,7 @@ export default function RegisterForm() {
          backButtonHref="/login"
          showSocial
          showBackButton
-         socialLabel="Signup with Google"
+         socialLabel="Continue with Google"
       >
          <Form {...form}>
             <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>

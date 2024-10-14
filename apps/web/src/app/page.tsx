@@ -1,19 +1,17 @@
 "use client";
 
-import LoginButton from "@/components/auth/LoginButton";
-import LogoutButton from "@/components/auth/LogoutButton";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
-import UserCard from "@/components/user/UserCard";
 import { useUserStore } from "@/stores/useUserStore";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import ProfileButton from "@/components/user/ProfileButton";
 import { toast } from "sonner";
+import Navbar from "@/components/header/Navbar";
+import Banner from "@/components/Banner";
+import SmallCard from "@/components/SmallCard";
+import { exploreData, bannerData } from "@/static-db";
+import MediumCard from "@/components/MediumCard";
 
 export default function Home() {
    const [isLoading, setIsLoading] = useState(true);
-   const [success, setSuccess] = useState<string | undefined>("");
    const { user, setUser } = useUserStore();
    const searchParams = useSearchParams();
    const successMessage = searchParams.get("success");
@@ -46,41 +44,35 @@ export default function Home() {
    }, []);
 
    return (
-      <main className="flex h-full items-center justify-center overflow-y-auto bg-[#85d8ea] px-4">
-         <div className="h-full w-[375px] content-center self-center">
-            <div className="h-fit w-full py-4">
-               <div>This is Home Page</div>
-               {isLoading ? (
-                  <Skeleton className="h-[50px] w-[100px] rounded-lg" />
-               ) : (
-                  <div>
-                     {user !== null ? (
-                        <div className="flex flex-col gap-2">
-                           <UserCard />
-                           <div className="flex gap-2">
-                              <LogoutButton>
-                                 <Button variant={"secondary"} size={"lg"}>
-                                    Log out
-                                 </Button>
-                              </LogoutButton>
-                              <ProfileButton>
-                                 <Button variant={"secondary"} size={"lg"}>
-                                    Profile
-                                 </Button>
-                              </ProfileButton>
-                           </div>
-                        </div>
-                     ) : (
-                        <LoginButton>
-                           <Button variant={"secondary"} size={"lg"}>
-                              Log in
-                           </Button>
-                        </LoginButton>
-                     )}
+      <>
+         <Navbar />
+         <main className="bg-background mt-4 flex h-fit flex-col items-center justify-center px-4">
+            <Banner />
+
+            <div className="mx auto mt-2 w-full max-w-7xl px-8 sm:px-16">
+               <section className="w-full justify-start pt-6">
+                  <h2 className="pb-5 text-3xl font-semibold sm:text-4xl">Explore Indonesia</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-4">
+                     {exploreData?.map((item, idx) => <SmallCard key={idx} img={item.img} location={item.location} />)}
                   </div>
-               )}
+               </section>
+
+               <section className="mt-4">
+                  <h2 className="py-8 pb-5 text-3xl font-semibold sm:text-4xl">Popular properties</h2>
+
+                  <div className="grid grid-cols-1 items-center gap-8 align-middle sm:grid-cols-2 lg:grid-cols-3">
+                     {bannerData?.map((item) => (
+                        <MediumCard
+                           key={item.id}
+                           img={item.img}
+                           propertyName={item.propertyName}
+                           location={item.location}
+                        />
+                     ))}
+                  </div>
+               </section>
             </div>
-         </div>
-      </main>
+         </main>
+      </>
    );
 }

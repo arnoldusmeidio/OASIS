@@ -46,7 +46,7 @@ export default function SelectRolePage() {
    };
 
    return (
-      <main className="flex h-full items-center justify-center overflow-y-auto bg-[#85d8ea] px-4">
+      <main className="bg-main-theme flex h-full items-center justify-center overflow-y-auto px-4">
          <div className="h-full w-[375px] content-center self-center">
             <div className="h-fit w-full py-4">
                <RoleCardWrapper headerLabel="Selecting Role">

@@ -81,7 +81,7 @@ export default function LoginForm() {
          backButtonHref="/register"
          showSocial
          showBackButton
-         socialLabel="Login with Google"
+         socialLabel="Continue with Google"
       >
          <Form {...form}>
             <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
