@@ -15,6 +15,7 @@ export default function UserCard() {
             <div>Name: {user?.name}</div>
             <div>Email: {user?.email}</div>
             <div>Role: {role}</div>
+            <div>Pictureurl: {user?.pictureUrl}</div>
          </CardContent>
       </Card>
    );
