@@ -15,7 +15,9 @@
 
 # playground
 /src/app/playground
-/src/app/playground-form-append
+
+# dummy database
+/src/db
 
 # production
 /build

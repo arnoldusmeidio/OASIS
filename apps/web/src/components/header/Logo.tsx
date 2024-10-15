@@ -1,19 +1,21 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Logo() {
    return (
-      <div className="flex gap-2 align-middle">
-         <Image
-            alt="OASIS logo"
-            className="hidden h-[50px] w-full cursor-pointer md:block"
-            width={50}
-            height={50}
-            src={"/oasis-logo-only.svg"}
-         />
-         <h1 className={"font-rokkitt w-full pt-1 text-5xl font-semibold text-[#1A61EF]"}>OASIS</h1>
-      </div>
+      <Link href={"/"}>
+         <div className="flex justify-center gap-2 align-middle">
+            <Image
+               alt="OASIS logo"
+               className="h-[60px] w-full cursor-pointer"
+               width={60}
+               height={60}
+               src={"/oasis-logo-only-white.svg"}
+            />
+            <h1 className={"font-rokkitt text-background w-full pt-3 text-5xl font-semibold"}>OASIS</h1>
+         </div>
+      </Link>
    );
 }

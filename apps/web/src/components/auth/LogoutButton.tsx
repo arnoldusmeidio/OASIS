@@ -1,6 +1,8 @@
 "use client";
 
+import { useUserStore } from "@/stores/useUserStore";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface LogoutButtonProps {
    children: React.ReactNode;
@@ -10,6 +12,7 @@ interface LogoutButtonProps {
 
 export default function LogoutButton({ children, mode = "redirect", asChild }: LogoutButtonProps) {
    const router = useRouter();
+   const { clearUser } = useUserStore();
 
    const onClick = async () => {
       try {
@@ -20,18 +23,15 @@ export default function LogoutButton({ children, mode = "redirect", asChild }: L
             },
             credentials: "include",
          });
-         // const data = await response.json();
-         // if (!response.ok) {
-         //   if (data.message) {
-         //     toast.error(data.message);
-         //   } else {
-         //     toast.error(data.errors[0].message);
-         //   }
-         // } else {
-         //   toast.success(data.message);
-         router.push("/login");
-         router.refresh();
-         // }
+         const data = await response.json();
+         if (!data.ok) {
+            toast.error(data.message, { duration: 1500 });
+         } else {
+            router.push("/login");
+            clearUser();
+            toast.success(data.message, { duration: 1500 });
+            router.refresh();
+         }
       } catch (error) {
          console.error(error);
       }
