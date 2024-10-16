@@ -1,10 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-
 import { format } from "date-fns";
 import { Booking } from "@/types/booking";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -30,6 +28,26 @@ export default function BookingCard() {
    useEffect(() => {
       eventGetter();
    }, []);
+
+   if (bookingData.data.length == 0) {
+      return (
+         <div className="flex flex-col gap-4 px-4 py-4">
+            <div className="flex justify-center gap-2 align-middle">
+               <Image
+                  alt="picture of people going on holiday"
+                  width={100}
+                  height={100}
+                  src={"/drive.svg"}
+                  className="w-[40%] max-w-[40%]"
+               />
+            </div>
+            <h3 className="flex justify-center gap-2 align-middle">No booking found!</h3>
+            <div className="flex justify-center gap-2 align-middle">
+               <Button className="w-[30%] max-w-[30%]">Book Now</Button>
+            </div>
+         </div>
+      );
+   }
 
    return (
       <div className="flex flex-col gap-4 px-4 py-4">
