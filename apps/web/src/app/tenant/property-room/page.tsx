@@ -23,15 +23,10 @@ export default function Room({ index, onRemove }: AddRoomProps) {
       defaultValues: {
          roomName: "", //i
          roomDescription: "", //i
-         roomPictureUrl: "",
+         roomPictureUrl: new File([], ""),
          roomPrice: 0, //i
          roomCapacity: 0, //i
       },
-   });
-
-   const { fields, remove: removeRoom } = useFieldArray({
-      control: form.control,
-      name: "room",
    });
 
    const { control } = useFormContext();
@@ -69,7 +64,7 @@ export default function Room({ index, onRemove }: AddRoomProps) {
                   />
                   <FormField
                      control={control}
-                     name={`room.${index}.price`}
+                     name={`room.${index}.roomPrice`}
                      render={({ field }) => (
                         <FormItem>
                            <FormLabel>Room Price</FormLabel>
@@ -80,7 +75,7 @@ export default function Room({ index, onRemove }: AddRoomProps) {
                                  type="number"
                                  onChange={(e) => {
                                     const value = e.target.value;
-                                    field.onChange(value ? Number(value) : 0); // Convert string to number
+                                    field.onChange(value ? value : "0"); // Convert string to number
                                  }}
                               />
                            </FormControl>
@@ -101,7 +96,7 @@ export default function Room({ index, onRemove }: AddRoomProps) {
                                  type="number"
                                  onChange={(e) => {
                                     const value = e.target.value;
-                                    field.onChange(value ? Number(value) : 0); // Convert string to number
+                                    field.onChange(value ? value : "0"); // Convert string to number
                                  }}
                               />
                            </FormControl>
@@ -111,13 +106,19 @@ export default function Room({ index, onRemove }: AddRoomProps) {
                   />
                   <FormField
                      control={control}
-                     name="roomPictureUrl"
+                     name={`room.${index}.roomPictureUrl`}
                      render={({ field }) => {
                         return (
                            <FormItem>
                               <FormLabel>Room Picture</FormLabel>
                               <FormControl>
-                                 <Input {...field} placeholder="Picture" type="file" />
+                                 <Input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(event) => {
+                                       field.onChange(event.target?.files?.[0] ?? undefined);
+                                    }}
+                                 />
                               </FormControl>
                               <FormMessage />
                            </FormItem>

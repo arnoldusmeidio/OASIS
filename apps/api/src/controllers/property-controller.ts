@@ -1,5 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import prisma from "@/prisma";
+import cloudinary from "@/config/cloudinary";
+import { RequestWithUserId } from "@/types";
+import { idText } from "typescript";
 
 //get all Pagination
 export async function Pagination(req: Request, res: Response, next: NextFunction) {
@@ -7,19 +10,19 @@ export async function Pagination(req: Request, res: Response, next: NextFunction
       const { page = 1, limit = 3 } = req.query;
       const offset = (Number(page) - 1) * Number(limit);
 
-      const events = await prisma.property.findMany({
+      const properties = await prisma.property.findMany({
          skip: offset,
          take: Number(limit),
       });
 
-      const totalEvents = await prisma.property.count();
+      const totalProperties = await prisma.property.count();
 
       return res.status(200).json({
-         data: events,
+         data: properties,
          meta: {
-            totalEvents,
+            totalProperties,
             currentPage: Number(page),
-            totalPages: Math.ceil(totalEvents / Number(limit)),
+            totalPages: Math.ceil(totalProperties / Number(limit)),
          },
       });
    } catch (error) {
@@ -27,25 +30,65 @@ export async function Pagination(req: Request, res: Response, next: NextFunction
    }
 }
 
-//get all property
-
-export async function createProperty(req: Request, res: Response, next: NextFunction) {
+//Create property
+// Property creation handler
+export const createProperty = async (req: Request, res: Response, next: NextFunction) => {
    try {
-      const { propertyName, propertyAddress, propertyDescription, propertyImage, room, tenantId } = req.body;
+      const id = (req as RequestWithUserId).user?.id;
+
+      const user = await prisma.user.findUnique({
+         where: {
+            id: id,
+         },
+         include: { tenant: true },
+      });
+
+      const tenantId = user?.tenant?.id;
+
+      if (!tenantId) {
+         return res.status(400).json({ message: "Tenant ID not found" });
+      }
+
+      const { propertyName, propertyAddress, propertyDescription } = req.body;
+
+      if (!req.file) {
+         return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      const cloudinaryData = await cloudinary.uploader.upload(req.file.path, {
+         folder: "images",
+      });
 
       await prisma.property.create({
          data: {
+            tenantId,
             name: propertyName,
             address: propertyAddress,
             description: propertyDescription,
-            pictureUrl: propertyImage,
-            room: {
-               create: room,
-            },
-            tenantId,
+            pictureUrl: cloudinaryData.secure_url,
          },
       });
+      return res.status(201).json({ message: "property Created" });
    } catch (error) {
+      console.error("Error creating property:", error);
       next(Error);
    }
-}
+};
+
+export const getSingleProperty = async (req: Request, res: Response, next: NextFunction) => {
+   try {
+      const { id } = req.params;
+      const getProperty = await prisma.property.findUnique({
+         where: {
+            id: id,
+         },
+      });
+
+      if (!getProperty) res.status(404).json({ message: "Property not found" });
+
+      return res.status(200).json({ message: "sucsessfully error" });
+   } catch (error) {
+      next(error);
+      console.error(error);
+   }
+};

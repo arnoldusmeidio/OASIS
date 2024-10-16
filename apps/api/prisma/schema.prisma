@@ -70,7 +70,7 @@ model Property {
   location Location?
 
   tenantId String
-  tenant   Tenant @relation(fields: [id], references: [id], onDelete: Cascade)
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@unique([name, address], name: "uniqueProperty")
 }

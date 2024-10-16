@@ -3,9 +3,13 @@ import cors from "cors";
 
 import authRouter from "./routers/auth-router";
 import sampleRouter from "./routers/sample-router";
+import property from "./routers/property-router";
 import userRouter from "./routers/user-router";
 import { verifyToken } from "./middlewares/auth-middleware";
 import { notFoundMiddleware } from "./middlewares/not-found-middleware";
+
+import { tenantGuard } from "@/middlewares/auth-middleware";
+
 import { error } from "./middlewares/error-middleware";
 import cookieParser from "cookie-parser";
 
@@ -36,10 +40,16 @@ const createApp = () => {
    // User Route
    app.use("/api/v1/users", verifyToken, userRouter);
 
+   // property Route
+   app.use("/api/v1/property", verifyToken, property);
+
+   //tenant Route
+   app.use("/api/v1/tenant", verifyToken, tenantGuard, property);
+
    // Not found handler
    app.use(notFoundMiddleware);
 
-   // Error handler
+   // Error handlers
    app.use(error);
 
    return app;
