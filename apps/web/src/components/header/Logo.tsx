@@ -9,7 +9,7 @@ export default function Logo() {
          <div className="flex justify-center gap-2 align-middle">
             <Image
                alt="OASIS logo"
-               className="h-[60px] w-full cursor-pointer"
+               className="h-[60px] w-auto cursor-pointer"
                width={60}
                height={60}
                src={"/oasis-logo-only-white.svg"}

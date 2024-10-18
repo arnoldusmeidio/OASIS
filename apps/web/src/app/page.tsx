@@ -4,7 +4,7 @@ import { useUserStore } from "@/stores/useUserStore";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import Navbar from "@/components/header/Navbar";
+import SearchNavbar from "@/components/header/SearchNavbar";
 import Banner from "@/components/Banner";
 import SmallCard from "@/components/SmallCard";
 import { exploreData, bannerData } from "@/static-db";
@@ -45,7 +45,7 @@ export default function Home() {
 
    return (
       <>
-         <Navbar />
+         <SearchNavbar />
          <main className="bg-background mt-4 flex h-fit flex-col items-center justify-center px-4">
             <Banner />
 
@@ -58,7 +58,7 @@ export default function Home() {
                </section>
 
                <section className="mt-4">
-                  <h2 className="py-8 pb-5 text-3xl font-semibold sm:text-4xl">Popular properties</h2>
+                  <h2 className="py-8 pb-5 text-3xl font-semibold sm:text-4xl">Popular Properties</h2>
 
                   <div className="grid grid-cols-1 items-center gap-8 align-middle sm:grid-cols-2 lg:grid-cols-3">
                      {bannerData?.map((item) => (
