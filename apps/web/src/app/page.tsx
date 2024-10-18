@@ -1,95 +1,78 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+
+import { useUserStore } from "@/stores/useUserStore";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
+import SearchNavbar from "@/components/header/SearchNavbar";
+import Banner from "@/components/Banner";
+import SmallCard from "@/components/SmallCard";
+import { exploreData, bannerData } from "@/static-db";
+import MediumCard from "@/components/MediumCard";
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+   const [isLoading, setIsLoading] = useState(true);
+   const { user, setUser } = useUserStore();
+   const searchParams = useSearchParams();
+   const successMessage = searchParams.get("success");
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+   const router = useRouter();
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+   useEffect(() => {
+      async function getUser() {
+         try {
+            const user = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users/search`, {
+               credentials: "include",
+            });
+            const data = await user.json();
+            if (data.ok) {
+               setUser(data.data);
+               if (!data.data.tenant && !data.data.customer) {
+                  router.push("/select-role");
+                  router.refresh();
+               }
+               if (successMessage) {
+                  toast.success(successMessage, { duration: 1500 });
+               }
+            }
+            setIsLoading(false);
+         } catch (error) {
+            console.error(error);
+         }
+      }
+      getUser();
+   }, []);
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+   return (
+      <>
+         <SearchNavbar />
+         <main className="bg-background mt-4 flex h-fit flex-col items-center justify-center px-4">
+            <Banner />
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
+            <div className="mx auto mt-2 w-full max-w-7xl px-8 sm:px-16">
+               <section className="w-full justify-start pt-6">
+                  <h2 className="pb-5 text-3xl font-semibold sm:text-4xl">Explore Indonesia</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-4">
+                     {exploreData?.map((item, idx) => <SmallCard key={idx} img={item.img} location={item.location} />)}
+                  </div>
+               </section>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+               <section className="mt-4">
+                  <h2 className="py-8 pb-5 text-3xl font-semibold sm:text-4xl">Popular Properties</h2>
+
+                  <div className="grid grid-cols-1 items-center gap-8 align-middle sm:grid-cols-2 lg:grid-cols-3">
+                     {bannerData?.map((item) => (
+                        <MediumCard
+                           key={item.id}
+                           img={item.img}
+                           propertyName={item.propertyName}
+                           location={item.location}
+                        />
+                     ))}
+                  </div>
+               </section>
+            </div>
+         </main>
+      </>
+   );
 }
