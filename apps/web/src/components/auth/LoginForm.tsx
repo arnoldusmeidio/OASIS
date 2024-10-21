@@ -2,13 +2,16 @@
 
 import * as z from "zod";
 import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { loginSchema } from "@/schemas/auth-schemas";
+import { loginSchema } from "@/schemas/auth-schemas";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
 import { toast } from "sonner";
 
 import CardWrapper from "@/components/auth/CardWrapper";
@@ -32,8 +35,17 @@ export default function LoginForm() {
       if (errorMessage) setError(errorMessage);
    }, []);
 
+   const searchParams = useSearchParams();
+   const errorMessage = searchParams.get("error");
+
+   useEffect(() => {
+      if (errorMessage) setError(errorMessage);
+   }, []);
+
    const router = useRouter();
 
+   const form = useForm<z.infer<typeof loginSchema>>({
+      resolver: zodResolver(loginSchema),
    const form = useForm<z.infer<typeof loginSchema>>({
       resolver: zodResolver(loginSchema),
       defaultValues: {
@@ -42,12 +54,14 @@ export default function LoginForm() {
          rememberMe: false,
       },
       mode: "onBlur",
+      mode: "onBlur",
    });
 
    const {
       formState: { isSubmitting },
    } = form;
 
+   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
    const onSubmit = async (values: z.infer<typeof loginSchema>) => {
       try {
          const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/auth/login`, {
@@ -68,6 +82,7 @@ export default function LoginForm() {
             setError("");
             setSuccess(data.message);
             toast.success(data.message, { duration: 1500 });
+            toast.success(data.message, { duration: 1500 });
             form.reset();
             if (data.role == "tenant") {
                router.push("/tenant");
@@ -79,6 +94,7 @@ export default function LoginForm() {
       } catch (error) {
          console.error(error);
          setError("Something went wrong!");
+         setError("Something went wrong!");
       }
    };
 
@@ -88,6 +104,8 @@ export default function LoginForm() {
          backButtonLabel="Don't have an account?"
          backButtonHref="/register"
          showSocial
+         showBackButton
+         socialLabel="Continue with Google"
          showBackButton
          socialLabel="Continue with Google"
       >
@@ -116,6 +134,9 @@ export default function LoginForm() {
                            <FormControl>
                               <Input {...field} disabled={isSubmitting} placeholder="********" type="password" />
                            </FormControl>
+                           <Button size={"sm"} variant={"link"} asChild className="px-0 font-normal">
+                              <Link href={"/reset"}>Forgot password?</Link>
+                           </Button>
                            <Button size={"sm"} variant={"link"} asChild className="px-0 font-normal">
                               <Link href={"/reset"}>Forgot password?</Link>
                            </Button>
