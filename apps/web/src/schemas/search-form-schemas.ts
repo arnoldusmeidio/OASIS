@@ -7,8 +7,8 @@ export const searchSchema = z.object({
    dates: z
       .object(
          {
-            from: z.date(),
-            to: z.date(),
+            from: z.date({ required_error: "From date is required" }),
+            to: z.date({ invalid_type_error: "To date is required" }),
          },
          {
             required_error: "Please select a date range",
@@ -18,7 +18,6 @@ export const searchSchema = z.object({
          path: ["dates"],
          message: "From date must be before to date",
       }),
-
    adults: z
       .string()
       .min(1, { message: "Please select at least 1 adult" })
@@ -35,8 +34,8 @@ export const useFormSearch = () =>
       defaultValues: {
          location: "",
          dates: {
-            from: undefined,
-            to: undefined,
+            from: new Date(new Date().setHours(0, 0, 0, 0)),
+            to: new Date(new Date(new Date().setDate(new Date().getDate() + 1)).setHours(0, 0, 0, 0)),
          },
          adults: "1",
          children: "0",

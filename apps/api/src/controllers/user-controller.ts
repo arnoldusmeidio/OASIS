@@ -14,6 +14,9 @@ export async function getSingleUser(req: Request, res: Response, next: NextFunct
       const id = (req as RequestWithUserId).user?.id;
 
       const user = await prisma.user.findUnique({
+         omit: {
+            password: true,
+         },
          where: {
             id: id,
          },
