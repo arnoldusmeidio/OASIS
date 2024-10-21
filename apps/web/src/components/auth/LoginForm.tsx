@@ -117,9 +117,6 @@ export default function LoginForm() {
                            <Button size={"sm"} variant={"link"} asChild className="px-0 font-normal">
                               <Link href={"/reset"}>Forgot password?</Link>
                            </Button>
-                           <Button size={"sm"} variant={"link"} asChild className="px-0 font-normal">
-                              <Link href={"/reset"}>Forgot password?</Link>
-                           </Button>
                            <FormMessage />
                         </FormItem>
                      )}

@@ -5,12 +5,18 @@ import { profileSchema } from "@/schemas/profile-schemas";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import { useUserStore } from "@/stores/useUserStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-export default function UpdateProfileForm() {
+interface Props {
+   getUser: () => void;
+}
+
+export default function UpdateProfileForm({ getUser }: Props) {
    const [error, setError] = useState<string | undefined>("");
    const [success, setSuccess] = useState<string | undefined>("");
 
@@ -20,10 +26,12 @@ export default function UpdateProfileForm() {
       resolver: zodResolver(profileSchema),
       defaultValues: {
          name: user?.name || undefined,
-         email: user?.email || undefined,
          password: undefined,
          newPassword: undefined,
          confirmNewPassword: undefined,
+         language: user?.language || undefined,
+         currency: user?.currency || undefined,
+
       },
       mode: "onBlur",
    });
@@ -35,22 +43,24 @@ export default function UpdateProfileForm() {
    const onSubmit = async (values: z.infer<typeof profileSchema>) => {
       console.log(values);
       try {
-         // const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/auth/login`, {
-         //    method: "UPDATE",
-         //    headers: {
-         //       "Content-Type": "application/json",
-         //    },
-         //    body: JSON.stringify(values),
-         //    credentials: "include",
-         // });
-         // const data = await response.json();
-         // if (!data.ok) {
-         //    setSuccess("");
-         //    setError(data.message);
-         // } else {
-         //    setError("");
-         //    setSuccess(data.message);
-         // }
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users`, {
+            method: "PUT",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values),
+            credentials: "include",
+         });
+         const data = await response.json();
+         if (!data.ok) {
+            setSuccess("");
+            setError(data.message);
+            form.reset();
+         } else {
+            setError("");
+            setSuccess(data.message);
+            getUser();
+         }
       } catch (error) {
          console.error(error);
          setError("Something went wrong!");
@@ -134,6 +144,50 @@ export default function UpdateProfileForm() {
                                     value={field.value ?? ""}
                                  />
                               </FormControl>
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
+                     <FormField
+                        control={form.control}
+                        name="language"
+                        render={({ field }) => (
+                           <FormItem>
+                              <FormLabel>Language</FormLabel>
+                              <Select disabled={isSubmitting} onValueChange={field.onChange} defaultValue={field.value}>
+                                 <FormControl>
+                                    <SelectTrigger>
+                                       <SelectValue placeholder="Select Language" />
+                                    </SelectTrigger>
+                                 </FormControl>
+                                 <SelectContent>
+                                    <SelectItem value="ENGLISH">English</SelectItem>
+                                    <SelectItem value="INDONESIA">Indonesia</SelectItem>
+                                 </SelectContent>
+                              </Select>
+
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
+                     <FormField
+                        control={form.control}
+                        name="currency"
+                        render={({ field }) => (
+                           <FormItem>
+                              <FormLabel>Currency</FormLabel>
+                              <Select disabled={isSubmitting} onValueChange={field.onChange} defaultValue={field.value}>
+                                 <FormControl>
+                                    <SelectTrigger>
+                                       <SelectValue placeholder="Select Currency" />
+                                    </SelectTrigger>
+                                 </FormControl>
+                                 <SelectContent>
+                                    <SelectItem value="IDR">IDR</SelectItem>
+                                    <SelectItem value="USD">USD</SelectItem>
+                                 </SelectContent>
+                              </Select>
+
                               <FormMessage />
                            </FormItem>
                         )}
