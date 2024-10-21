@@ -98,7 +98,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
             secure: true, // turn off while check on thunderclient
          })
          .status(200)
-         .json({ message: "Login success", ok: true });
+         .json({ message: "Login success", ok: true, role });
    } catch (error) {
       if (error instanceof ZodError) {
          return res.status(400).json({ message: error.errors[0].message, ok: false });
