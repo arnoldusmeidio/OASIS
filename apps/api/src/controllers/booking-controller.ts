@@ -1,10 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import prisma from "@/prisma";
-import crypto from "crypto";
 import { RequestWithUserId } from "@/types";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function getBookings(req: RequestWithUserId, res: Response, next: NextFunction) {
    try {
