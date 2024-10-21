@@ -72,11 +72,11 @@ body {
    overflow-x: hidden;
 }
 
-html,
+/* html,
 body,
 :root {
    height: 100%;
-}
+} */
 
 /* main {
    background-color: hsl(var(--main-theme));
