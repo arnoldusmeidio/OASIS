@@ -86,7 +86,7 @@ export async function selectUserRole(req: Request, res: Response, next: NextFunc
          secure: true, // turn off while check on thunderclient
       })
          .status(200)
-         .json({ message: "Role updated successfully", ok: true });
+         .json({ message: "Role updated successfully", ok: true, role });
    } catch (error) {
       if (error instanceof ZodError) {
          return res.status(400).json({ message: error.errors[0].message, ok: false });
