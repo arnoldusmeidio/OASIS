@@ -1,4 +1,4 @@
-import DatePickerForm from "@/components/booking/DatePickerRange";
+import DatePickerForm from "@/components/book/DatePickerRange";
 import React from "react";
 
 export default function page() {

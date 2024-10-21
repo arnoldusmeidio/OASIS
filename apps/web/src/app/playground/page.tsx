@@ -1,6 +1,6 @@
 "use client";
 
-import DatePickerForm from "@/components/booking/DatePickerRange";
+import DatePickerForm from "@/components/book/DatePickerRange";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
