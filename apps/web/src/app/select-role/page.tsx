@@ -37,12 +37,18 @@ export default function SelectRolePage() {
             credentials: "include",
          });
          const data = await response.json();
+         console.log(data);
+
          if (!data.ok) {
             toast.error(data.message);
          } else {
             toast.success(data.message);
             form.reset();
-            router.push("/");
+            if (data.role == "tenant") {
+               router.push("/tenant");
+            } else {
+               router.push("/");
+            }
             router.refresh();
          }
       } catch (error) {

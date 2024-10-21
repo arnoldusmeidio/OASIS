@@ -1,21 +1,45 @@
-// "use client";
-
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import UpdateProfileForm from "@/components/user/UpdateProfileForm";
+import EditProfilePictureButton from "@/components/user/EditProfilePictureButton";
 import { useUserStore } from "@/stores/useUserStore";
-import { Card, CardContent, CardHeader } from "../ui/card";
+import ChangeEmailButton from "@/components/user/ChangeEmailButton";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { User } from "lucide-react";
 
 export default function UserCard() {
    const { user } = useUserStore();
-   const role = user?.tenant ? "Tenant" : user?.customer ? "Customer" : "-";
+   console.log(user?.pictureUrl);
 
    return (
-      <Card className="w-full shadow-md">
-         <CardHeader>User Card</CardHeader>
-         <CardContent>
-            <div>Id: {user?.id}</div>
-            <div>Name: {user?.name}</div>
-            <div>Email: {user?.email}</div>
-            <div>Role: {role}</div>
-            <div>Pictureurl: {user?.pictureUrl}</div>
+      <Card>
+         <CardHeader>
+            <span className="text-2xl font-bold">User Profile</span>
+         </CardHeader>
+         <CardContent className="flex flex-col">
+            <div className="flex flex-col items-center gap-2 self-center">
+               <Avatar className="h-20 w-20">
+                  <AvatarImage src={user?.pictureUrl} alt="Profile picture" />
+                  <AvatarFallback>
+                     <User className="h-10 w-10" />
+                  </AvatarFallback>
+               </Avatar>
+               {user?.accountProvider === "CREDENTIALS" && <EditProfilePictureButton />}
+            </div>
+            {/* <img className="h-20 w-20" src={user?.pictureUrl} alt="" /> */}
+
+            <div className="mt-6 flex items-end justify-between gap-2">
+               <div className="w-full space-y-2">
+                  <Label>Email</Label>
+                  <Input placeholder={user?.email || "example@mail.com"} type="email" disabled={true} />
+               </div>
+               {user?.accountProvider === "CREDENTIALS" && <ChangeEmailButton />}
+            </div>
+
+            <hr className="bg-foreground/50 my-6 h-[2px] border-0" />
+
+            <UpdateProfileForm />
          </CardContent>
       </Card>
    );

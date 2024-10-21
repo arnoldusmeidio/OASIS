@@ -1,6 +1,8 @@
 "use client";
 
 import ChangeEmailForm from "@/components/auth/ChangeEmailForm";
+import Navbar from "@/components/Navbar";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import UserCard from "@/components/user/UserCard";
 import { useUserStore } from "@/stores/useUserStore";
@@ -36,13 +38,18 @@ export default function ProfilePage() {
    }, []);
 
    return (
-      <main className="flex h-full items-center justify-center overflow-y-auto px-4">
-         <div className="h-full w-[375px] content-center self-center">
-            <div className="flex h-fit w-full flex-col gap-4 py-4">
-               <ChangeEmailForm />
-               {isLoading ? <Skeleton className="h-[50px] w-[375px] rounded-lg" /> : <UserCard />}
+      <>
+         <Navbar />
+         <main className="flex h-full items-center justify-center overflow-y-auto px-4">
+            <div className="h-full w-[375px] content-center self-center">
+               <div className="w-full py-4">
+                  {isLoading ? <Skeleton className="h-[750px] w-full" /> : <UserCard />}
+
+                  {/* <ChangeEmailForm /> */}
+                  {/* {isLoading ? <Skeleton className="h-[50px] w-[375px] rounded-lg" /> : <UserCard />} */}
+               </div>
             </div>
-         </div>
-      </main>
+         </main>
+      </>
    );
 }

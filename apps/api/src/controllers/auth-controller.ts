@@ -98,7 +98,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
             secure: true, // turn off while check on thunderclient
          })
          .status(200)
-         .json({ message: "Login success", ok: true });
+         .json({ message: "Login success", ok: true, role });
    } catch (error) {
       if (error instanceof ZodError) {
          return res.status(400).json({ message: error.errors[0].message, ok: false });
@@ -158,9 +158,9 @@ export async function googleLoginCallback(req: Request, res: Response, next: Nex
 
       let role = null;
 
-      if (existingUser?.tenant !== null) {
+      if (existingUser?.tenant) {
          role = "tenant";
-      } else if (existingUser?.customer !== null) {
+      } else if (existingUser?.customer) {
          role = "customer";
       }
 
@@ -174,7 +174,11 @@ export async function googleLoginCallback(req: Request, res: Response, next: Nex
          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
          sameSite: "none", // need to change on production to be true
          secure: true, // turn off while check on thunderclient
-      }).redirect(`${process.env.CLIENT_PORT}/?success=Login%20success`);
+      }).redirect(
+         role == "tenant"
+            ? `${process.env.CLIENT_PORT}/tenant?success=Login%20success`
+            : `${process.env.CLIENT_PORT}/?success=Login%20success`,
+      );
    } catch (error) {
       return res.redirect(`${process.env.CLIENT_PORT}/login?error=Something%20went%20wrong!`);
    }
