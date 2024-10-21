@@ -18,8 +18,6 @@ import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { data } from "cypress/types/jquery";
-import Tenant from "@/app/tenant/page";
 
 export default function LoginForm() {
    const [error, setError] = useState<string | undefined>("");
@@ -68,7 +66,6 @@ export default function LoginForm() {
             setError("");
             setSuccess(data.message);
             toast.success(data.message, { duration: 1500 });
-            toast.success(data.message, { duration: 1500 });
             form.reset();
             if (data.role == "tenant") {
                router.push("/tenant");
@@ -79,7 +76,6 @@ export default function LoginForm() {
          }
       } catch (error) {
          console.error(error);
-         setError("Something went wrong!");
          setError("Something went wrong!");
       }
    };
