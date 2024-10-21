@@ -27,6 +27,8 @@ model User {
 
   tenant   Tenant?
   customer Customer?
+
+  wallet Wallet?
 }
 
 enum AccountProvider {
@@ -172,4 +174,13 @@ model Review {
   star   Int
 
   @@unique([customerId, propertyId], name: "uniqueReview")
+}
+
+model Wallet {
+  id        String   @id
+  user      User     @relation(fields: [id], references: [id], onDelete: Cascade)
+  balance   Float
+  points    Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
