@@ -18,8 +18,6 @@ import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { data } from "cypress/types/jquery";
-import Tenant from "@/app/tenant/page";
 
 export default function LoginForm() {
    const [error, setError] = useState<string | undefined>("");
