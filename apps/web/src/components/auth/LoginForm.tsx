@@ -65,7 +65,11 @@ export default function LoginForm() {
             setSuccess(data.message);
             toast.success(data.message, { duration: 1500 });
             form.reset();
-            router.push("/");
+            if (data.role == "tenant") {
+               router.push("/tenant");
+            } else {
+               router.push("/");
+            }
             router.refresh();
          }
       } catch (error) {

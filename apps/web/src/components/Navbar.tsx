@@ -10,14 +10,13 @@ import Link from "next/link";
 import LogoutButton from "@/components/auth/LogoutButton";
 import LoginButton from "@/components/auth/LoginButton";
 import RegisterButton from "@/components/auth/RegisterButton";
-import Searchbar from "@/components/header/Searchbar";
 
 export default function Navbar() {
    const { user } = useUserStore();
 
    return (
       <header className="bg-main-theme w-full">
-         <nav className="mx-auto mb-14 flex max-w-[100rem] flex-col gap-4 p-3 shadow-sm sm:p-6">
+         <nav className="mx-auto flex max-w-[100rem] flex-col gap-4 p-3 shadow-sm sm:p-6">
             <div className="flex justify-between">
                {/* Left */}
                <div className="flex sm:basis-1/3">

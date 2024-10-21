@@ -42,7 +42,11 @@ export default function SelectRolePage() {
          } else {
             toast.success(data.message);
             form.reset();
-            router.push("/");
+            if (data.role == "tenant") {
+               router.push("/tenant");
+            } else {
+               router.push("/");
+            }
             router.refresh();
          }
       } catch (error) {
