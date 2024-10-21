@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { updateRoleSchema } from "@/schemas/auth-schema";
+import { updateRoleSchema } from "@/schemas/auth-schemas";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import RoleCardWrapper from "@/components/auth/RoleCardWrapper";
 import { useRouter, useSearchParams } from "next/navigation";

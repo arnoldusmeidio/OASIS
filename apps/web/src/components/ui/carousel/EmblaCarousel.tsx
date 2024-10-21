@@ -39,8 +39,9 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                         width={1920}
                         height={1080}
                      />
-                     <div className="text-background text-shadow bg-foreground/30 absolute left-10 top-5 flex rounded-2xl p-2 align-middle lg:left-16 lg:top-10">
-                        <span className="text-xs sm:text-base md:text-lg lg:text-xl">Property location</span>
+                     <div className="text-background text-shadow bg-foreground/30 absolute left-10 top-5 flex flex-col gap-2 rounded-2xl p-2 align-middle lg:left-16 lg:top-10">
+                        <span className="text-xs sm:text-base md:text-lg lg:text-xl">{item.propertyName}</span>
+                        <span className="text-xs lg:text-base">{item.location}</span>
                      </div>
                   </div>
                ))}

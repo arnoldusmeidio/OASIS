@@ -13,6 +13,7 @@
    --foreground-rgb: 0, 0, 0;
    --background-start-rgb: 214, 219, 220;
    --background-end-rgb: 255, 255, 255;
+   --main-theme-rgb: 51, 159, 205;
 
    --primary-glow: conic-gradient(
       from 180deg at 50% 50%,
@@ -77,6 +78,10 @@ body,
    height: 100%;
 }
 
+/* main {
+   background-color: hsl(var(--main-theme));
+} */
+
 a {
    color: inherit;
    text-decoration: none;
@@ -94,7 +99,7 @@ a {
 
 @layer base {
    :root {
-      --main-theme: #339fcd;
+      --main-theme: 198 61% 50%;
 
       --background: 0 0% 100%;
       --foreground: 0 0% 3.9%;

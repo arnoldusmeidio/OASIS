@@ -8,7 +8,7 @@ import { FaGoogle } from "react-icons/fa6";
 export default function Footer() {
    return (
       <footer className="bg-secondary mt-4 flex content-center justify-center px-10 pt-4 sm:px-5 md:px-10">
-         <div className="w-full max-w-7xl">
+         <div className="w-full max-w-[100rem]">
             <div className="grid grid-cols-1 md:grid-cols-2">
                <nav className="mx-auto pb-2 md:mx-0">
                   <Link href={"/"}>
@@ -16,7 +16,7 @@ export default function Footer() {
                         <Image
                            alt="OASIS logo"
                            className="h-[50px] w-auto cursor-pointer"
-                           width={50}
+                           width={173}
                            height={50}
                            src={"/oasis-logo-with-text.svg"}
                         />
