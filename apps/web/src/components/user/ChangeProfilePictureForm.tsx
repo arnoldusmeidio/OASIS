@@ -13,25 +13,19 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
-import { useRouter, useSearchParams } from "next/navigation";
 import { profilePictureSchema } from "@/schemas/profile-schemas";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export default function ChangeProfilePictureForm() {
+interface Props {
+   getUser: () => void;
+}
+
+export default function ChangeProfilePictureForm({ getUser }: Props) {
    const { user } = useUserStore();
 
    const [error, setError] = useState<string | undefined>("");
    const [success, setSuccess] = useState<string | undefined>("");
    const [picture, setPicture] = useState(user?.pictureUrl);
-
-   const searchParams = useSearchParams();
-   const errorMessage = searchParams.get("error");
-
-   useEffect(() => {
-      if (errorMessage) setError(errorMessage);
-   }, []);
-
-   const router = useRouter();
 
    const form = useForm<z.infer<typeof profilePictureSchema>>({
       resolver: zodResolver(profilePictureSchema),
@@ -42,30 +36,34 @@ export default function ChangeProfilePictureForm() {
    });
 
    const {
-      watch,
       formState: { isSubmitting },
    } = form;
 
    const onSubmit = async (values: z.infer<typeof profilePictureSchema>) => {
+      console.log(values);
+      const formData = new FormData();
+      Object.entries(values).forEach(([key, value]) => {
+         formData.append("pictureUrl", value);
+      });
+
+      const formDataEntries = Array.from(formData.entries());
+      console.log("FormData entries:", formDataEntries);
+
       try {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/auth/user/email`, {
-            method: "POST",
-            headers: {
-               "Content-Type": "application/json",
-            },
-            body: JSON.stringify(values),
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users/picture`, {
+            method: "PUT",
+            body: formData,
             credentials: "include",
          });
          const data = await response.json();
-
          if (!data.ok) {
             setSuccess("");
             setError(data.message);
          } else {
             setError("");
             setSuccess(data.message);
+            getUser();
             form.reset();
-            router.refresh();
          }
       } catch (error) {
          console.error(error);
@@ -78,7 +76,6 @@ export default function ChangeProfilePictureForm() {
          <Avatar className="h-20 w-20 justify-self-center">
             <AvatarImage src={picture} alt="Profile picture" />
             <AvatarFallback>
-               {/* <AvatarImage src={user?.pictureUrl} alt="Profile picture" /> */}
                <User className="h-10 w-10" />
             </AvatarFallback>
          </Avatar>

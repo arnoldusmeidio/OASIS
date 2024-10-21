@@ -1,12 +1,14 @@
+import { Currency, Language } from "@/types/user-types";
 import * as z from "zod";
 
 export const profileSchema = z
    .object({
       name: z.optional(z.string()),
-      email: z.optional(z.string().email()),
       password: z.optional(z.string()),
       newPassword: z.optional(z.string().min(8, { message: "Password must be at least 8 characters long" })),
       confirmNewPassword: z.optional(z.string().min(1, { message: "Confirmation password is required" })),
+      language: z.optional(z.nativeEnum(Language)),
+      currency: z.optional(z.nativeEnum(Currency)),
    })
    .refine(
       (values) => {

@@ -2,9 +2,12 @@ import { Request, Response, NextFunction } from "express";
 import { RequestWithUserId } from "../types";
 import { ZodError } from "zod";
 import jwt from "jsonwebtoken";
+import { genSalt, hash, compare } from "bcrypt";
+import cloudinary from "@/config/cloudinary";
+import fs from "fs/promises";
 
 import prisma from "@/prisma";
-import { selectUserRoleSchema, updateEmailUserSchema } from "@/schemas/user-schema";
+import { profileSchema, selectUserRoleSchema, updateEmailUserSchema } from "@/schemas/user-schema";
 import { getVerificationTokenByToken } from "@/lib/verification-token";
 
 // GET METHOD
@@ -145,6 +148,107 @@ export async function updateUserEmail(req: Request, res: Response, next: NextFun
       });
 
       res.status(200).json({ message: "Email updated successfully", ok: true });
+   } catch (error) {
+      if (error instanceof ZodError) {
+         return res.status(400).json({ message: error.errors[0].message, ok: false });
+      } else {
+         next(error);
+      }
+   }
+}
+
+// Update user profile info
+export async function updateUserInfo(req: Request, res: Response, next: NextFunction) {
+   try {
+      const id = (req as RequestWithUserId).user?.id;
+      const parsedData = profileSchema.parse(req.body);
+      const { name, password, newPassword, language, currency } = parsedData;
+
+      const user = await prisma.user.findUnique({
+         where: {
+            id: id,
+         },
+      });
+
+      if (!user)
+         return res.status(404).json({
+            message: "User not found",
+            ok: false,
+         });
+
+      if (password) {
+         const isValidPassword = await compare(password, user?.password!);
+
+         if (!isValidPassword) return res.status(401).json({ message: "Invalid Current Password", ok: false });
+      }
+
+      let hashedPassword = undefined;
+
+      if (newPassword) {
+         const salt = await genSalt(10);
+         hashedPassword = await hash(newPassword, salt);
+      }
+
+      const updateData = { name, language, currency, password: hashedPassword };
+
+      await prisma.user.update({
+         where: {
+            id,
+         },
+         data: {
+            ...updateData,
+         },
+      });
+
+      return res.status(200).json({ message: "User info successfully updated", ok: true });
+   } catch (error) {
+      if (error instanceof ZodError) {
+         return res.status(400).json({ message: error.errors[0].message, ok: false });
+      } else {
+         next(error);
+      }
+   }
+}
+
+// Update user profile picture
+export async function updateUserPicture(req: Request, res: Response, next: NextFunction) {
+   try {
+      const id = (req as RequestWithUserId).user?.id;
+      const parsedData = profileSchema.parse(req.body);
+      const {} = parsedData;
+
+      const user = await prisma.user.findUnique({
+         where: {
+            id: id,
+         },
+      });
+
+      if (!user)
+         return res.status(404).json({
+            message: "User not found",
+            ok: false,
+         });
+
+      if (!req.file) {
+         return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      const cloudinaryData = await cloudinary.uploader.upload(req.file.path, {
+         folder: "images",
+      });
+
+      const pictureUrl = cloudinaryData.secure_url;
+
+      await prisma.user.update({
+         where: {
+            id,
+         },
+         data: {
+            pictureUrl,
+         },
+      });
+
+      return res.status(200).json({ message: "Profile picture successfully updated", ok: true });
    } catch (error) {
       if (error instanceof ZodError) {
          return res.status(400).json({ message: error.errors[0].message, ok: false });

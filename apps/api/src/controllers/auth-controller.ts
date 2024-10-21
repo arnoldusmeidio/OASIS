@@ -7,7 +7,6 @@ import { ZodError } from "zod";
 import { authorizationUrl, oauth2Client } from "@/config/google";
 import { google } from "googleapis";
 import { getVerificationTokenByToken } from "@/lib/verification-token";
-import { RequestWithUserId } from "@/types";
 import { getPasswordResetTokenByToken } from "@/lib/password-reset-token";
 
 // Register user

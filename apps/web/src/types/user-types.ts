@@ -1,3 +1,13 @@
+export enum Language {
+   ENGLISH = "ENGLISH",
+   INDONESIA = "INDONESIA",
+}
+
+export enum Currency {
+   IDR = "IDR",
+   USD = "USD",
+}
+
 export interface User {
    id: number;
    name: string;
@@ -8,4 +18,6 @@ export interface User {
    customer: {};
    accountProvider: string;
    pictureUrl: string;
+   currency: Currency;
+   language: Language;
 }
