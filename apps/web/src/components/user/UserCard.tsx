@@ -29,6 +29,7 @@ export default function UserCard({ getUser }: Props) {
                      <User className="h-10 w-10" />
                   </AvatarFallback>
                </Avatar>
+
                {user?.accountProvider === "CREDENTIALS" && <EditProfilePictureButton getUser={getUser} />}
             </div>
 

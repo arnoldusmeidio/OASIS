@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
+
 import { profilePictureSchema } from "@/schemas/profile-schemas";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -40,6 +41,7 @@ export default function ChangeProfilePictureForm({ getUser }: Props) {
    } = form;
 
    const onSubmit = async (values: z.infer<typeof profilePictureSchema>) => {
+
       console.log(values);
       const formData = new FormData();
       Object.entries(values).forEach(([key, value]) => {
@@ -62,6 +64,7 @@ export default function ChangeProfilePictureForm({ getUser }: Props) {
          } else {
             setError("");
             setSuccess(data.message);
+
             getUser();
             form.reset();
          }
