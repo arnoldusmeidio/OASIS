@@ -2,8 +2,8 @@
 
 import * as z from "zod";
 import { useState } from "react";
-import Room from "../property-room/page";
-import { useToast } from "@/hooks/use-toast";
+import Room from "../create-room/page";
+import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { propertySchema } from "@/schemas/property-schemas";
 import { Form, FormField, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -20,7 +20,6 @@ export default function Property() {
    const [success, setSuccess] = useState<string | undefined>("");
 
    const router = useRouter();
-   const { toast } = useToast();
 
    const form = useForm<z.infer<typeof propertySchema>>({
       resolver: zodResolver(propertySchema),
@@ -55,14 +54,9 @@ export default function Property() {
 
          const data = await response.json();
          if (!data.ok) {
-            toast({
-               variant: "destructive",
-               description: `${data.message}`,
-            });
+            toast.success(data.message, { duration: 1000 });
          } else {
-            toast({
-               description: `${data.message}`,
-            });
+            toast.error(data.message, { duration: 1000 });
             form.reset();
             router.push("/");
             router.refresh();

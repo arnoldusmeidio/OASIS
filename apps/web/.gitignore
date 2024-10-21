@@ -13,6 +13,12 @@
 /.next/
 /out/
 
+# playground
+/src/app/playground
+
+# dummy database
+/src/db
+
 # production
 /build
 

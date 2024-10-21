@@ -5,15 +5,15 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { emailVerificationSchema } from "@/schemas";
+import { emailVerificationSchema } from "@/schemas/auth-schemas";
 
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
-import CardWrapper from "./CardWrapper";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import FormError from "../FormError";
-import FormSuccess from "../FormSuccess";
+import CardWrapper from "@/components/auth/CardWrapper";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import FormError from "@/components/FormError";
+import FormSuccess from "@/components/FormSuccess";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export default function RegisterForm() {
@@ -64,6 +64,7 @@ export default function RegisterForm() {
          }
       } catch (error) {
          console.error(error);
+         setError("Something went wrong!");
       }
    };
 
@@ -73,7 +74,8 @@ export default function RegisterForm() {
          backButtonLabel="Already have an account"
          backButtonHref="/login"
          showSocial
-         socialLabel="Signup with Google"
+         showBackButton
+         socialLabel="Continue with Google"
       >
          <Form {...form}>
             <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>

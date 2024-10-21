@@ -28,7 +28,7 @@
       "**/*.tsx",
       ".next/types/**/*.ts",
       "src/app/tenant/create-property",
-      "src/app/tenant/property-room"
+      "src/app/tenant/create-room"
    ],
    "exclude": ["node_modules"]
 }

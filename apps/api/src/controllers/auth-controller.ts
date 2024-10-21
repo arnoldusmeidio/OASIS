@@ -2,64 +2,28 @@ import { Request, Response, NextFunction } from "express";
 import prisma from "@/prisma";
 import { genSalt, hash, compare } from "bcrypt";
 import jwt from "jsonwebtoken";
-import { emailVerificationSchema, loginSchema, registerSchema } from "../schemas/auth-schema";
+import { loginSchema, newPasswordSchema, registerSchema, resetSchema } from "../schemas/auth-schema";
 import { ZodError } from "zod";
 import { authorizationUrl, oauth2Client } from "@/config/google";
 import { google } from "googleapis";
-import crypto from "crypto";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-// Email confirmation
-export async function emailVerification(req: Request, res: Response, next: NextFunction) {
-   try {
-      const parsedData = emailVerificationSchema.parse(req.body);
-      const { email } = parsedData;
-
-      const existingUser = await prisma.user.findUnique({
-         where: { email },
-      });
-
-      if (existingUser) return res.status(409).json({ message: "Email has already been used", ok: false });
-
-      // Generate confirmation token
-      const token = crypto.randomBytes(20).toString("hex");
-      const confirmationLink = `${process.env.CLIENT_PORT}/register/select-role?token=${token}&email=${email}`;
-
-      const { error } = await resend.emails.send({
-         from: "Oasis <oasis.app@resend.dev>",
-         to: [email],
-         subject: "Email Confirmation (OASIS)",
-         html: `<p> Please confirm your email to continue the registration process by clicking on the following link: <a href="${confirmationLink}">Confirmation Link</a></p>`,
-      });
-
-      if (error) {
-         return res.status(400).json({ message: "Something went wrong", ok: false });
-      }
-
-      return res
-         .status(200)
-         .json({ message: "Please check your email inbox/spam folder for the confirmation link", ok: true });
-   } catch (error) {
-      if (error instanceof ZodError) {
-         return res.status(400).json({ message: error.errors[0].message, ok: false });
-      } else {
-         next(error);
-      }
-   }
-}
+import { getVerificationTokenByToken } from "@/lib/verification-token";
+import { RequestWithUserId } from "@/types";
+import { getPasswordResetTokenByToken } from "@/lib/password-reset-token";
 
 // Register user
 export async function register(req: Request, res: Response, next: NextFunction) {
    try {
       const parsedData = registerSchema.parse(req.body);
-      const { name, email, password, role } = parsedData;
+      const { name, password, role, token } = parsedData;
       const selectRole = {
          ...(role == "customer" ? { customer: { create: {} } } : role == "tenant" ? { tenant: { create: {} } } : {}),
       };
+      const existingToken = await getVerificationTokenByToken(token);
+
+      if (!existingToken) return res.status(400).json({ message: "Invalid Token", ok: false });
+
       const existingUser = await prisma.user.findUnique({
-         where: { email },
+         where: { email: existingToken.email },
       });
 
       if (existingUser) return res.status(409).json({ message: "Email has already been used", ok: false });
@@ -70,11 +34,15 @@ export async function register(req: Request, res: Response, next: NextFunction) 
       await prisma.user.create({
          data: {
             name,
-            email,
+            email: existingToken.email,
             password: hashedPassword,
             accountProvider: "CREDENTIALS",
             ...selectRole,
          },
+      });
+
+      await prisma.verificationToken.delete({
+         where: { id: existingToken.id },
       });
 
       return res.status(201).json({ message: "User successfully created", ok: true });
@@ -130,7 +98,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
             secure: true, // turn off while check on thunderclient
          })
          .status(200)
-         .json({ message: "Login success", ok: true });
+         .json({ message: "Login success", ok: true, role });
    } catch (error) {
       if (error instanceof ZodError) {
          return res.status(400).json({ message: error.errors[0].message, ok: false });
@@ -145,7 +113,7 @@ export async function googleLogin(req: Request, res: Response) {
    res.redirect(authorizationUrl);
 }
 
-// GOOGLE Callback login
+// GOOGLE Callback login TODO: handle return error
 export async function googleLoginCallback(req: Request, res: Response, next: NextFunction) {
    try {
       const { code } = req.query;
@@ -161,7 +129,7 @@ export async function googleLoginCallback(req: Request, res: Response, next: Nex
       const { data } = await oauth2.userinfo.get();
 
       if (!data.email || !data.name || !data.id) {
-         return res.status(401).json({ message: "Invalid User", ok: false });
+         return res.redirect(`${process.env.CLIENT_PORT}/login?error=Invalid%20User`);
       }
 
       const existingUser = await prisma.user.findUnique({
@@ -190,9 +158,9 @@ export async function googleLoginCallback(req: Request, res: Response, next: Nex
 
       let role = null;
 
-      if (existingUser?.tenant !== null) {
+      if (existingUser?.tenant) {
          role = "tenant";
-      } else if (existingUser?.customer !== null) {
+      } else if (existingUser?.customer) {
          role = "customer";
       }
 
@@ -206,9 +174,64 @@ export async function googleLoginCallback(req: Request, res: Response, next: Nex
          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
          sameSite: "none", // need to change on production to be true
          secure: true, // turn off while check on thunderclient
-      }).redirect(`${process.env.CLIENT_PORT}/`);
+      }).redirect(
+         role == "tenant"
+            ? `${process.env.CLIENT_PORT}/tenant?success=Login%20success`
+            : `${process.env.CLIENT_PORT}/?success=Login%20success`,
+      );
    } catch (error) {
-      next(error);
+      return res.redirect(`${process.env.CLIENT_PORT}/login?error=Something%20went%20wrong!`);
+   }
+}
+
+// Update user password
+export async function updateUserPassword(req: Request, res: Response, next: NextFunction) {
+   try {
+      const parsedData = newPasswordSchema.parse(req.body);
+      const { token, password } = parsedData;
+
+      const existingToken = await getPasswordResetTokenByToken(token);
+      if (!existingToken) return res.status(404).json({ message: "Invalid Token", ok: false });
+
+      const hasExpired = new Date(existingToken.expires) < new Date();
+
+      if (hasExpired) return res.status(400).json({ message: "Token has expired", ok: false });
+
+      const user = await prisma.user.findUnique({
+         where: {
+            email: existingToken.email,
+         },
+      });
+
+      if (!user)
+         return res.status(404).json({
+            message: "User not found",
+            ok: false,
+         });
+
+      const salt = await genSalt(10);
+      const hashedPassword = await hash(password, salt);
+
+      await prisma.user.update({
+         where: {
+            email: existingToken.email,
+         },
+         data: {
+            password: hashedPassword,
+         },
+      });
+
+      await prisma.passwordResetToken.delete({
+         where: { id: existingToken.id },
+      });
+
+      res.status(200).json({ message: "Password updated successfully", ok: true });
+   } catch (error) {
+      if (error instanceof ZodError) {
+         return res.status(400).json({ message: error.errors[0].message, ok: false });
+      } else {
+         next(error);
+      }
    }
 }
 
