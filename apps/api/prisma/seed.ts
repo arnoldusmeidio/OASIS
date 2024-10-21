@@ -36,13 +36,23 @@ async function inputData() {
       },
    });
 
+   const jeta = await prisma.user.create({
+      data: {
+         name: "Jessica Tanaka",
+         email: "jeta123@mail.com",
+         password: hashedPassword,
+         customer: { create: {} },
+         accountProvider: "CREDENTIALS",
+      },
+   });
+
    await prisma.property.create({
       data: {
          name: "Super Villa",
          address: "Bali",
          description: "Cozy place",
          pictureUrl:
-            "https://plus.unsplash.com/premium_photo-1682377521625-c656fc1ff3e1?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
          tenantId: budi.id,
          room: {
             createMany: {
@@ -59,7 +69,7 @@ async function inputData() {
                      type: "Standard",
                      description: "Standard",
                      pictureUrl:
-                        "https://plus.unsplash.com/premium_photo-1675615667752-2ccda7042e7e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                      price: 300000,
                      roomCapacity: 2,
                   },
@@ -75,7 +85,7 @@ async function inputData() {
          address: "Bali",
          description: "Standard place",
          pictureUrl:
-            "https://plus.unsplash.com/premium_photo-1661915661139-5b6a4e4a6fcc?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
          tenantId: budi.id,
          room: {
             createMany: {
@@ -92,7 +102,7 @@ async function inputData() {
                      type: "Standard",
                      description: "Standard",
                      pictureUrl:
-                        "https://plus.unsplash.com/premium_photo-1675615667752-2ccda7042e7e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                      price: 300000,
                      roomCapacity: 2,
                   },
