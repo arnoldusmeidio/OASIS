@@ -7,4 +7,5 @@ export interface User {
    tenant: {};
    customer: {};
    accountProvider: string;
+   pictureUrl: string;
 }

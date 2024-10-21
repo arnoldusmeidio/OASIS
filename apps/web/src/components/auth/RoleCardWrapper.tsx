@@ -1,7 +1,7 @@
 // "use client";
 
-import { Card, CardContent, CardHeader } from "../ui/card";
-import RoleHeader from "./RoleHeader";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import RoleHeader from "@/components/auth/RoleHeader";
 
 interface CardWrapperProps {
    children: React.ReactNode;

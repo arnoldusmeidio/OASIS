@@ -1,45 +1,52 @@
 "use client";
 
 import * as z from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { LoginSchema } from "@/schemas";
+import { loginSchema } from "@/schemas/auth-schemas";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
-import CardWrapper from "./CardWrapper";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import FormError from "../FormError";
-import FormSuccess from "../FormSuccess";
-import { useRouter } from "next/navigation";
+import CardWrapper from "@/components/auth/CardWrapper";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import FormError from "@/components/FormError";
+import FormSuccess from "@/components/FormSuccess";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginForm() {
    const [error, setError] = useState<string | undefined>("");
    const [success, setSuccess] = useState<string | undefined>("");
 
+   const searchParams = useSearchParams();
+   const errorMessage = searchParams.get("error");
+
+   useEffect(() => {
+      if (errorMessage) setError(errorMessage);
+   }, []);
+
    const router = useRouter();
 
-   const { toast } = useToast();
-
-   const form = useForm<z.infer<typeof LoginSchema>>({
-      resolver: zodResolver(LoginSchema),
+   const form = useForm<z.infer<typeof loginSchema>>({
+      resolver: zodResolver(loginSchema),
       defaultValues: {
          email: "",
          password: "",
          rememberMe: false,
       },
+      mode: "onBlur",
    });
 
    const {
       formState: { isSubmitting },
    } = form;
 
-   const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
+   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
       try {
          const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/auth/login`, {
             method: "POST",
@@ -56,15 +63,14 @@ export default function LoginForm() {
          } else {
             setError("");
             setSuccess(data.message);
-            toast({
-               description: `${data.message}`,
-            });
+            toast.success(data.message, { duration: 1500 });
             form.reset();
             router.push("/");
             router.refresh();
          }
       } catch (error) {
          console.error(error);
+         setError("Something went wrong!");
       }
    };
 
@@ -74,7 +80,8 @@ export default function LoginForm() {
          backButtonLabel="Don't have an account?"
          backButtonHref="/register"
          showSocial
-         socialLabel="Login with Google"
+         showBackButton
+         socialLabel="Continue with Google"
       >
          <Form {...form}>
             <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
@@ -101,6 +108,9 @@ export default function LoginForm() {
                            <FormControl>
                               <Input {...field} disabled={isSubmitting} placeholder="********" type="password" />
                            </FormControl>
+                           <Button size={"sm"} variant={"link"} asChild className="px-0 font-normal">
+                              <Link href={"/reset"}>Forgot password?</Link>
+                           </Button>
                            <FormMessage />
                         </FormItem>
                      )}
