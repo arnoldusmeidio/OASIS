@@ -214,8 +214,6 @@ export async function updateUserInfo(req: Request, res: Response, next: NextFunc
 export async function updateUserPicture(req: Request, res: Response, next: NextFunction) {
    try {
       const id = (req as RequestWithUserId).user?.id;
-      const parsedData = profileSchema.parse(req.body);
-      const {} = parsedData;
 
       const user = await prisma.user.findUnique({
          where: {
@@ -247,6 +245,8 @@ export async function updateUserPicture(req: Request, res: Response, next: NextF
             pictureUrl,
          },
       });
+
+      fs.unlink(req.file.path);
 
       return res.status(200).json({ message: "Profile picture successfully updated", ok: true });
    } catch (error) {
