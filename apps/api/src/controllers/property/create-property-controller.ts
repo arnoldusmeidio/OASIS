@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import prisma from "@/prisma";
 import cloudinary from "@/config/cloudinary";
 import { RequestWithUserId } from "@/types";
+import fs from "fs/promises";
 
 //Create property
 export const createProperty = async (req: Request, res: Response, next: NextFunction) => {
@@ -40,6 +41,9 @@ export const createProperty = async (req: Request, res: Response, next: NextFunc
             pictureUrl: cloudinaryData.secure_url,
          },
       });
+
+      fs.unlink(req.file.path);
+
       return res.status(201).json({ message: "property Created" });
    } catch (error) {
       console.error("Error creating property:", error);
