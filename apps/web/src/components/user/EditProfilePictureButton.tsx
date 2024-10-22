@@ -9,7 +9,12 @@ import {
 } from "@/components/ui/dialog";
 import ChangeProfilePictureForm from "@/components/user/ChangeProfilePictureForm";
 
-export default function EditProfilePictureButton() {
+interface Props {
+   getUser: () => void;
+}
+
+export default function EditProfilePictureButton({ getUser }: Props) {
+
    return (
       <Dialog>
          <DialogTrigger asChild>
@@ -24,7 +29,7 @@ export default function EditProfilePictureButton() {
                   Make changes to your profile picture here. Click save when you're done.
                </DialogDescription>
             </DialogHeader>
-            <ChangeProfilePictureForm />
+            <ChangeProfilePictureForm getUser={getUser} />
          </DialogContent>
       </Dialog>
    );

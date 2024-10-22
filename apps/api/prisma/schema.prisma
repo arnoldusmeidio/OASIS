@@ -14,15 +14,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Language {
+  ENGLISH
+  INDONESIA
+}
+
+enum Currency {
+  IDR
+  USD
+}
+
 model User {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   name       String
-  email      String  @unique
+  email      String   @unique
   password   String?
   pictureUrl String?
+  currency   Currency @default(IDR)
+  language   Language @default(ENGLISH)
 
   accountProvider AccountProvider
 

@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import "@/components/ui/carousel/embla.css";
 import { Toaster } from "@/components/ui/sonner";
-import Navbar from "@/components/header/SearchNavbar";
 import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -19,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
          <body className={`${inter.className}`}>
             {children}
             <Toaster richColors />
-            <Footer />
+            {/* <Footer /> */}
          </body>
       </html>
    );

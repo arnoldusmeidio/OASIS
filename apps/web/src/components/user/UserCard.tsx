@@ -8,7 +8,11 @@ import ChangeEmailButton from "@/components/user/ChangeEmailButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "lucide-react";
 
-export default function UserCard() {
+interface Props {
+   getUser: () => void;
+}
+
+export default function UserCard({ getUser }: Props) {
    const { user } = useUserStore();
    console.log(user?.pictureUrl);
 
@@ -25,9 +29,9 @@ export default function UserCard() {
                      <User className="h-10 w-10" />
                   </AvatarFallback>
                </Avatar>
-               {user?.accountProvider === "CREDENTIALS" && <EditProfilePictureButton />}
+
+               {user?.accountProvider === "CREDENTIALS" && <EditProfilePictureButton getUser={getUser} />}
             </div>
-            {/* <img className="h-20 w-20" src={user?.pictureUrl} alt="" /> */}
 
             <div className="mt-6 flex items-end justify-between gap-2">
                <div className="w-full space-y-2">
@@ -39,7 +43,7 @@ export default function UserCard() {
 
             <hr className="bg-foreground/50 my-6 h-[2px] border-0" />
 
-            <UpdateProfileForm />
+            <UpdateProfileForm getUser={getUser} />
          </CardContent>
       </Card>
    );

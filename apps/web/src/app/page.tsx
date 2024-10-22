@@ -9,6 +9,7 @@ import Banner from "@/components/Banner";
 import SmallCard from "@/components/SmallCard";
 import { exploreData, bannerData } from "@/static-db";
 import MediumCard from "@/components/MediumCard";
+import Footer from "@/components/Footer";
 
 export default function Home() {
    const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +22,7 @@ export default function Home() {
    useEffect(() => {
       async function getUser() {
          try {
-            const user = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users/search`, {
+            const user = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users`, {
                credentials: "include",
             });
             const data = await user.json();
@@ -60,7 +61,7 @@ export default function Home() {
                <section className="mt-4">
                   <h2 className="py-8 pb-5 text-3xl font-semibold sm:text-4xl">Popular Properties</h2>
 
-                  <div className="grid grid-cols-1 items-center gap-8 align-middle sm:grid-cols-2 lg:grid-cols-3">
+                  <div className="mb-4 grid grid-cols-1 items-center gap-8 align-middle sm:grid-cols-2 lg:grid-cols-3">
                      {bannerData?.map((item) => (
                         <MediumCard
                            key={item.id}
@@ -73,6 +74,7 @@ export default function Home() {
                </section>
             </div>
          </main>
+         <Footer />
       </>
    );
 }
