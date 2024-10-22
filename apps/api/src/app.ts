@@ -8,6 +8,7 @@ import userRouter from "./routers/user-router";
 import bookingRouter from "./routers/booking-router";
 import { verifyToken } from "./middlewares/auth-middleware";
 import { notFoundMiddleware } from "./middlewares/not-found-middleware";
+import room from "./routers/room-route";
 
 import { tenantGuard } from "@/middlewares/auth-middleware";
 
@@ -46,6 +47,8 @@ const createApp = () => {
 
    //tenant Route
    app.use("/api/v1/tenant", verifyToken, tenantGuard, property);
+
+   app.use("/api/v1/room", room);
 
    // Not found handler
    app.use(notFoundMiddleware);

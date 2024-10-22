@@ -4,16 +4,17 @@ import { editProperty } from "@/controllers/property/edit-property";
 import { uploader } from "@/middlewares/uplouder-middleware";
 import { Router } from "express";
 import { deleteProperty } from "@/controllers/property/delete-property";
+import { getSingleProperty } from "@/controllers/property/getSingle-property";
 
 const router = Router();
 const upload = uploader();
 
-router.route("/").get(getAllPropertiesPagination);
+router.route("/").get(getAllPropertiesPagination).post(upload.single("pictureUrl"), createProperty);
 
-router.route("/create").post(upload.single("pictureUrl"), createProperty);
-
-router.route("/delete/:id").delete(deleteProperty);
-
-router.route("/:propertyId/edit").put(upload.single("pictureUrl"), editProperty);
+router
+   .route("/:propertyId")
+   .get(getSingleProperty)
+   .delete(deleteProperty)
+   .put(upload.single("pictureUrl"), editProperty);
 
 export default router;

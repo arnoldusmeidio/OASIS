@@ -5,7 +5,7 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/web
 export const createRoomSchema = z.object({
    roomName: z.string().min(1, { message: "Room Name is required" }),
    roomDescription: z.string().min(1, { message: "Room Description is required" }),
-   roomPictureUrl: z
+   pictureUrl: z
       .instanceof(File)
       .refine(
          (files) => ACCEPTED_IMAGE_TYPES.includes(files.type),

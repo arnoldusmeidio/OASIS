@@ -13,7 +13,7 @@ export const getSingleProperty = async (req: Request, res: Response, next: NextF
 
       if (!getProperty) res.status(404).json({ message: "Property not found" });
 
-      return res.status(200).json({ message: "property edited" });
+      return res.status(200).json({ data: getProperty, ok: true });
    } catch (error) {
       next(error);
       console.error(error);

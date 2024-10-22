@@ -24,7 +24,10 @@ export const createProperty = async (req: Request, res: Response, next: NextFunc
 
       const { propertyName, propertyAddress, propertyDescription } = req.body;
 
+      console.log(req.body);
+
       if (!req.file) {
+         console.log(req.file);
          return res.status(400).json({ message: "No file uploaded" });
       }
 

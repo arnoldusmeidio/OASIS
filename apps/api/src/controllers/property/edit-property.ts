@@ -1,13 +1,17 @@
 import { NextFunction, Request, Response } from "express";
 import prisma from "@/prisma";
 import cloudinary from "@/config/cloudinary";
-import { RequestWithUserId } from "@/types"; // Assuming you have a user type in your request
+import { RequestWithUserId } from "@/types";
+import fs from "fs/promises";
 
 // Edit Property
 
 export async function editProperty(req: Request, res: Response, next: NextFunction) {
    try {
       const { propertyName, propertyAddress, propertyDescription } = req.body;
+
+      console.log(req.body);
+
       const propertyId = req.params.propertyId; // Get propertyId from URL parameters
 
       const id = (req as RequestWithUserId).user?.id;
@@ -26,6 +30,7 @@ export async function editProperty(req: Request, res: Response, next: NextFuncti
       }
 
       if (!req.file) {
+         console.log(req.file);
          return res.status(400).json({ message: "No file uploaded" });
       }
 
@@ -55,6 +60,9 @@ export async function editProperty(req: Request, res: Response, next: NextFuncti
             pictureUrl: cloudinaryData.secure_url,
          },
       });
+
+      console.log(keluar);
+      fs.unlink(req.file.path);
 
       res.status(201).json({ message: "Property edited", data: keluar, ok: true });
    } catch (error) {
