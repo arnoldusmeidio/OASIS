@@ -10,7 +10,7 @@ import SmallCard from "@/components/SmallCard";
 import { exploreData, bannerData } from "@/static-db";
 import MediumCard from "@/components/MediumCard";
 import Footer from "@/components/Footer";
-import { divide } from "cypress/types/lodash";
+
 import HomeSkeleton from "@/components/HomeSkeleton";
 
 export default function Home() {
@@ -67,7 +67,6 @@ export default function Home() {
 
                      <section className="mt-4">
                         <h2 className="py-8 pb-5 text-3xl font-semibold sm:text-4xl">Popular Properties</h2>
-
                         <div className="mb-4 grid grid-cols-1 items-center gap-8 align-middle sm:grid-cols-2 lg:grid-cols-3">
                            {bannerData?.map((item) => (
                               <MediumCard
@@ -83,7 +82,6 @@ export default function Home() {
                </>
             )}
          </main>
-
          <Footer />
       </>
    );
