@@ -22,14 +22,20 @@ export default function UserCard({ getUser }: Props) {
             <span className="text-2xl font-bold">User Profile</span>
          </CardHeader>
          <CardContent className="flex flex-col">
-            <div className="flex flex-col items-center gap-2 self-center">
-               <Avatar className="h-20 w-20">
-                  <AvatarImage src={user?.pictureUrl} alt="Profile picture" />
-                  <AvatarFallback>
-                     <User className="h-10 w-10" />
-                  </AvatarFallback>
-               </Avatar>
-               {user?.accountProvider === "CREDENTIALS" && <EditProfilePictureButton getUser={getUser} />}
+            <div className="flex flex-col gap-4 sm:flex-row sm:justify-center sm:gap-10">
+               <div className="flex flex-col items-center gap-2 self-center">
+                  <Avatar className="h-20 w-20 lg:h-32 lg:w-32">
+                     <AvatarImage src={user?.pictureUrl} alt="Profile picture" />
+                     <AvatarFallback>
+                        <User className="h-10 w-10 lg:h-14 lg:w-14" />
+                     </AvatarFallback>
+                  </Avatar>
+                  {user?.accountProvider === "CREDENTIALS" && <EditProfilePictureButton getUser={getUser} />}
+               </div>
+               <div className="flex items-center justify-center gap-4 sm:flex-col sm:items-start">
+                  <span className="text-lg font-semibold xl:text-xl">Wallet : {30000}</span>
+                  <span className="text-lg font-semibold xl:text-xl">Point : {10000}</span>
+               </div>
             </div>
 
             <div className="mt-6 flex items-end justify-between gap-2">

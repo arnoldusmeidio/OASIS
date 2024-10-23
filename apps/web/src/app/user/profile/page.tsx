@@ -28,7 +28,6 @@ export default function ProfilePage() {
                router.refresh();
             }
          }
-         setIsLoading(false);
       } catch (error) {
          console.error(error);
       }
@@ -36,10 +35,11 @@ export default function ProfilePage() {
 
    useEffect(() => {
       getUser();
+      setIsLoading(false);
    }, []);
 
    return (
-      <div className="w-[375px] content-center self-center">
+      <div className="w-[375px] content-center self-center sm:w-[500px] xl:w-[800px]">
          <div className="w-full py-4">
             {isLoading ? <Skeleton className="h-[750px] w-full" /> : <UserCard getUser={getUser} />}
          </div>
