@@ -1,4 +1,5 @@
 import { Currency, Language } from "@/types/user-types";
+
 import * as z from "zod";
 
 export const profileSchema = z

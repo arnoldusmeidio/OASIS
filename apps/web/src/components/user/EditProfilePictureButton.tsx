@@ -14,6 +14,7 @@ interface Props {
 }
 
 export default function EditProfilePictureButton({ getUser }: Props) {
+
    return (
       <Dialog>
          <DialogTrigger asChild>

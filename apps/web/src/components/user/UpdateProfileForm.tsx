@@ -5,6 +5,7 @@ import { profileSchema } from "@/schemas/profile-schemas";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+
 import { useEffect, useState } from "react";
 import { useUserStore } from "@/stores/useUserStore";
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,7 @@ export default function UpdateProfileForm({ getUser }: Props) {
          confirmNewPassword: undefined,
          language: user?.language || undefined,
          currency: user?.currency || undefined,
+
       },
       mode: "onBlur",
    });
