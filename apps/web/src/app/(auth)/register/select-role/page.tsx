@@ -46,64 +46,62 @@ export default function SelectRolePage() {
    };
 
    return (
-      <main className="bg-main-theme flex h-full items-center justify-center overflow-y-auto px-4">
-         <div className="h-full w-[375px] content-center self-center">
-            <div className="h-fit w-full py-4">
-               <RoleCardWrapper headerLabel="Selecting Role">
-                  <Form {...form}>
-                     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-6">
-                        <FormField
-                           control={form.control}
-                           name="role"
-                           render={({ field }) => (
-                              <FormItem className="space-y-3">
-                                 <FormControl>
-                                    <RadioGroup
-                                       onValueChange={field.onChange}
-                                       defaultValue={"customer"}
-                                       className="flex flex-col space-y-1"
-                                    >
-                                       <FormItem className="bg-card relative rounded-lg">
-                                          <FormControl>
-                                             <RadioGroupItem className="absolute left-4 top-6" value="customer" />
-                                          </FormControl>
-                                          <FormLabel>
-                                             <RoleSelectionCard
-                                                roleType={"Customer"}
-                                                description={"As a customer, you could booked the listed properties"}
-                                                roleImageUrl={"/customer.svg"}
-                                             />
-                                          </FormLabel>
-                                       </FormItem>
-                                       <FormItem className="bg-card relative rounded-lg">
-                                          <FormControl>
-                                             <RadioGroupItem className="absolute left-4 top-6" value="tenant" />
-                                          </FormControl>
-                                          <FormLabel>
-                                             <RoleSelectionCard
-                                                roleType={"Tenant"}
-                                                description={"As a tenant, you could rent your properties to customers"}
-                                                roleImageUrl={"/tenant.svg"}
-                                             />
-                                          </FormLabel>
-                                       </FormItem>
-                                    </RadioGroup>
-                                 </FormControl>
-                                 <FormMessage />
-                                 <p className="text-muted-foreground text-sm">
-                                    Note: You could not change your role in the future once you choose a role
-                                 </p>
-                              </FormItem>
-                           )}
-                        />
-                        <Button type="submit" disabled={isSubmitting}>
-                           Select Role
-                        </Button>
-                     </form>
-                  </Form>
-               </RoleCardWrapper>
-            </div>
+      <div className="h-full w-[375px] content-center self-center sm:w-[500px] lg:w-[900px]">
+         <div className="h-fit w-full py-4">
+            <RoleCardWrapper headerLabel="Selecting Role">
+               <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-6">
+                     <FormField
+                        control={form.control}
+                        name="role"
+                        render={({ field }) => (
+                           <FormItem className="space-y-3 lg:space-y-6">
+                              <FormControl>
+                                 <RadioGroup
+                                    onValueChange={field.onChange}
+                                    defaultValue={"customer"}
+                                    className="flex flex-col space-y-1 lg:flex-row lg:gap-10"
+                                 >
+                                    <FormItem className="bg-card relative rounded-lg">
+                                       <FormControl>
+                                          <RadioGroupItem className="absolute left-4 top-6" value="customer" />
+                                       </FormControl>
+                                       <FormLabel>
+                                          <RoleSelectionCard
+                                             roleType={"Customer"}
+                                             description={"As a customer, you could booked the listed properties"}
+                                             roleImageUrl={"/customer.svg"}
+                                          />
+                                       </FormLabel>
+                                    </FormItem>
+                                    <FormItem className="bg-card relative rounded-lg">
+                                       <FormControl>
+                                          <RadioGroupItem className="absolute left-4 top-6" value="tenant" />
+                                       </FormControl>
+                                       <FormLabel>
+                                          <RoleSelectionCard
+                                             roleType={"Tenant"}
+                                             description={"As a tenant, you could rent your properties to customers"}
+                                             roleImageUrl={"/tenant.svg"}
+                                          />
+                                       </FormLabel>
+                                    </FormItem>
+                                 </RadioGroup>
+                              </FormControl>
+                              <FormMessage />
+                              <p className="text-muted-foreground text-sm">
+                                 Note: You could not change your role in the future once you choose a role
+                              </p>
+                           </FormItem>
+                        )}
+                     />
+                     <Button type="submit" disabled={isSubmitting}>
+                        Select Role
+                     </Button>
+                  </form>
+               </Form>
+            </RoleCardWrapper>
          </div>
-      </main>
+      </div>
    );
 }
