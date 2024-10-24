@@ -58,8 +58,8 @@ export default function SelectRolePage() {
    };
 
    return (
-      <main className="flex h-full items-center justify-center overflow-y-auto px-4">
-         <div className="h-full w-[375px] content-center self-center">
+      <main className="flex h-full min-h-screen items-center justify-center overflow-y-auto px-4">
+         <div className="h-full w-[375px] content-center self-center sm:w-[500px] lg:w-[900px]">
             <div className="h-fit w-full py-4">
                <RoleCardWrapper headerLabel="Selecting Role">
                   <Form {...form}>
@@ -68,12 +68,12 @@ export default function SelectRolePage() {
                            control={form.control}
                            name="role"
                            render={({ field }) => (
-                              <FormItem className="space-y-3">
+                              <FormItem className="space-y-3 lg:space-y-6">
                                  <FormControl>
                                     <RadioGroup
                                        onValueChange={field.onChange}
                                        defaultValue={"customer"}
-                                       className="flex flex-col space-y-1"
+                                       className="flex flex-col space-y-1 lg:flex-row lg:gap-10"
                                     >
                                        <FormItem className="bg-card relative rounded-lg">
                                           <FormControl>
