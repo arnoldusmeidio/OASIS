@@ -46,8 +46,6 @@ export default function ChangeProfilePictureForm({ getUser }: Props) {
          formData.append("pictureUrl", value);
       });
 
-      const formDataEntries = Array.from(formData.entries());
-
       try {
          const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users/picture`, {
             method: "PUT",
