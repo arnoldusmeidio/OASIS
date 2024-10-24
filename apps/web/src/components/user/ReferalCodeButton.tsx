@@ -31,13 +31,13 @@ export default function RefCodeButton({ getUser }: Props) {
          </DialogTrigger>
          <DialogContent className="w-[375px]">
             <DialogHeader>
-               <DialogTitle>Your Referal Code</DialogTitle>
+               <DialogTitle>Your Referral Code</DialogTitle>
                <DialogDescription>Share your code to friends to redeem points.</DialogDescription>
             </DialogHeader>
             <div className="flex items-center space-x-2">
                <div className="grid flex-1 gap-2">
                   <Label htmlFor="link" className="sr-only">
-                     Referal Code
+                     Referral Code
                   </Label>
                   <Input id="link" defaultValue={user?.customer?.refCode} readOnly />
                </div>
