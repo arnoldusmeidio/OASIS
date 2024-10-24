@@ -14,7 +14,6 @@ interface Props {
 
 export default function UserCard({ getUser }: Props) {
    const { user } = useUserStore();
-   console.log(user?.pictureUrl);
 
    return (
       <Card>

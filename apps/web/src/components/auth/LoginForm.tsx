@@ -58,7 +58,6 @@ export default function LoginForm() {
          });
          const data = await response.json();
 
-         console.log(data);
          if (!data.ok) {
             setSuccess("");
             setError(data.message);

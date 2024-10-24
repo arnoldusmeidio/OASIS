@@ -31,7 +31,6 @@ export default function UpdateProfileForm({ getUser }: Props) {
          confirmNewPassword: undefined,
          language: user?.language || undefined,
          currency: user?.currency || undefined,
-
       },
       mode: "onBlur",
    });
@@ -41,7 +40,6 @@ export default function UpdateProfileForm({ getUser }: Props) {
    } = form;
 
    const onSubmit = async (values: z.infer<typeof profileSchema>) => {
-      console.log(values);
       try {
          const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users`, {
             method: "PUT",
@@ -148,52 +146,51 @@ export default function UpdateProfileForm({ getUser }: Props) {
                            </FormItem>
                         )}
                      />
-                     <FormField
-                        control={form.control}
-                        name="language"
-                        render={({ field }) => (
-                           <FormItem>
-                              <FormLabel>Language</FormLabel>
-                              <Select disabled={isSubmitting} onValueChange={field.onChange} defaultValue={field.value}>
-                                 <FormControl>
-                                    <SelectTrigger>
-                                       <SelectValue placeholder="Select Language" />
-                                    </SelectTrigger>
-                                 </FormControl>
-                                 <SelectContent>
-                                    <SelectItem value="ENGLISH">English</SelectItem>
-                                    <SelectItem value="INDONESIA">Indonesia</SelectItem>
-                                 </SelectContent>
-                              </Select>
-
-                              <FormMessage />
-                           </FormItem>
-                        )}
-                     />
-                     <FormField
-                        control={form.control}
-                        name="currency"
-                        render={({ field }) => (
-                           <FormItem>
-                              <FormLabel>Currency</FormLabel>
-                              <Select disabled={isSubmitting} onValueChange={field.onChange} defaultValue={field.value}>
-                                 <FormControl>
-                                    <SelectTrigger>
-                                       <SelectValue placeholder="Select Currency" />
-                                    </SelectTrigger>
-                                 </FormControl>
-                                 <SelectContent>
-                                    <SelectItem value="IDR">IDR</SelectItem>
-                                    <SelectItem value="USD">USD</SelectItem>
-                                 </SelectContent>
-                              </Select>
-
-                              <FormMessage />
-                           </FormItem>
-                        )}
-                     />
                   </>
                )}
+               <FormField
+                  control={form.control}
+                  name="language"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Language</FormLabel>
+                        <Select disabled={isSubmitting} onValueChange={field.onChange} defaultValue={field.value}>
+                           <FormControl>
+                              <SelectTrigger>
+                                 <SelectValue placeholder="Select Language" />
+                              </SelectTrigger>
+                           </FormControl>
+                           <SelectContent>
+                              <SelectItem value="ENGLISH">English</SelectItem>
+                              <SelectItem value="INDONESIA">Indonesia</SelectItem>
+                           </SelectContent>
+                        </Select>
+
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+               <FormField
+                  control={form.control}
+                  name="currency"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Currency</FormLabel>
+                        <Select disabled={isSubmitting} onValueChange={field.onChange} defaultValue={field.value}>
+                           <FormControl>
+                              <SelectTrigger>
+                                 <SelectValue placeholder="Select Currency" />
+                              </SelectTrigger>
+                           </FormControl>
+                           <SelectContent>
+                              <SelectItem value="IDR">IDR</SelectItem>
+                              <SelectItem value="USD">USD</SelectItem>
+                           </SelectContent>
+                        </Select>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
             </div>
             <FormError message={error} />
             <FormSuccess message={success} />
