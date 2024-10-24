@@ -20,4 +20,8 @@ export interface User {
    pictureUrl: string;
    currency: Currency;
    language: Language;
+   wallet: {
+      balance: number;
+      points: number;
+   };
 }

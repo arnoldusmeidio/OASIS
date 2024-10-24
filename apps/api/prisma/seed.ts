@@ -33,6 +33,7 @@ async function inputData() {
          password: hashedPassword,
          customer: { create: {} },
          accountProvider: "CREDENTIALS",
+         wallet: { create: {} },
       },
    });
 
@@ -43,6 +44,7 @@ async function inputData() {
          password: hashedPassword,
          customer: { create: {} },
          accountProvider: "CREDENTIALS",
+         wallet: { create: {} },
       },
    });
 

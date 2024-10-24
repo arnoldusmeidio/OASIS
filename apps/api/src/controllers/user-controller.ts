@@ -26,6 +26,7 @@ export async function getSingleUser(req: Request, res: Response, next: NextFunct
          include: {
             customer: true,
             tenant: true,
+            wallet: true,
          },
       });
 
