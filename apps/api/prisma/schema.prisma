@@ -90,6 +90,8 @@ model Customer {
 
   bookings Booking[]
   reviews  Review[]
+
+  refCode String
 }
 
 model Property {
