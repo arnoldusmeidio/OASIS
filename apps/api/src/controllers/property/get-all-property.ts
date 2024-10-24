@@ -4,7 +4,7 @@ import prisma from "@/prisma";
 //get all Pagination
 export async function getAllPropertiesPagination(req: Request, res: Response, next: NextFunction) {
    try {
-      const { page = 1, limit = 3 } = req.query;
+      const { page = 1, limit = 10 } = req.query;
       const offset = (Number(page) - 1) * Number(limit);
 
       const properties = await prisma.property.findMany({

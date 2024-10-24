@@ -22,14 +22,10 @@ export const deleteProperty = async (req: RequestWithUserId, res: Response, next
 
       const tenantId = property.tenant.id;
 
-      console.log(tenantId);
-
-      // Check if the request user ID matches the property tenant ID
       if (id !== tenantId) {
          return res.status(403).json({ message: "Unauthorized to delete this property" });
       }
 
-      // If the property has a picture, delete it from Cloudinary
       const publicId = property.pictureUrl?.split("/").pop()?.split(".")[0];
       if (publicId) {
          await cloudinary.uploader.destroy(`images/${publicId}`);

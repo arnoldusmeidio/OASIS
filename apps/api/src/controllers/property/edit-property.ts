@@ -10,9 +10,9 @@ export async function editProperty(req: Request, res: Response, next: NextFuncti
    try {
       const { propertyName, propertyAddress, propertyDescription } = req.body;
 
-      console.log(req.body);
-
       const propertyId = req.params.propertyId; // Get propertyId from URL parameters
+
+      console.log(req.params.propertyid);
 
       const id = (req as RequestWithUserId).user?.id;
 
@@ -30,7 +30,6 @@ export async function editProperty(req: Request, res: Response, next: NextFuncti
       }
 
       if (!req.file) {
-         console.log(req.file);
          return res.status(400).json({ message: "No file uploaded" });
       }
 
@@ -61,7 +60,6 @@ export async function editProperty(req: Request, res: Response, next: NextFuncti
          },
       });
 
-      console.log(keluar);
       fs.unlink(req.file.path);
 
       res.status(201).json({ message: "Property edited", data: keluar, ok: true });
