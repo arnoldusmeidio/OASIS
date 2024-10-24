@@ -15,7 +15,9 @@ export interface User {
    email: string;
    role: string;
    tenant: {};
-   customer: {};
+   customer: {
+      refCode: string;
+   };
    accountProvider: string;
    pictureUrl: string;
    currency: Currency;

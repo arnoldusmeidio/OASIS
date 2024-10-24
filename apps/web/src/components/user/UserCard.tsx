@@ -7,6 +7,7 @@ import { useUserStore } from "@/stores/useUserStore";
 import ChangeEmailButton from "@/components/user/ChangeEmailButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "lucide-react";
+import RefCodeButton from "./ReferalCodeButton";
 
 interface Props {
    getUser: () => void;
@@ -37,6 +38,9 @@ export default function UserCard({ getUser }: Props) {
                   </span>
                   <span className="text-lg font-semibold xl:text-xl">
                      {user?.customer ? "Points: " + user?.wallet?.points : ""}
+                  </span>
+                  <span>
+                     <RefCodeButton getUser={getUser} />
                   </span>
                </div>
             </div>
