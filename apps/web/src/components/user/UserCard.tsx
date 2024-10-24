@@ -8,6 +8,7 @@ import ChangeEmailButton from "@/components/user/ChangeEmailButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "lucide-react";
 import RefCodeButton from "./ReferalCodeButton";
+import RedeemRefCode from "./RedeemRefCodeForm";
 
 interface Props {
    getUser: () => void;
@@ -41,6 +42,9 @@ export default function UserCard({ getUser }: Props) {
                   </span>
                   <span>
                      <RefCodeButton getUser={getUser} />
+                  </span>
+                  <span>
+                     <RedeemRefCode getUser={getUser} />
                   </span>
                </div>
             </div>

@@ -26,7 +26,7 @@ export default function RefCodeButton({ getUser }: Props) {
       <Dialog>
          <DialogTrigger asChild>
             <Button type="button" variant={"secondary"} size={"sm"}>
-               Referal Code
+               Referral Code
             </Button>
          </DialogTrigger>
          <DialogContent className="w-[375px]">
