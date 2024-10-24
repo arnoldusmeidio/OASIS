@@ -24,7 +24,6 @@ import {
    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { ToastAction } from "@/components/ui/toast";
 import { format } from "date-fns";
 import { Booking } from "@/types/booking";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -72,7 +71,7 @@ export default function BookingCard() {
                   width={100}
                   height={100}
                   src={"/drive.svg"}
-                  className="w-[40%] max-w-[40%]"
+                  className="h-[300px] w-[300px] md:h-[500px] md:w-[500px]"
                />
             </div>
             <h3 className="flex justify-center gap-2 align-middle">No booking found!</h3>
@@ -84,117 +83,115 @@ export default function BookingCard() {
    }
 
    return (
-      <main className="flex w-full justify-center">
-         <div className="flex w-full min-w-[375px] max-w-7xl flex-col gap-8 px-8 py-4">
-            <div className="flex justify-end gap-4 px-4 py-4">
-               <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                     <Button variant="outline">Sort</Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56">
-                     <DropdownMenuLabel>Sort by:</DropdownMenuLabel>
-                     <DropdownMenuSeparator />
-                     <DropdownMenuRadioGroup>
-                        <DropdownMenuRadioItem value="date_asc">Date (Asc)</DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem value="date_desc">Date (Desc)</DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem value="booking_asc">Booking Number (Asc)</DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem value="booking_desc">Booking Number (Desc)</DropdownMenuRadioItem>
-                     </DropdownMenuRadioGroup>
-                  </DropdownMenuContent>
-               </DropdownMenu>
-            </div>
-            <Accordion type="single" collapsible>
-               {(bookingData as any)?.data?.map((e: Booking, index: number) => (
-                  <AccordionItem value={e.id} key={e.id}>
-                     <AccordionTrigger>
-                        <div className="grid grid-cols-1 sm:grid-cols-2">
-                           <div>Booking Number:</div>
-                           <div>
-                              <h6 className="font-bold"> {e.bookingNumber}</h6>
-                           </div>
-                        </div>
-                     </AccordionTrigger>
-                     <AccordionContent>
-                        <Card className="w-full shadow-md">
-                           <CardHeader>
-                              <CardTitle>Booking Info</CardTitle>
-                              <CardDescription>
-                                 {!e.endDate
-                                    ? `${format(e.startDate, "LLL dd, y")}`
-                                    : `${format(e.startDate, "LLL dd, y")} - ${format(e.endDate, "LLL dd, y")}`}
-                                 <Image
-                                    src={e.room.pictureUrl}
-                                    alt=""
-                                    width={200}
-                                    height={200}
-                                    className="flex rounded-lg"
-                                 ></Image>
-                              </CardDescription>
-                           </CardHeader>
-                           <CardContent className="grid gap-4">
-                              <div className="flex items-center space-x-4 rounded-md border p-4">
-                                 <div className="flex-1 space-y-1">
-                                    <p className="text-sm font-medium leading-none">Payment Status:</p>
-                                    <p className="text-muted-foreground text-sm">{e.paymentStatus}</p>
-                                 </div>
-                              </div>
-                           </CardContent>
-                           <CardFooter className="flex gap-4">
-                              {e.paymentStatus == "PENDING" ? (
-                                 <Link href="/">
-                                    <Button className="w-full">Pay Now</Button>
-                                 </Link>
-                              ) : (
-                                 ""
-                              )}
-                              {e.paymentStatus == "PENDING" ? (
-                                 <AlertDialog>
-                                    <AlertDialogTrigger asChild>
-                                       <Button variant="outline">Cancel Booking</Button>
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                       <AlertDialogHeader>
-                                          <AlertDialogTitle>Cancel your booking?</AlertDialogTitle>
-                                          <AlertDialogDescription>
-                                             By confirming cancellation, all associated reservations will be released.
-                                             Please review our policies regarding cancellations carefully.
-                                          </AlertDialogDescription>
-                                       </AlertDialogHeader>
-                                       <AlertDialogFooter>
-                                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                          <AlertDialogAction
-                                             onClick={async () => {
-                                                try {
-                                                   const res = await fetch(
-                                                      `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings/${e.bookingNumber}`,
-                                                      {
-                                                         method: "DELETE",
-                                                         headers: { "Content-Type": "application/json" },
-                                                         credentials: "include",
-                                                      },
-                                                   );
-                                                   toast.success("Booking Successfully Cancelled", { duration: 1500 });
-                                                   eventGetter();
-                                                } catch (error) {
-                                                   console.error(error);
-                                                }
-                                             }}
-                                          >
-                                             Continue
-                                          </AlertDialogAction>
-                                       </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                 </AlertDialog>
-                              ) : (
-                                 ""
-                              )}
-                           </CardFooter>
-                        </Card>
-                     </AccordionContent>
-                  </AccordionItem>
-               ))}
-            </Accordion>
+      <>
+         <div className="flex justify-end gap-4 px-4 py-4">
+            <DropdownMenu>
+               <DropdownMenuTrigger asChild>
+                  <Button variant="outline">Sort</Button>
+               </DropdownMenuTrigger>
+               <DropdownMenuContent className="w-56">
+                  <DropdownMenuLabel>Sort by:</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuRadioGroup>
+                     <DropdownMenuRadioItem value="date_asc">Date (Asc)</DropdownMenuRadioItem>
+                     <DropdownMenuRadioItem value="date_desc">Date (Desc)</DropdownMenuRadioItem>
+                     <DropdownMenuRadioItem value="booking_asc">Booking Number (Asc)</DropdownMenuRadioItem>
+                     <DropdownMenuRadioItem value="booking_desc">Booking Number (Desc)</DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
+               </DropdownMenuContent>
+            </DropdownMenu>
          </div>
-      </main>
+         <Accordion type="single" collapsible>
+            {(bookingData as any)?.data?.map((e: Booking, index: number) => (
+               <AccordionItem value={e.id} key={e.id}>
+                  <AccordionTrigger>
+                     <div className="grid grid-cols-1 sm:grid-cols-2">
+                        <div>Booking Number:</div>
+                        <div>
+                           <h6 className="font-bold"> {e.bookingNumber}</h6>
+                        </div>
+                     </div>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                     <Card className="w-full shadow-md">
+                        <CardHeader>
+                           <CardTitle>Booking Info</CardTitle>
+                           <CardDescription>
+                              {!e.endDate
+                                 ? `${format(e.startDate, "LLL dd, y")}`
+                                 : `${format(e.startDate, "LLL dd, y")} - ${format(e.endDate, "LLL dd, y")}`}
+                              <Image
+                                 src={e.room.pictureUrl}
+                                 alt=""
+                                 width={200}
+                                 height={200}
+                                 className="flex rounded-lg"
+                              ></Image>
+                           </CardDescription>
+                        </CardHeader>
+                        <CardContent className="grid gap-4">
+                           <div className="flex items-center space-x-4 rounded-md border p-4">
+                              <div className="flex-1 space-y-1">
+                                 <p className="text-sm font-medium leading-none">Payment Status:</p>
+                                 <p className="text-muted-foreground text-sm">{e.paymentStatus}</p>
+                              </div>
+                           </div>
+                        </CardContent>
+                        <CardFooter className="flex gap-4">
+                           {e.paymentStatus == "PENDING" ? (
+                              <Link href="/">
+                                 <Button className="w-full">Pay Now</Button>
+                              </Link>
+                           ) : (
+                              ""
+                           )}
+                           {e.paymentStatus == "PENDING" ? (
+                              <AlertDialog>
+                                 <AlertDialogTrigger asChild>
+                                    <Button variant="outline">Cancel Booking</Button>
+                                 </AlertDialogTrigger>
+                                 <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                       <AlertDialogTitle>Cancel your booking?</AlertDialogTitle>
+                                       <AlertDialogDescription>
+                                          By confirming cancellation, all associated reservations will be released.
+                                          Please review our policies regarding cancellations carefully.
+                                       </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                       <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                       <AlertDialogAction
+                                          onClick={async () => {
+                                             try {
+                                                const res = await fetch(
+                                                   `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings/${e.bookingNumber}`,
+                                                   {
+                                                      method: "DELETE",
+                                                      headers: { "Content-Type": "application/json" },
+                                                      credentials: "include",
+                                                   },
+                                                );
+                                                toast.success("Booking Successfully Cancelled", { duration: 1500 });
+                                                eventGetter();
+                                             } catch (error) {
+                                                console.error(error);
+                                             }
+                                          }}
+                                       >
+                                          Continue
+                                       </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                 </AlertDialogContent>
+                              </AlertDialog>
+                           ) : (
+                              ""
+                           )}
+                        </CardFooter>
+                     </Card>
+                  </AccordionContent>
+               </AccordionItem>
+            ))}
+         </Accordion>
+      </>
    );
 }
