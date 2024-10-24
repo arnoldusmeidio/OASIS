@@ -41,15 +41,12 @@ export default function ChangeProfilePictureForm({ getUser }: Props) {
    } = form;
 
    const onSubmit = async (values: z.infer<typeof profilePictureSchema>) => {
-
-      console.log(values);
       const formData = new FormData();
       Object.entries(values).forEach(([key, value]) => {
          formData.append("pictureUrl", value);
       });
 
       const formDataEntries = Array.from(formData.entries());
-      console.log("FormData entries:", formDataEntries);
 
       try {
          const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users/picture`, {
