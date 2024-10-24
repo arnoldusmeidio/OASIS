@@ -37,7 +37,6 @@ export default function SelectRolePage() {
             credentials: "include",
          });
          const data = await response.json();
-         console.log(data);
 
          if (!data.ok) {
             toast.error(data.message);
