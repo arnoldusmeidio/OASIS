@@ -7,6 +7,7 @@ import { useUserStore } from "@/stores/useUserStore";
 import ChangeEmailButton from "@/components/user/ChangeEmailButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "lucide-react";
+import RefCodeButton from "./ReferalCodeButton";
 
 interface Props {
    getUser: () => void;
@@ -14,7 +15,6 @@ interface Props {
 
 export default function UserCard({ getUser }: Props) {
    const { user } = useUserStore();
-   console.log(user?.pictureUrl);
 
    return (
       <Card>
@@ -33,8 +33,15 @@ export default function UserCard({ getUser }: Props) {
                   {user?.accountProvider === "CREDENTIALS" && <EditProfilePictureButton getUser={getUser} />}
                </div>
                <div className="flex items-center justify-center gap-4 sm:flex-col sm:items-start">
-                  <span className="text-lg font-semibold xl:text-xl">Wallet : {30000}</span>
-                  <span className="text-lg font-semibold xl:text-xl">Point : {10000}</span>
+                  <span className="text-lg font-semibold xl:text-xl">
+                     {user?.customer ? "Wallet: " + user?.wallet?.balance : ""}
+                  </span>
+                  <span className="text-lg font-semibold xl:text-xl">
+                     {user?.customer ? "Points: " + user?.wallet?.points : ""}
+                  </span>
+                  <span>
+                     <RefCodeButton getUser={getUser} />
+                  </span>
                </div>
             </div>
 

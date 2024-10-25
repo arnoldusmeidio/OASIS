@@ -86,9 +86,10 @@ export async function createBooking(req: Request, res: Response, next: NextFunct
             data: {
                startDate,
                endDate,
-               //  bookingNumber,
+               bookingNumber,
                roomId,
                customerId: user.id,
+               paymentStatus: "PENDING",
             },
          });
 

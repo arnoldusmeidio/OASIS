@@ -48,7 +48,8 @@ const createApp = () => {
    //tenant Route
    app.use("/api/v1/tenant", verifyToken, tenantGuard, property);
 
-   app.use("/api/v1/room", room);
+   // Booking Route
+   app.use("/api/v1/bookings", verifyToken, bookingRouter);
 
    // Not found handler
    app.use(notFoundMiddleware);

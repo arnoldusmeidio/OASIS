@@ -1,5 +1,6 @@
 import prisma from "./client";
 import { genSalt, hash } from "bcrypt";
+import crypto from "crypto";
 
 async function inputData() {
    console.log("Start seeding...\n");
@@ -31,8 +32,13 @@ async function inputData() {
          name: "Alex",
          email: "alex123@mail.com",
          password: hashedPassword,
-         customer: { create: {} },
+         customer: {
+            create: {
+               refCode: crypto.randomBytes(6).toString("hex").toUpperCase(),
+            },
+         },
          accountProvider: "CREDENTIALS",
+         wallet: { create: {} },
       },
    });
 
@@ -41,8 +47,13 @@ async function inputData() {
          name: "Jessica Tanaka",
          email: "jeta123@mail.com",
          password: hashedPassword,
-         customer: { create: {} },
+         customer: {
+            create: {
+               refCode: crypto.randomBytes(6).toString("hex").toUpperCase(),
+            },
+         },
          accountProvider: "CREDENTIALS",
+         wallet: { create: {} },
       },
    });
 

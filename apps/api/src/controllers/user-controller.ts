@@ -9,6 +9,7 @@ import fs from "fs/promises";
 import prisma from "@/prisma";
 import { profileSchema, selectUserRoleSchema, updateEmailUserSchema } from "@/schemas/user-schema";
 import { getVerificationTokenByToken } from "@/lib/verification-token";
+import crypto from "crypto";
 
 // GET METHOD
 // Search User by ID
@@ -26,6 +27,7 @@ export async function getSingleUser(req: Request, res: Response, next: NextFunct
          include: {
             customer: true,
             tenant: true,
+            wallet: true,
          },
       });
 
@@ -49,7 +51,23 @@ export async function selectUserRole(req: Request, res: Response, next: NextFunc
       const parsedData = selectUserRoleSchema.parse(req.body);
       const { role } = parsedData;
       const selectRole = {
-         ...(role == "customer" ? { customer: { create: {} } } : role == "tenant" ? { tenant: { create: {} } } : {}),
+         ...(role == "customer"
+            ? {
+                 customer: {
+                    create: {
+                       refCode: crypto.randomBytes(6).toString("hex").toUpperCase(),
+                    },
+                 },
+                 wallet: {
+                    create: {
+                       balance: 0,
+                       points: 0,
+                    },
+                 },
+              }
+            : role == "tenant"
+              ? { tenant: { create: {} } }
+              : {}),
       };
 
       const user = await prisma.user.findUnique({

@@ -7,6 +7,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { bannerData } from "@/static-db";
+import { currency } from "@/lib/currency";
+import { useUserStore } from "@/stores/useUserStore";
 
 type Props = {
    searchParams: SearchParams;
@@ -24,15 +26,38 @@ type SearchParams = {
 export default function SearchPage({ searchParams }: Props) {
    const [properties, setProperties] = useState([]) as any;
    const [isLoading, setIsLoading] = useState(true);
-
-   const rupiah = (number: number) => {
-      return new Intl.NumberFormat("id-ID", {
-         style: "currency",
-         currency: "IDR",
-      }).format(number);
-   };
+   const [currencyLoading, setCurrencyLoading] = useState(true);
+   const [currencyRates, setCurrencyRates] = useState<number | null>(null);
+   const { user } = useUserStore();
 
    useEffect(() => {
+      async function getCurrencyRates() {
+         try {
+            if (user?.currency == "USD") {
+               const response = await fetch(
+                  "https://api.freecurrencyapi.com/v1/latest?currencies=USD&base_currency=IDR",
+                  {
+                     headers: {
+                        apikey: process.env.NEXT_PUBLIC_FREE_CURRENCY_KEY as string,
+                     },
+                  },
+               );
+               const data = await response.json();
+               if (data.data) {
+                  setCurrencyRates(data.data.USD);
+               } else {
+                  setCurrencyRates(1);
+               }
+            } else {
+               setCurrencyRates(1);
+            }
+         } catch (error) {
+            console.error(error);
+         } finally {
+            setCurrencyLoading(false); // FINISH LOADING CURRENCY RATE
+         }
+      }
+
       async function getProperties() {
          try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/properties/search`, {
@@ -44,19 +69,26 @@ export default function SearchPage({ searchParams }: Props) {
                setProperties(data.data);
             } else {
                setProperties(bannerData); //need to be changed with real data
-               setIsLoading(false);
             }
          } catch (error) {
             console.error(error);
+         } finally {
+            setIsLoading(false);
          }
       }
-      getProperties();
-   }, []);
+
+      async function fetchData() {
+         await getCurrencyRates();
+         await getProperties();
+      }
+
+      fetchData();
+   }, [user]);
 
    return (
       <>
          <SearchNavbar />
-         {isLoading ? (
+         {isLoading || currencyLoading || currencyRates === null ? (
             <SearchSkeleton />
          ) : (
             <main>
@@ -121,7 +153,11 @@ export default function SearchPage({ searchParams }: Props) {
 
                                  <div className="sm:text-right">
                                     <p className="text-xs md:text-sm lg:text-base">capacity: {item.capacity} persons</p>
-                                    <p className="text-lg font-bold md:text-xl lg:text-2xl">{rupiah(item.price)}</p>
+                                    <p className="text-lg font-bold md:text-xl lg:text-2xl">
+                                       {currencyRates == 1
+                                          ? currency(item.price, "IDR", currencyRates)
+                                          : currency(item.price, user?.currency, currencyRates)}
+                                    </p>
                                  </div>
                               </div>
                            </div>

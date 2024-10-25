@@ -1,8 +1,5 @@
 "use client";
 
-import ChangeEmailForm from "@/components/auth/ChangeEmailForm";
-import Navbar from "@/components/Navbar";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import UserCard from "@/components/user/UserCard";
 import { useUserStore } from "@/stores/useUserStore";
