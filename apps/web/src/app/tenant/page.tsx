@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function Tenant() {
    const [property, setProperty] = useState({ data: [] });
@@ -22,13 +23,5 @@ export default function Tenant() {
    useEffect(() => {
       properties();
    }, []);
-   return (
-      <>
-         {properties.map((e) => {
-            <div key={e.id}>
-               <Image src={e.image} width={50} height={50} alt={logo.title} />
-            </div>;
-         })}
-      </>
-   );
+   return <></>;
 }
