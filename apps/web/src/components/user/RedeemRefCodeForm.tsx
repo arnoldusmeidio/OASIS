@@ -42,8 +42,9 @@ export default function RedeemRefCode({ getUser }: Props) {
             toast("Successfully redeemed the code!", {
                description: "Earned 10000 points!",
             });
+            getUser();
          } else {
-            toast("Failed to redeem the code...", {
+            toast.error("Failed to redeem the code...", {
                description: `${resData.message}`,
             });
          }

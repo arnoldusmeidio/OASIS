@@ -28,15 +28,6 @@ export async function redeemRefCode(req: RequestWithUserId, res: Response, next:
          return res.status(400).json({ message: "Cannot redeem this Referral Code", ok: false });
       }
 
-      await prisma.wallet.update({
-         where: {
-            id: user.id,
-         },
-         data: {
-            points: 10000,
-         },
-      });
-
       await prisma.$transaction(async (tx) => {
          await tx.wallet.update({
             where: {
@@ -44,6 +35,15 @@ export async function redeemRefCode(req: RequestWithUserId, res: Response, next:
             },
             data: {
                points: { increment: 10000 },
+            },
+         });
+
+         await tx.wallet.update({
+            where: {
+               id: validRefCode.id,
+            },
+            data: {
+               points: { increment: 20000 },
             },
          });
 

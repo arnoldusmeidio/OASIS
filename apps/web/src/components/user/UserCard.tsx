@@ -33,20 +33,18 @@ export default function UserCard({ getUser }: Props) {
                   </Avatar>
                   {user?.accountProvider === "CREDENTIALS" && <EditProfilePictureButton getUser={getUser} />}
                </div>
-               <div className="flex items-center justify-center gap-4 sm:flex-col sm:items-start">
-                  <span className="text-lg font-semibold xl:text-xl">
-                     {user?.customer ? "Wallet: " + user?.wallet?.balance : ""}
-                  </span>
-                  <span className="text-lg font-semibold xl:text-xl">
-                     {user?.customer ? "Points: " + user?.wallet?.points : ""}
-                  </span>
-                  <span>
-                     <RefCodeButton getUser={getUser} />
-                  </span>
-                  <span>
-                     <RedeemRefCode getUser={getUser} />
-                  </span>
-               </div>
+               {user?.customer && (
+                  <div className="flex items-center justify-center gap-4 sm:flex-col sm:items-start">
+                     <span className="text-lg font-semibold xl:text-xl">Wallet: {user?.wallet?.balance}</span>
+                     <span className="text-lg font-semibold xl:text-xl">Points: {user?.wallet?.points}</span>
+                     <span>
+                        <RefCodeButton getUser={getUser} />
+                     </span>
+                     <span>
+                        <RedeemRefCode getUser={getUser} />
+                     </span>
+                  </div>
+               )}
             </div>
 
             <div className="mt-6 flex items-end justify-between gap-2">
