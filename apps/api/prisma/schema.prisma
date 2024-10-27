@@ -104,6 +104,7 @@ model Customer {
 
   refCode            String  @unique
   hasRedeemedRefCode Boolean @default(false)
+}
 
 model Property {
   id        String   @id @default(uuid())
