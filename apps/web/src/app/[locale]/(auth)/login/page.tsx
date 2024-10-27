@@ -12,7 +12,7 @@ export default function LoginPage() {
             <figure className="bg-main-theme hidden w-[450px] items-center justify-center overflow-hidden rounded-full py-4 lg:flex">
                <Image
                   className="h-[350px] w-auto"
-                  src={"/login-illustration.svg"}
+                  src={"/illustration-login.svg"}
                   alt="Illustration of a person loggging in"
                   height={328}
                   width={216}

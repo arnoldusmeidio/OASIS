@@ -82,7 +82,7 @@ export default function SelectRolePage() {
                                              <RoleSelectionCard
                                                 roleType={"Customer"}
                                                 description={"As a customer, you could booked the listed properties"}
-                                                roleImageUrl={"/customer.svg"}
+                                                roleImageUrl={"/illustration-customer.svg"}
                                              />
                                           </FormLabel>
                                        </FormItem>
@@ -94,7 +94,7 @@ export default function SelectRolePage() {
                                              <RoleSelectionCard
                                                 roleType={"Tenant"}
                                                 description={"As a tenant, you could rent your properties to customers"}
-                                                roleImageUrl={"/tenant.svg"}
+                                                roleImageUrl={"/illustration-tenant.svg"}
                                              />
                                           </FormLabel>
                                        </FormItem>

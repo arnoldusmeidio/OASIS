@@ -10,10 +10,12 @@ import SmallCard from "@/components/SmallCard";
 import { exploreData, bannerData } from "@/static-db";
 import MediumCard from "@/components/MediumCard";
 import Footer from "@/components/Footer";
+import { useTranslations } from "next-intl";
 
 import HomeSkeleton from "@/components/HomeSkeleton";
 
 export default function Home() {
+   const t = useTranslations("HomePage");
    const [isLoading, setIsLoading] = useState(true);
    const { user, setUser } = useUserStore();
    const searchParams = useSearchParams();
@@ -57,7 +59,7 @@ export default function Home() {
                   <Banner />
                   <div className="mx auto mt-2 w-full max-w-7xl px-8 sm:px-16">
                      <section className="w-full justify-start pt-6">
-                        <h2 className="pb-5 text-3xl font-semibold sm:text-4xl">Explore Indonesia</h2>
+                        <h2 className="pb-5 text-3xl font-semibold sm:text-4xl">{t("explore")}</h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-4">
                            {exploreData?.map((item, idx) => (
                               <SmallCard key={idx} img={item.img} location={item.location} />
@@ -66,7 +68,7 @@ export default function Home() {
                      </section>
 
                      <section className="mt-4">
-                        <h2 className="py-8 pb-5 text-3xl font-semibold sm:text-4xl">Popular Properties</h2>
+                        <h2 className="py-8 pb-5 text-3xl font-semibold sm:text-4xl">{t("popular")}</h2>
                         <div className="mb-4 grid grid-cols-1 items-center gap-8 align-middle sm:grid-cols-2 lg:grid-cols-3">
                            {bannerData?.map((item) => (
                               <MediumCard
