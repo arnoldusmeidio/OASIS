@@ -9,10 +9,10 @@ export const deleteProperty = async (req: RequestWithUserId, res: Response, next
       const id = req.user?.id; // Get user ID from request
       const propertyId = req.params.id; // Get propertyId from URL parameters
 
-      // Fetch the property and include the tenant
+      // Fetch the property and include the tenant and picture URLs
       const property = await prisma.property.findUnique({
          where: { id: propertyId },
-         include: { tenant: true },
+         include: { tenant: true, pictureUrl: true }, // Include picture URLs
       });
 
       // Check if the property exists and if it belongs to the tenant
@@ -26,9 +26,12 @@ export const deleteProperty = async (req: RequestWithUserId, res: Response, next
          return res.status(403).json({ message: "Unauthorized to delete this property" });
       }
 
-      const publicId = property.pictureUrl?.split("/").pop()?.split(".")[0];
-      if (publicId) {
-         await cloudinary.uploader.destroy(`images/${publicId}`);
+      // Loop through each picture URL and delete from Cloudinary
+      for (const pic of property.pictureUrl) {
+         const publicId = pic.name.split("/").pop()?.split(".")[0]; // Assuming 'name' holds the URL or path
+         if (publicId) {
+            await cloudinary.uploader.destroy(`images/${publicId}`);
+         }
       }
 
       // Delete the property from the database

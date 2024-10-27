@@ -4,15 +4,13 @@ import cloudinary from "@/config/cloudinary";
 import { RequestWithUserId } from "@/types";
 import fs from "fs/promises";
 
-//Create property
+// Create property
 export const createProperty = async (req: Request, res: Response, next: NextFunction) => {
    try {
       const id = (req as RequestWithUserId).user?.id;
 
       const user = await prisma.user.findUnique({
-         where: {
-            id: id,
-         },
+         where: { id },
          include: { tenant: true },
       });
 
@@ -22,34 +20,46 @@ export const createProperty = async (req: Request, res: Response, next: NextFunc
          return res.status(400).json({ message: "Tenant ID not found" });
       }
 
-      const { propertyName, propertyAddress, propertyDescription } = req.body;
+      const { propertyName, propertyAddress, propertyDescription, category } = req.body;
 
-      console.log(req.body);
-
-      if (!req.file) {
-         console.log(req.file);
-         return res.status(400).json({ message: "No file uploaded" });
+      // Check if files were uploaded
+      if (!req.files || (Array.isArray(req.files) && req.files.length === 0)) {
+         return res.status(400).json({ message: "No files uploaded" });
       }
 
-      const cloudinaryData = await cloudinary.uploader.upload(req.file.path, {
-         folder: "images",
-      });
+      // Upload each file to Cloudinary and collect URLs
+      const pictureUrls = await Promise.all(
+         (req.files as Express.Multer.File[]).map(async (file) => {
+            try {
+               const cloudinaryData = await cloudinary.uploader.upload(file.path, {
+                  folder: "images",
+               });
+               // Remove file after upload
+               await fs.unlink(file.path);
+               return { name: cloudinaryData.secure_url }; // Return the URL
+            } catch (uploadError) {
+               console.error("Error uploading file:", uploadError);
+               throw new Error("Error uploading one or more files");
+            }
+         }),
+      );
 
-      await prisma.property.create({
+      // Create property with associated picture URLs
+      const property = await prisma.property.create({
          data: {
             tenantId,
             name: propertyName,
             address: propertyAddress,
             description: propertyDescription,
-            pictureUrl: cloudinaryData.secure_url,
+            category,
+            pictureUrl: {
+               create: pictureUrls,
+            },
          },
       });
 
-      fs.unlink(req.file.path);
-
-      return res.status(201).json({ message: "property Created" });
+      return res.status(201).json({ message: "Property created", property });
    } catch (error) {
-      console.error("Error creating property:", error);
-      next(Error);
+      next(error);
    }
 };

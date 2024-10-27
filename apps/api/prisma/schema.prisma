@@ -24,6 +24,17 @@ enum Currency {
   USD
 }
 
+enum Category {
+  Vila
+  Hotel
+  Apartment
+  House
+  Cottage
+  Resort
+  Hostel
+  Motel
+}
+
 model User {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
@@ -101,8 +112,9 @@ model Property {
 
   name        String
   address     String
-  description String   @db.VarChar(1000)
-  pictureUrl  String
+  description String       @db.VarChar(1000)
+  category    Category
+  pictureUrl  pictureUrl[]
   room        Room[]
   reviews     Review[]
 
@@ -142,6 +154,17 @@ model Room {
   property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@unique([type, propertyId], name: "uniqueRoom")
+}
+
+model pictureUrl {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String
+
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 }
 
 model Booking {
