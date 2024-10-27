@@ -6,6 +6,7 @@ import sampleRouter from "./routers/sample-router";
 import property from "./routers/property-router";
 import userRouter from "./routers/user-router";
 import bookingRouter from "./routers/booking-router";
+import walletRouter from "./routers/wallet-router";
 import { verifyToken } from "./middlewares/auth-middleware";
 import { notFoundMiddleware } from "./middlewares/not-found-middleware";
 import room from "./routers/room-route";
@@ -51,6 +52,9 @@ const createApp = () => {
    // Booking Route
    app.use("/api/v1/bookings", verifyToken, bookingRouter);
 
+   // Wallet Route
+   app.use("/api/v1/wallets", verifyToken, walletRouter);
+  
    // Not found handler
    app.use(notFoundMiddleware);
 

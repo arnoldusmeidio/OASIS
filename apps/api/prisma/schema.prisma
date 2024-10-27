@@ -102,8 +102,8 @@ model Customer {
   bookings Booking[]
   reviews  Review[]
 
-  refCode String
-}
+  refCode            String  @unique
+  hasRedeemedRefCode Boolean @default(false)
 
 model Property {
   id        String   @id @default(uuid())
