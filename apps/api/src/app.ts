@@ -53,7 +53,7 @@ const createApp = () => {
 
    // Wallet Route
    app.use("/api/v1/wallets", verifyToken, walletRouter);
-
+  
    // Not found handler
    app.use(notFoundMiddleware);
 
