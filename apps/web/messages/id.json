@@ -1,0 +1,16 @@
+{
+   "Layout": {
+      "Navigation": {
+         "tagLine": "Temukan Surga Tersembunyi",
+         "signUp": "Daftar",
+         "logIn": "Masuk",
+         "profile": "Profil",
+         "bookings": "Pesanan",
+         "logOut": "Keluar"
+      }
+   },
+   "HomePage": {
+      "explore": "Jelajahi Indonesia",
+      "popular": "Properti Populer"
+   }
+}
