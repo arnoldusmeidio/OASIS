@@ -27,7 +27,7 @@ export default function Room({ index, onRemove }: AddRoomProps) {
       defaultValues: {
          roomName: "",
          roomDescription: "",
-         roomPictureUrl: new File([], ""),
+         pictureUrl: new File([], ""),
          roomPrice: 0,
          roomCapacity: 0,
       },
@@ -117,7 +117,7 @@ export default function Room({ index, onRemove }: AddRoomProps) {
                         />
                         <FormField
                            control={form.control}
-                           name={"roomPictureUrl"}
+                           name={"pictureUrl"}
                            render={({ field }) => {
                               return (
                                  <FormItem>

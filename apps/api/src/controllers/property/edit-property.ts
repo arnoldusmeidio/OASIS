@@ -1,14 +1,18 @@
 import { NextFunction, Request, Response } from "express";
 import prisma from "@/prisma";
 import cloudinary from "@/config/cloudinary";
-import { RequestWithUserId } from "@/types"; // Assuming you have a user type in your request
+import { RequestWithUserId } from "@/types";
+import fs from "fs/promises";
 
 // Edit Property
 
 export async function editProperty(req: Request, res: Response, next: NextFunction) {
    try {
-      const { propertyName, propertyAddress, propertyDescription } = req.body;
+      const { propertyName, propertyAddress, propertyDescription, category } = req.body;
+
       const propertyId = req.params.propertyId; // Get propertyId from URL parameters
+
+      console.log(req.params.propertyid);
 
       const id = (req as RequestWithUserId).user?.id;
 
@@ -25,13 +29,26 @@ export async function editProperty(req: Request, res: Response, next: NextFuncti
          return res.status(400).json({ message: "Tenant ID not found" });
       }
 
-      if (!req.file) {
-         return res.status(400).json({ message: "No file uploaded" });
+      if (!req.files || (Array.isArray(req.files) && req.files.length === 0)) {
+         return res.status(400).json({ message: "No files uploaded" });
       }
 
-      const cloudinaryData = await cloudinary.uploader.upload(req.file.path, {
-         folder: "images",
-      });
+      // Upload each file to Cloudinary and collect URLs
+      const pictureUrls = await Promise.all(
+         (req.files as Express.Multer.File[]).map(async (file) => {
+            try {
+               const cloudinaryData = await cloudinary.uploader.upload(file.path, {
+                  folder: "images",
+               });
+               // Remove file after upload
+               await fs.unlink(file.path);
+               return { name: cloudinaryData.secure_url }; // Return the URL
+            } catch (uploadError) {
+               console.error("Error uploading file:", uploadError);
+               throw new Error("Error uploading one or more files");
+            }
+         }),
+      );
 
       const property = await prisma.property.findUnique({
          where: {
@@ -52,7 +69,10 @@ export async function editProperty(req: Request, res: Response, next: NextFuncti
             name: propertyName,
             address: propertyAddress,
             description: propertyDescription,
-            pictureUrl: cloudinaryData.secure_url,
+            category,
+            pictureUrl: {
+               create: pictureUrls,
+            },
          },
       });
 

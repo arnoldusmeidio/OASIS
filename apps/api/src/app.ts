@@ -9,6 +9,7 @@ import bookingRouter from "./routers/booking-router";
 import walletRouter from "./routers/wallet-router";
 import { verifyToken } from "./middlewares/auth-middleware";
 import { notFoundMiddleware } from "./middlewares/not-found-middleware";
+import room from "./routers/room-route";
 
 import { tenantGuard } from "@/middlewares/auth-middleware";
 

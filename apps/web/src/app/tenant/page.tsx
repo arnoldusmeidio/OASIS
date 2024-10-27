@@ -1,17 +1,27 @@
-import Link from "next/link";
+"use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function Tenant() {
-   return (
-      <div className="flex">
-         <div className="space-x5 space-x-screen flex">
-            <h1>Oasis</h1>
-            <Avatar className="h-14 w-14">
-               <AvatarImage src="https://github.com/shadcn.png" />
-               <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-         </div>
-      </div>
-   );
+   const [property, setProperty] = useState({ data: [] });
+   const properties = async () => {
+      try {
+         const res = await fetch(`http://localhost:8069/api/v1/property/`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+         });
+
+         const resData = await res.json();
+         console.log(resData);
+         setProperty(resData);
+      } catch (error) {
+         console.error(error);
+      }
+   };
+   useEffect(() => {
+      properties();
+   }, []);
+   return <></>;
 }

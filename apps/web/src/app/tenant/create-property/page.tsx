@@ -14,6 +14,8 @@ import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Category } from "@/types/property-types";
 
 export default function Property() {
    const [error, setError] = useState<string | undefined>("");
@@ -27,6 +29,7 @@ export default function Property() {
          propertyName: "",
          propertyAddress: "",
          propertyDescription: "",
+         category: [],
          pictureUrl: new File([], ""),
       },
       mode: "onBlur",
@@ -36,12 +39,15 @@ export default function Property() {
       formState: { isSubmitting },
    } = form;
 
+   const categories = Object.values(Category).filter((value) => typeof value === "string");
+
    const onSubmit = async (values: z.infer<typeof propertySchema>) => {
       try {
          const formData = new FormData();
          formData.append("propertyName", values.propertyName);
          formData.append("propertyAddress", values.propertyAddress);
          formData.append("propertyDescription", values.propertyDescription);
+         // formData.append("propertyCategory", values.category);
          if (values.pictureUrl) {
             formData.append("pictureUrl", values.pictureUrl);
          }
@@ -129,6 +135,21 @@ export default function Property() {
                            )}
                         />
                         {/* Property Image */}
+                        {Object.values(Category).map((category) => (
+                           <FormField
+                              key={category}
+                              control={form.control}
+                              name="category"
+                              render={({ field }) => (
+                                 <FormItem>
+                                    <FormLabel>{category}</FormLabel>
+                                    <FormControl></FormControl>
+                                    <FormMessage />
+                                 </FormItem>
+                              )}
+                           />
+                        ))}
+                        {/* Property category */}
                         <FormField
                            control={form.control}
                            name="pictureUrl"
