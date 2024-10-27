@@ -135,20 +135,19 @@ export default function Property() {
                            )}
                         />
                         {/* Property Image */}
-                        {Object.values(Category).map((category) => (
-                           <FormField
-                              key={category}
-                              control={form.control}
-                              name="category"
-                              render={({ field }) => (
-                                 <FormItem>
-                                    <FormLabel>{category}</FormLabel>
-                                    <FormControl></FormControl>
-                                    <FormMessage />
-                                 </FormItem>
-                              )}
-                           />
-                        ))}
+                        <FormField
+                           control={form.control}
+                           name="category"
+                           render={({ field }) => (
+                              <FormItem>
+                                 <FormLabel>property Cateegory</FormLabel>
+                                 <FormControl>
+                                    <Checkbox />
+                                 </FormControl>
+                                 <FormMessage />
+                              </FormItem>
+                           )}
+                        />
                         {/* Property category */}
                         <FormField
                            control={form.control}
