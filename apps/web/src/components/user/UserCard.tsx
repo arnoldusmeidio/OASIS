@@ -6,9 +6,11 @@ import EditProfilePictureButton from "@/components/user/EditProfilePictureButton
 import { useUserStore } from "@/stores/useUserStore";
 import ChangeEmailButton from "@/components/user/ChangeEmailButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User } from "lucide-react";
-import RefCodeButton from "./ReferalCodeButton";
-import RedeemRefCode from "./RedeemRefCodeForm";
+import RefCodeCard from "./RefCodeCard";
+import RedeemCodeCard from "./RedeemCodeCard";
+import WalletCard from "./WalletCard";
 
 interface Props {
    getUser: () => void;
@@ -34,15 +36,22 @@ export default function UserCard({ getUser }: Props) {
                   {user?.accountProvider === "CREDENTIALS" && <EditProfilePictureButton getUser={getUser} />}
                </div>
                {user?.customer && (
-                  <div className="flex items-center justify-center gap-4 sm:flex-col sm:items-start">
-                     <span className="text-lg font-semibold xl:text-xl">Wallet: {user?.wallet?.balance}</span>
-                     <span className="text-lg font-semibold xl:text-xl">Points: {user?.wallet?.points}</span>
-                     <span>
-                        <RefCodeButton getUser={getUser} />
-                     </span>
-                     <span>
-                        <RedeemRefCode getUser={getUser} />
-                     </span>
+                  <div>
+                     <div className="flex items-center justify-center gap-4 py-4 sm:flex-col sm:items-start">
+                        <Tabs defaultValue="refcode" className="w-[400px]">
+                           <TabsList>
+                              <TabsTrigger value="refcode">Referral Code</TabsTrigger>
+                              <TabsTrigger value="redeem">Redeem Code</TabsTrigger>
+                           </TabsList>
+                           <TabsContent value="refcode">
+                              <RefCodeCard getUser={getUser} />
+                           </TabsContent>
+                           <TabsContent value="redeem">
+                              <RedeemCodeCard getUser={getUser} />
+                           </TabsContent>
+                        </Tabs>
+                     </div>
+                     <WalletCard getUser={getUser} />
                   </div>
                )}
             </div>
