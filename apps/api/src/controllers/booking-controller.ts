@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import prisma from "@/prisma";
-import crypto from "crypto";
 import { RequestWithUserId } from "@/types";
 import { Resend } from "resend";
 
@@ -21,7 +20,7 @@ export async function getBookings(req: RequestWithUserId, res: Response, next: N
       });
 
       if (!bookings) {
-         return res.send(200).json({ data: bookings, message: "No bookings found", ok: true });
+         return res.status(200).json({ data: bookings, message: "No bookings found", ok: true });
       }
 
       return res.status(200).json({ data: bookings, ok: true });

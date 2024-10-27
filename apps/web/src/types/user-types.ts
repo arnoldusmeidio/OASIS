@@ -17,6 +17,7 @@ export interface User {
    tenant: {};
    customer: {
       refCode: string;
+      hasRedeemedRefCode: boolean;
    };
    accountProvider: string;
    pictureUrl: string;
