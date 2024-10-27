@@ -1,34 +1,34 @@
 export const exploreData = [
    {
-      img: "/property/card/jakarta.jpg",
+      img: "/property-images/card/jakarta.jpg",
       location: "Jakarta",
    },
    {
-      img: "/property/card/bali.jpg",
+      img: "/property-images/card/bali.jpg",
       location: "Bali",
    },
    {
-      img: "/property/card/bandung.jpg",
+      img: "/property-images/card/bandung.jpg",
       location: "Bandung",
    },
    {
-      img: "/property/card/semarang.jpg",
+      img: "/property-images/card/semarang.jpg",
       location: "Semarang",
    },
    {
-      img: "/property/card/surabaya.jpg",
+      img: "/property-images/card/surabaya.jpg",
       location: "Surabaya",
    },
    {
-      img: "/property/card/yogyakarta.jpg",
+      img: "/property-images/card/yogyakarta.jpg",
       location: "Yogyakarta",
    },
    {
-      img: "/property/card/malang.jpg",
+      img: "/property-images/card/malang.jpg",
       location: "Malang",
    },
    {
-      img: "/property/card/medan.jpg",
+      img: "/property-images/card/medan.jpg",
       location: "Medan",
    },
 ];
@@ -36,7 +36,7 @@ export const exploreData = [
 export const bannerData = [
    {
       id: "1",
-      img: "/property/banner/villa-1.jpg",
+      img: "/property-images/banner/villa-1.jpg",
       propertyName: "The Paradiso",
       location: "Jakarta",
       description: "Your perfect getaway awaits",
@@ -48,7 +48,7 @@ export const bannerData = [
    },
    {
       id: "2",
-      img: "/property/banner/villa-2.jpg",
+      img: "/property-images/banner/villa-2.jpg",
       propertyName: "Coast Heaven",
       location: "Bali",
       description: "Luxury villa on the coast of Bali`s beach",
@@ -60,7 +60,7 @@ export const bannerData = [
    },
    {
       id: "3",
-      img: "/property/banner/villa-3.jpg",
+      img: "/property-images/banner/villa-3.jpg",
       propertyName: "Imperial",
       location: "Bandung",
       description: "Grand hotel",
@@ -72,7 +72,7 @@ export const bannerData = [
    },
    {
       id: "4",
-      img: "/property/banner/villa-4.jpg",
+      img: "/property-images/banner/villa-4.jpg",
       propertyName: "The Home",
       location: "Yogyakarta",
       description: "Beautiful villa",
@@ -84,7 +84,7 @@ export const bannerData = [
    },
    {
       id: "5",
-      img: "/property/banner/villa-5.jpg",
+      img: "/property-images/banner/villa-5.jpg",
       propertyName: "D-lux",
       location: "Surabaya",
       description: "Where you find the perfect place to relax",
@@ -96,7 +96,7 @@ export const bannerData = [
    },
    {
       id: "6",
-      img: "/property/banner/villa-6.jpg",
+      img: "/property-images/banner/villa-6.jpg",
       propertyName: "Hidden Gem",
       location: "Malang",
       description: "Extraordinary villa with perfect services",
