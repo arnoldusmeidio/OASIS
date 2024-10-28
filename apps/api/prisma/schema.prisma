@@ -28,11 +28,6 @@ enum Category {
   Vila
   Hotel
   Apartment
-  House
-  Cottage
-  Resort
-  Hostel
-  Motel
 }
 
 model User {
@@ -111,13 +106,13 @@ model Property {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name        String
-  address     String
-  description String       @db.VarChar(1000)
-  category    Category
-  pictureUrl  pictureUrl[]
-  room        Room[]
-  reviews     Review[]
+  name            String
+  address         String
+  description     String            @db.VarChar(1000)
+  category        Category
+  propertyPicture PropertyPicture[]
+  room            Room[]
+  reviews         Review[]
 
   location Location?
 
@@ -145,27 +140,38 @@ model Room {
 
   type         String
   description  String @db.VarChar(1000)
-  pictureUrl   String
   price        Int
   roomCapacity Int
 
   bookings Booking[]
 
-  propertyId String
-  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId  String
+  property    Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  RoomPicture RoomPicture[]
 
   @@unique([type, propertyId], name: "uniqueRoom")
 }
 
-model pictureUrl {
+model PropertyPicture {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name String
+  url String
 
   propertyId String
   property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+model RoomPicture {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  url String
+
+  roomId String
+  room   Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
 }
 
 model Booking {

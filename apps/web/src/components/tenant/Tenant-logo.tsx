@@ -2,13 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useUserStore } from "@/stores/useUserStore";
 
 export default function Logo() {
-   const { user } = useUserStore();
-
    return (
-      <Link href={user?.tenant ? "/tenant" : "/"}>
+      <Link href={"/tenant"}>
          <div className="flex justify-center gap-2 align-middle">
             <Image
                alt="OASIS logo"

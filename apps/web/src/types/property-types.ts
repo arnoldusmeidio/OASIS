@@ -7,4 +7,5 @@ export enum Category {
    Resort = "Resort",
    Hostel = "Hostel",
    Motel = "Motel",
+   map = "map",
 }

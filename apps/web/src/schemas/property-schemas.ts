@@ -7,7 +7,7 @@ export const propertySchema = z.object({
    propertyName: z.string().min(1, { message: "Property Name is required" }),
    propertyAddress: z.string().min(1, { message: "Property Address is required" }),
    propertyDescription: z.string().min(1, { message: "Property Description is required" }),
-   category: z.array(z.nativeEnum(Category)).optional(),
+   category: z.nativeEnum(Category),
    pictureUrl: z
       .instanceof(File)
       .refine(
