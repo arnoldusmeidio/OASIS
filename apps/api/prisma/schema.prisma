@@ -146,15 +146,28 @@ model Room {
   type         String
   description  String @db.VarChar(1000)
   pictureUrl   String
-  price        Int
+  defaultPrice Float
   roomCapacity Int
 
-  bookings Booking[]
+  bookings  Booking[]
+  RoomPrice RoomPrice[]
 
   propertyId String
   property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@unique([type, propertyId], name: "uniqueRoom")
+}
+
+model RoomPrice {
+  id        String   @id @default(uuid())
+  roomId    String
+  price     Float
+  startDate DateTime
+  endDate   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Room Room @relation(fields: [roomId], references: [id])
 }
 
 model pictureUrl {

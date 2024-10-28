@@ -1,9 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import prisma from "@/prisma";
 import { RequestWithUserId } from "@/types";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import crypto from "crypto";
 
 export async function getBookings(req: RequestWithUserId, res: Response, next: NextFunction) {
    try {
@@ -111,7 +109,7 @@ export async function createBooking(req: Request, res: Response, next: NextFunct
       // const parsedData = bookingSchema.parse(req.body);
       // const { startDate, endDate } = parsedData;
       const { date } = req.body;
-      const bookingNumber = crypto.randomBytes(3).toString("hex");
+      const bookingNumber = crypto.randomBytes(3).toString("hex").toUpperCase();
 
       //if (endDate < startDate) return res.status(400).json({ message: "Invalid Datetime", ok: false });
       if (!date) return res.status(400).json({ message: "Invalid Datetime", ok: false });
