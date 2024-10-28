@@ -7,7 +7,7 @@ export default function page() {
    const [propertyData, setPropertyData] = useState({ data: [] });
    const eventGetter = async () => {
       try {
-         const res = await fetch("http://localhost:8000/api/v1/playgrounds", {
+         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/playgrounds`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -28,10 +28,10 @@ export default function page() {
       <main>
          {(propertyData as any)?.data?.map((e: any) => (
             <div key={e.id}>
-               <h1>{e.name}</h1>
+               <h1 className="text-3xl font-bold">{e.name}</h1>
                {e.room?.map((e: any, idx: number) => (
                   <Link href={`/playground/${e.id}`} key={e.id}>
-                     <h2>{e.type}</h2>
+                     <h2 className="text-2xl">{e.type}</h2>
                   </Link>
                ))}
             </div>

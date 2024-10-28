@@ -11,7 +11,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 import { checkRoomPrice } from "@/helpers/check-room-price";
-import { checkRoomReservation } from "@/helpers/check-room-booking";
+import { checkRoomBooking } from "@/helpers/check-room-booking";
 import { RoomStatus } from "@/types/room-status";
 
 export function DatePicker({ className }: React.HTMLAttributes<HTMLDivElement>) {
@@ -40,7 +40,7 @@ export function DatePicker({ className }: React.HTMLAttributes<HTMLDivElement>) 
 
    React.useEffect(() => {
       async function fetchPrices() {
-         const response = await fetch("http://localhost:8000/api/v1/rooms/1/status");
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/rooms/1/status`);
          const data = await response.json();
 
          setRoomStatus(data.data);
@@ -67,7 +67,7 @@ export function DatePicker({ className }: React.HTMLAttributes<HTMLDivElement>) 
                currentDate = addDays(currentDate, 1);
             }
 
-            const isBooked = selectedDatesArray.some((date) => checkRoomReservation(date, roomStatus));
+            const isBooked = selectedDatesArray.some((date) => checkRoomBooking(date, roomStatus));
 
             if (isBooked) {
                setDate({ from: to, to: undefined });
@@ -122,7 +122,7 @@ export function DatePicker({ className }: React.HTMLAttributes<HTMLDivElement>) 
                         );
                      },
                   }}
-                  disabled={(date) => checkRoomReservation(date, roomStatus)}
+                  disabled={(date) => checkRoomBooking(date, roomStatus)}
                />
             </PopoverContent>
          </Popover>

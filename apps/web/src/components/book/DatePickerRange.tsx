@@ -1,9 +1,9 @@
 "use client";
 
-import { format } from "date-fns";
+import { addDays, format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -13,6 +13,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { useParams } from "next/navigation";
+import { RoomStatus } from "@/types/room-status";
+import { checkRoomBooking } from "@/helpers/check-room-booking";
 
 export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLDivElement>) {
    const [date, setDate] = useState<DateRange | undefined>();
@@ -21,6 +23,10 @@ export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLD
 
    const params = useParams<any>();
    const roomId = params.slug; // get the room id from url
+
+   const [roomStatus, setRoomStatus] = useState<RoomStatus>();
+   const [numberOfMonths, setNumberOfMonths] = useState<number>(2);
+
    if (!roomId) {
       return <h1>No Room Id provided</h1>;
    }
@@ -28,7 +34,7 @@ export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLD
       //console.log(date);
       console.log(JSON.stringify({ date }));
       try {
-         const res = await fetch(`http://localhost:8000/api/v1/bookings/${roomId}`, {
+         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings/${roomId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ date }),
@@ -39,6 +45,66 @@ export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLD
          toast.success("Booking Successfully Created", { duration: 1500 });
       } catch (error) {
          console.error(error);
+      }
+   }
+
+   //custom
+   useEffect(() => {
+      function handleResize() {
+         if (window.innerWidth < 650) {
+            setNumberOfMonths(1);
+         } else {
+            setNumberOfMonths(2);
+         }
+      }
+
+      handleResize();
+
+      window.addEventListener("resize", handleResize);
+
+      return () => window.removeEventListener("resize", handleResize);
+   }, []);
+
+   useEffect(() => {
+      async function fetchPrices() {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/rooms/1/status`);
+         const data = await response.json();
+
+         setRoomStatus(data.data);
+      }
+
+      fetchPrices();
+   }, []);
+
+   function handleSelect(selectedDate: DateRange | undefined) {
+      if (selectedDate) {
+         const { from, to } = selectedDate;
+
+         if (from && to && from.getTime() === to.getTime()) {
+            setDate(undefined);
+            return;
+         }
+
+         if (from && to) {
+            const selectedDatesArray: Date[] = [];
+            let currentDate = from;
+
+            while (currentDate <= to) {
+               selectedDatesArray.push(currentDate);
+               currentDate = addDays(currentDate, 1);
+            }
+
+            const isBooked = selectedDatesArray.some((date) => checkRoomBooking(date, roomStatus));
+
+            if (isBooked) {
+               setDate({ from: to, to: undefined });
+               return;
+            }
+         }
+
+         setDate(selectedDate);
+      } else {
+         setDate(undefined);
       }
    }
 

@@ -1,6 +1,6 @@
 import { RoomStatus } from "@/types/room-status";
 
-export function checkRoomReservation(date: Date, roomStatus: RoomStatus | undefined): boolean {
+export function checkRoomBooking(date: Date, roomStatus: RoomStatus | undefined): boolean {
    const booking = roomStatus?.booking;
    const targetTime = date.getTime();
    const now = Date.now();

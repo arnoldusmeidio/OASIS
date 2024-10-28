@@ -7,10 +7,10 @@ async function inputData() {
 
    await prisma.booking.deleteMany();
    await prisma.customer.deleteMany();
-   await prisma.location.deleteMany();
    await prisma.passwordResetToken.deleteMany();
-   await prisma.pictureUrl.deleteMany();
+   await prisma.roomPictures.deleteMany();
    await prisma.property.deleteMany();
+   await prisma.propertyPictures.deleteMany();
    await prisma.review.deleteMany();
    await prisma.room.deleteMany();
    await prisma.roomPrice.deleteMany();
@@ -24,7 +24,7 @@ async function inputData() {
 
    const budi = await prisma.user.create({
       data: {
-         name: "Budi",
+         name: "Budi Woodpecker",
          email: "budi123@mail.com",
          password: hashedPassword,
          tenant: { create: {} },
@@ -74,21 +74,35 @@ async function inputData() {
 
    const property1 = await prisma.property.create({
       data: {
-         name: "Oceanview Resort",
+         name: "Oceanview Hotel",
          tenantId: budi.id,
-         description: "A beautiful resort with ocean views.",
+         description: "A beautiful Hotel with ocean views.",
          address: "Jl. Rawa Buaya No.2, Jakarta",
-         category: "Resort",
+         lat: -70.631467,
+         lng: 210.201955,
+         category: "Hotel",
+         propertyPictures: {
+            create: [
+               {
+                  url: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=2070&auto=format=&fit=crop",
+               },
+            ],
+         },
          room: {
             create: [
                {
                   type: "Deluxe Room",
                   description: "Spacious room with a king-sized bed and ocean view.",
-                  pictureUrl:
-                     "https://images.unsplash.com/photo-1590650046499-e1aef6b62a9b?q=80&w=2070&auto=format=&fit=crop",
                   defaultPrice: 2500000,
                   roomCapacity: 2,
-                  RoomPrice: {
+                  roomPictures: {
+                     create: [
+                        {
+                           url: "https://images.unsplash.com/photo-1590650046499-e1aef6b62a9b?q=80&w=2070&auto=format=&fit=crop",
+                        },
+                     ],
+                  },
+                  roomPrice: {
                      create: [
                         {
                            price: 3500000,
@@ -106,11 +120,16 @@ async function inputData() {
                {
                   type: "Family Suite",
                   description: "A large suite suitable for families with a beautiful view.",
-                  pictureUrl:
-                     "https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=2070&auto=format=&fit=crop",
+                  roomPictures: {
+                     create: [
+                        {
+                           url: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=2070&auto=format=&fit=crop",
+                        },
+                     ],
+                  },
                   defaultPrice: 4000000,
                   roomCapacity: 4,
-                  RoomPrice: {
+                  roomPrice: {
                      create: [
                         {
                            price: 5000000,
@@ -136,17 +155,24 @@ async function inputData() {
          tenantId: budi.id,
          description: "A cozy Hotel nestled in the mountains.",
          address: "Jl. Gunung No.5, Bandung",
+         lat: -7.631467,
+         lng: 110.201955,
          category: "Hotel",
          room: {
             create: [
                {
                   type: "Standard Room",
                   description: "Comfortable room with basic amenities and mountain views.",
-                  pictureUrl:
-                     "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?q=80&w=2070&auto=format=&fit=crop",
+                  roomPictures: {
+                     create: [
+                        {
+                           url: "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?q=80&w=2070&auto=format=&fit=crop",
+                        },
+                     ],
+                  },
                   defaultPrice: 1500000,
                   roomCapacity: 2,
-                  RoomPrice: {
+                  roomPrice: {
                      create: [
                         {
                            price: 2000000,
@@ -164,11 +190,16 @@ async function inputData() {
                {
                   type: "Executive Suite",
                   description: "Luxurious suite with a king-sized bed and a balcony.",
-                  pictureUrl:
-                     "https://images.unsplash.com/photo-1525977165730-f129bca7b095?q=80&w=2070&auto=format=&fit=crop",
+                  roomPictures: {
+                     create: [
+                        {
+                           url: "https://images.unsplash.com/photo-1525977165730-f129bca7b095?q=80&w=2070&auto=format=&fit=crop",
+                        },
+                     ],
+                  },
                   defaultPrice: 6000000,
                   roomCapacity: 4,
-                  RoomPrice: {
+                  roomPrice: {
                      create: [
                         {
                            price: 7500000,
