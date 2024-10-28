@@ -51,8 +51,11 @@ export default function Searchbar() {
 
    return (
       <Form {...form}>
-         <form className="w-full min-w-[300px] max-w-5xl" onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="-mb-14 flex flex-col justify-center gap-1 rounded-lg bg-yellow-300 p-1 align-middle shadow-md lg:w-fit lg:flex-row">
+         <form
+            className="w-full min-w-[300px] max-w-5xl lg:flex lg:items-center lg:justify-center"
+            onSubmit={form.handleSubmit(onSubmit)}
+         >
+            <div className="-mb-12 flex flex-col justify-center gap-1 rounded-lg bg-yellow-300 p-1 align-middle shadow-md lg:w-fit lg:flex-row">
                <FormField
                   control={form.control}
                   name="location"

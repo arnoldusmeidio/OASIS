@@ -5,12 +5,34 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
 }
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+enum Language {
+  ENGLISH
+  INDONESIA
+}
+
+enum Currency {
+  IDR
+  USD
+}
+
+enum Category {
+  Vila
+  Hotel
+  Apartment
+  House
+  Cottage
+  Resort
+  Hostel
+  Motel
 }
 
 model User {
@@ -19,14 +41,18 @@ model User {
   updatedAt DateTime @updatedAt
 
   name       String
-  email      String  @unique
+  email      String   @unique
   password   String?
   pictureUrl String?
+  currency   Currency @default(IDR)
+  language   Language @default(ENGLISH)
 
   accountProvider AccountProvider
 
   tenant   Tenant?
   customer Customer?
+
+  wallet Wallet?
 }
 
 enum AccountProvider {
@@ -75,6 +101,9 @@ model Customer {
 
   bookings Booking[]
   reviews  Review[]
+
+  refCode            String  @unique
+  hasRedeemedRefCode Boolean @default(false)
 }
 
 model Property {
@@ -84,8 +113,9 @@ model Property {
 
   name        String
   address     String
-  description String   @db.VarChar(1000)
-  pictureUrl  String
+  description String       @db.VarChar(1000)
+  category    Category
+  pictureUrl  pictureUrl[]
   room        Room[]
   reviews     Review[]
 
@@ -125,6 +155,17 @@ model Room {
   property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@unique([type, propertyId], name: "uniqueRoom")
+}
+
+model pictureUrl {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String
+
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 }
 
 model Booking {
@@ -172,4 +213,13 @@ model Review {
   star   Int
 
   @@unique([customerId, propertyId], name: "uniqueReview")
+}
+
+model Wallet {
+  id        String   @id
+  user      User     @relation(fields: [id], references: [id], onDelete: Cascade)
+  balance   Float    @default(1000000)
+  points    Float    @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

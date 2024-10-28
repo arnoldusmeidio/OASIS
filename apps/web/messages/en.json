@@ -1,0 +1,16 @@
+{
+   "Layout": {
+      "Navigation": {
+         "tagLine": "Discover Hidden Havens",
+         "signUp": "Sign up",
+         "logIn": "Log in",
+         "profile": "Profile",
+         "bookings": "Bookings",
+         "logout": "Log out"
+      }
+   },
+   "HomePage": {
+      "explore": "Explore Indonesia",
+      "popular": "Popular Properties"
+   }
+}

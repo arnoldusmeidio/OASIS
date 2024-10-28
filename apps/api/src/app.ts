@@ -3,10 +3,16 @@ import cors from "cors";
 
 import authRouter from "./routers/auth-router";
 import sampleRouter from "./routers/sample-router";
+import property from "./routers/property-router";
 import userRouter from "./routers/user-router";
 import bookingRouter from "./routers/booking-router";
+import walletRouter from "./routers/wallet-router";
 import { verifyToken } from "./middlewares/auth-middleware";
 import { notFoundMiddleware } from "./middlewares/not-found-middleware";
+import room from "./routers/room-route";
+
+import { tenantGuard } from "@/middlewares/auth-middleware";
+
 import { error } from "./middlewares/error-middleware";
 import cookieParser from "cookie-parser";
 import { getAllPropertyBeta } from "./controllers/sample-controller";
@@ -38,8 +44,17 @@ const createApp = () => {
    // User Route
    app.use("/api/v1/users", verifyToken, userRouter);
 
+   // property Route
+   app.use("/api/v1/property", verifyToken, property);
+
+   //tenant Route
+   app.use("/api/v1/tenant", verifyToken, tenantGuard, property);
+
    // Booking Route
    app.use("/api/v1/bookings", verifyToken, bookingRouter);
+
+   // Wallet Route
+   app.use("/api/v1/wallets", verifyToken, walletRouter);
 
    // Playground Route for testing
    app.use("/api/v1/playgrounds", getAllPropertyBeta);
@@ -47,7 +62,7 @@ const createApp = () => {
    // Not found handler
    app.use(notFoundMiddleware);
 
-   // Error handler
+   // Error handlers
    app.use(error);
 
    return app;

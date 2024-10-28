@@ -57,6 +57,7 @@ export default function LoginForm() {
             credentials: "include",
          });
          const data = await response.json();
+
          if (!data.ok) {
             setSuccess("");
             setError(data.message);
@@ -65,7 +66,11 @@ export default function LoginForm() {
             setSuccess(data.message);
             toast.success(data.message, { duration: 1500 });
             form.reset();
-            router.push("/");
+            if (data.role == "tenant") {
+               router.push("/tenant");
+            } else {
+               router.push("/");
+            }
             router.refresh();
          }
       } catch (error) {

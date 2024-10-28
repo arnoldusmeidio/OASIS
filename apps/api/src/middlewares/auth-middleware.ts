@@ -29,6 +29,11 @@ export function verifyToken(req: Request, res: Response, next: NextFunction) {
 }
 
 // Tenant authorization
+
+interface RequestWithTenantId extends Request {
+   tenantId?: string;
+}
+
 export async function tenantGuard(req: Request, res: Response, next: NextFunction) {
    try {
       const tenant = await prisma.tenant.findUnique({
@@ -36,6 +41,8 @@ export async function tenantGuard(req: Request, res: Response, next: NextFunctio
       });
 
       if (!tenant) return res.status(401).json({ message: "You are not an tenant" });
+
+      // (req as RequestWithTenantId).tenantId = tenant.id;
 
       next();
    } catch (error) {
