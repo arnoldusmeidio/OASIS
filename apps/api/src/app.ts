@@ -3,13 +3,14 @@ import cors from "cors";
 
 import authRouter from "./routers/auth-router";
 import sampleRouter from "./routers/sample-router";
-import property from "./routers/property-router";
+// import property from "./routers/property-router";
 import userRouter from "./routers/user-router";
 import bookingRouter from "./routers/booking-router";
 import walletRouter from "./routers/wallet-router";
 import { verifyToken } from "./middlewares/auth-middleware";
 import { notFoundMiddleware } from "./middlewares/not-found-middleware";
-import room from "./routers/room-route";
+// import room from "./routers/room-route";
+import dateRoomRoutes from "./routers/date-room-route";
 
 import { tenantGuard } from "@/middlewares/auth-middleware";
 
@@ -45,10 +46,10 @@ const createApp = () => {
    app.use("/api/v1/users", verifyToken, userRouter);
 
    // property Route
-   app.use("/api/v1/property", verifyToken, property);
+   // app.use("/api/v1/property", verifyToken, property);
 
    //tenant Route
-   app.use("/api/v1/tenant", verifyToken, tenantGuard, property);
+   // app.use("/api/v1/tenant", verifyToken, tenantGuard, property);
 
    // Booking Route
    app.use("/api/v1/bookings", verifyToken, bookingRouter);
@@ -57,7 +58,7 @@ const createApp = () => {
    app.use("/api/v1/wallets", verifyToken, walletRouter);
 
    // Playground Route for testing
-   app.use("/api/v1/playgrounds", getAllPropertyBeta);
+   app.use("/api/v1/playgrounds", dateRoomRoutes);
 
    // Not found handler
    app.use(notFoundMiddleware);

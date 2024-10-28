@@ -6,18 +6,18 @@ async function inputData() {
    console.log("Start seeding...\n");
 
    await prisma.booking.deleteMany();
-   await prisma.customer.deleteMany();
    await prisma.passwordResetToken.deleteMany();
-   await prisma.roomPictures.deleteMany();
-   await prisma.property.deleteMany();
    await prisma.propertyPictures.deleteMany();
    await prisma.review.deleteMany();
-   await prisma.room.deleteMany();
    await prisma.roomPrice.deleteMany();
-   await prisma.tenant.deleteMany();
-   await prisma.user.deleteMany();
+   await prisma.roomPictures.deleteMany();
    await prisma.verificationToken.deleteMany();
    await prisma.wallet.deleteMany();
+   await prisma.room.deleteMany();
+   await prisma.property.deleteMany();
+   await prisma.tenant.deleteMany();
+   await prisma.customer.deleteMany();
+   await prisma.user.deleteMany();
 
    const salt = await genSalt(10);
    const hashedPassword = await hash("password", salt);

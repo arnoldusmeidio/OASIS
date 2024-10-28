@@ -5,12 +5,12 @@ const prisma = new PrismaClient();
 
 export async function getRoomStatus(req: Request, res: Response) {
    const { id } = req.params;
-
+   console.log("test");
    try {
       const status = await prisma.room.findUnique({
          where: { id: id },
          include: {
-            RoomPrice: { select: { startDate: true, endDate: true, price: true } },
+            roomPrice: { select: { startDate: true, endDate: true, price: true } },
             bookings: {
                select: { startDate: true, endDate: true, paymentStatus: true },
             },
@@ -22,7 +22,7 @@ export async function getRoomStatus(req: Request, res: Response) {
             id: status?.id,
             type: status?.type,
             defaultPrice: status?.defaultPrice,
-            roomPrice: status?.RoomPrice,
+            roomPrice: status?.roomPrice,
             bookings: status?.bookings,
          },
       });

@@ -13,6 +13,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { checkRoomPrice } from "@/helpers/check-room-price";
 import { checkRoomBooking } from "@/helpers/check-room-booking";
 import { RoomStatus } from "@/types/room-status";
+import { useParams } from "next/navigation";
 
 export function DatePicker({ className }: React.HTMLAttributes<HTMLDivElement>) {
    const [date, setDate] = React.useState<DateRange | undefined>({
@@ -21,6 +22,9 @@ export function DatePicker({ className }: React.HTMLAttributes<HTMLDivElement>) 
    });
    const [roomStatus, setRoomStatus] = React.useState<RoomStatus>();
    const [numberOfMonths, setNumberOfMonths] = React.useState<number>(2);
+
+   const params = useParams<any>();
+   const roomId = params.slug;
 
    React.useEffect(() => {
       function handleResize() {
@@ -40,7 +44,7 @@ export function DatePicker({ className }: React.HTMLAttributes<HTMLDivElement>) 
 
    React.useEffect(() => {
       async function fetchPrices() {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/rooms/1/status`);
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/playgrounds/${roomId}/status`);
          const data = await response.json();
 
          setRoomStatus(data.data);

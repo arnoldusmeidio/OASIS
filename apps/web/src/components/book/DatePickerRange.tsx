@@ -15,6 +15,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { useParams } from "next/navigation";
 import { RoomStatus } from "@/types/room-status";
 import { checkRoomBooking } from "@/helpers/check-room-booking";
+import { checkRoomPrice } from "@/helpers/check-room-price";
 
 export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLDivElement>) {
    const [date, setDate] = useState<DateRange | undefined>();
@@ -67,7 +68,7 @@ export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLD
 
    useEffect(() => {
       async function fetchPrices() {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/rooms/1/status`);
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/playgrounds/${roomId}/status`);
          const data = await response.json();
 
          setRoomStatus(data.data);
@@ -137,8 +138,19 @@ export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLD
                   mode="range"
                   defaultMonth={date?.from}
                   selected={date}
-                  onSelect={setDate}
-                  numberOfMonths={2}
+                  onSelect={handleSelect}
+                  numberOfMonths={numberOfMonths}
+                  components={{
+                     DayContent: ({ date }) => {
+                        return (
+                           <div className="flex flex-col items-center justify-center">
+                              <span>{date.getDate()}</span>
+                              <span className="text-[10px] text-green-500">{checkRoomPrice(date, roomStatus)}</span>
+                           </div>
+                        );
+                     },
+                  }}
+                  disabled={(date) => checkRoomBooking(date, roomStatus)}
                />
             </PopoverContent>
          </Popover>
