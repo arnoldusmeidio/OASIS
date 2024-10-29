@@ -1,5 +1,5 @@
 export enum Category {
-   Villa = "Vila",
+   Villa = "Villa",
    Hotel = "Hotel",
    Apartment = "Apartment",
 }
