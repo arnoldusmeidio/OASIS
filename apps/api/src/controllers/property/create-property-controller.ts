@@ -48,17 +48,18 @@ export const createProperty = async (req: Request, res: Response, next: NextFunc
       );
 
       const geo = await fetch(
-         `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(propertyAddress)}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
+         `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(propertyAddress)}&key=${process.env.GOOGLE_MAPS_API_KEY}`,
       );
 
       const data = await geo.json();
       const { lat, lng } = data?.results?.[0]?.geometry.location;
+      const { formatted_address } = data?.results[0];
 
-      const property = await prisma.property.create({
+      await prisma.property.create({
          data: {
             tenantId,
             name: propertyName,
-            address: propertyAddress,
+            address: formatted_address,
             lng,
             lat,
             description: propertyDescription,
