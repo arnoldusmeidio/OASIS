@@ -1,7 +1,7 @@
 import { RoomStatus } from "@/types/room-status";
 
 export function checkRoomBooking(date: Date, roomStatus: RoomStatus | undefined): boolean {
-   const booking = roomStatus?.booking;
+   const booking = roomStatus?.bookings;
    const targetTime = date.getTime();
    const now = Date.now();
    const ninetyDaysFromNow = now + 90 * 24 * 60 * 60 * 1000;
