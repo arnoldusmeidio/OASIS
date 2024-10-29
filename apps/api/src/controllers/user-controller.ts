@@ -15,6 +15,7 @@ import crypto from "crypto";
 // Search User by ID
 export async function getSingleUser(req: Request, res: Response, next: NextFunction) {
    try {
+      const locale = req.cookies.NEXT_LOCALE;
       const id = (req as RequestWithUserId).user?.id;
 
       const user = await prisma.user.findUnique({
@@ -33,7 +34,7 @@ export async function getSingleUser(req: Request, res: Response, next: NextFunct
 
       if (!user)
          return res.status(404).json({
-            message: "User not found",
+            message: locale == "id" ? "User tidak ditemukan" : "User not found",
             ok: false,
          });
 
@@ -123,16 +124,21 @@ export async function selectUserRole(req: Request, res: Response, next: NextFunc
 // Update user email
 export async function updateUserEmail(req: Request, res: Response, next: NextFunction) {
    try {
+      const locale = req.cookies.NEXT_LOCALE;
       const id = (req as RequestWithUserId).user?.id;
       const parsedData = updateEmailUserSchema.parse(req.body);
       const { token } = parsedData;
 
       const existingToken = await getVerificationTokenByToken(token);
-      if (!existingToken) return res.status(404).json({ message: "Invalid Token", ok: false });
+      if (!existingToken)
+         return res.status(404).json({ message: locale == "id" ? "Token Tidak Sah" : "Invalid Token", ok: false });
 
       const hasExpired = new Date(existingToken.expires) < new Date();
 
-      if (hasExpired) return res.status(400).json({ message: "Token has expired", ok: false });
+      if (hasExpired)
+         return res
+            .status(400)
+            .json({ message: locale == "id" ? "Token sudah kedaluwarsa" : "Token has expired", ok: false });
 
       const user = await prisma.user.findUnique({
          where: {
@@ -142,7 +148,7 @@ export async function updateUserEmail(req: Request, res: Response, next: NextFun
 
       if (!user)
          return res.status(404).json({
-            message: "User not found",
+            message: locale == "id" ? "User tidak ditemukan" : "User not found",
             ok: false,
          });
 
@@ -150,7 +156,10 @@ export async function updateUserEmail(req: Request, res: Response, next: NextFun
          where: { email: existingToken.email },
       });
 
-      if (existingEmail) return res.status(409).json({ message: "Email has already been used", ok: false });
+      if (existingEmail)
+         return res
+            .status(409)
+            .json({ message: locale == "id" ? "Email sudah terpakai" : "Email has already been used", ok: false });
 
       await prisma.user.update({
          where: {
@@ -165,7 +174,10 @@ export async function updateUserEmail(req: Request, res: Response, next: NextFun
          where: { id: existingToken.id },
       });
 
-      res.status(200).json({ message: "Email updated successfully", ok: true });
+      res.status(200).json({
+         message: locale == "id" ? "Email berhasil diperbarui" : "Email updated successfully",
+         ok: true,
+      });
    } catch (error) {
       if (error instanceof ZodError) {
          return res.status(400).json({ message: error.errors[0].message, ok: false });
@@ -181,6 +193,7 @@ export async function updateUserInfo(req: Request, res: Response, next: NextFunc
       const id = (req as RequestWithUserId).user?.id;
       const parsedData = profileSchema.parse(req.body);
       const { name, password, newPassword, language, currency } = parsedData;
+      const locale = language == "INDONESIA" ? "id" : "en";
 
       const user = await prisma.user.findUnique({
          where: {
@@ -197,7 +210,10 @@ export async function updateUserInfo(req: Request, res: Response, next: NextFunc
       if (password) {
          const isValidPassword = await compare(password, user?.password!);
 
-         if (!isValidPassword) return res.status(401).json({ message: "Invalid Current Password", ok: false });
+         if (!isValidPassword)
+            return res
+               .status(401)
+               .json({ message: locale == "id" ? "Kata Sandi Salah" : "Invalid Current Password", ok: false });
       }
 
       let hashedPassword = undefined;
@@ -218,7 +234,16 @@ export async function updateUserInfo(req: Request, res: Response, next: NextFunc
          },
       });
 
-      return res.status(200).json({ message: "User info successfully updated", ok: true });
+      res.cookie("NEXT_LOCALE", locale, {
+         httpOnly: false,
+         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30 * 365),
+         sameSite: "lax",
+      });
+
+      return res.status(200).json({
+         message: locale == "id" ? "Informasi user berhasil diperbarui" : "User info successfully updated",
+         ok: true,
+      });
    } catch (error) {
       if (error instanceof ZodError) {
          return res.status(400).json({ message: error.errors[0].message, ok: false });
@@ -231,6 +256,7 @@ export async function updateUserInfo(req: Request, res: Response, next: NextFunc
 // Update user profile picture
 export async function updateUserPicture(req: Request, res: Response, next: NextFunction) {
    try {
+      let locale = req.cookies.NEXT_LOCALE;
       const id = (req as RequestWithUserId).user?.id;
 
       const user = await prisma.user.findUnique({
@@ -241,7 +267,7 @@ export async function updateUserPicture(req: Request, res: Response, next: NextF
 
       if (!user)
          return res.status(404).json({
-            message: "User not found",
+            message: locale == "id" ? "User tidak ditemukan" : "User not found",
             ok: false,
          });
 
@@ -266,7 +292,10 @@ export async function updateUserPicture(req: Request, res: Response, next: NextF
 
       fs.unlink(req.file.path);
 
-      return res.status(200).json({ message: "Profile picture successfully updated", ok: true });
+      return res.status(200).json({
+         message: locale == "id" ? "Foto profil berhasil diperbarui" : "Profile picture successfully updated",
+         ok: true,
+      });
    } catch (error) {
       if (error instanceof ZodError) {
          return res.status(400).json({ message: error.errors[0].message, ok: false });

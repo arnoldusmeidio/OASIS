@@ -5,8 +5,11 @@ import { profileSchema } from "@/schemas/profile-schemas";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { Locale, usePathname, useRouter } from "@/i18n/routing";
+import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useUserStore } from "@/stores/useUserStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,8 +20,12 @@ interface Props {
 }
 
 export default function UpdateProfileForm({ getUser }: Props) {
+   const t = useTranslations("UserProfile");
    const [error, setError] = useState<string | undefined>("");
    const [success, setSuccess] = useState<string | undefined>("");
+   const router = useRouter();
+   const pathname = usePathname();
+   const params = useParams();
 
    const { user } = useUserStore();
 
@@ -55,13 +62,23 @@ export default function UpdateProfileForm({ getUser }: Props) {
             setError(data.message);
             form.reset();
          } else {
+            const nextLocale = values.language == "INDONESIA" ? "id" : ("en" as Locale);
+
             setError("");
             setSuccess(data.message);
             getUser();
+
+            router.replace(
+               // @ts-expect-error -- TypeScript will validate that only known `params`
+               // are used in combination with a given `pathname`. Since the two will
+               // always match for the current route, we can skip runtime checks.
+               { pathname, params },
+               { locale: nextLocale },
+            );
          }
       } catch (error) {
          console.error(error);
-         setError("Something went wrong!");
+         setError(`${t("error")}`);
       }
    };
 
@@ -74,11 +91,11 @@ export default function UpdateProfileForm({ getUser }: Props) {
                   name="name"
                   render={({ field }) => (
                      <FormItem>
-                        <FormLabel>Name</FormLabel>
+                        <FormLabel>{t("name")}</FormLabel>
                         <FormControl>
                            <Input
                               {...field}
-                              placeholder={user?.name || "Your name"}
+                              placeholder={user?.name || `${t("namePlaceholder")}`}
                               disabled={isSubmitting}
                               value={field.value ?? ""}
                            />
@@ -94,7 +111,7 @@ export default function UpdateProfileForm({ getUser }: Props) {
                         name="password"
                         render={({ field }) => (
                            <FormItem>
-                              <FormLabel>Current Password</FormLabel>
+                              <FormLabel>{t("currentPassword")}</FormLabel>
                               <FormControl>
                                  <Input
                                     {...field}
@@ -113,7 +130,7 @@ export default function UpdateProfileForm({ getUser }: Props) {
                         name="newPassword"
                         render={({ field }) => (
                            <FormItem>
-                              <FormLabel>New Password</FormLabel>
+                              <FormLabel>{t("newPassword")}</FormLabel>
                               <FormControl>
                                  <Input
                                     {...field}
@@ -132,7 +149,7 @@ export default function UpdateProfileForm({ getUser }: Props) {
                         name="confirmNewPassword"
                         render={({ field }) => (
                            <FormItem>
-                              <FormLabel>Confirm New Password</FormLabel>
+                              <FormLabel>{t("confirmNewPassword")}</FormLabel>
                               <FormControl>
                                  <Input
                                     {...field}
@@ -153,16 +170,16 @@ export default function UpdateProfileForm({ getUser }: Props) {
                   name="language"
                   render={({ field }) => (
                      <FormItem>
-                        <FormLabel>Language</FormLabel>
+                        <FormLabel>{t("language.label")}</FormLabel>
                         <Select disabled={isSubmitting} onValueChange={field.onChange} defaultValue={field.value}>
                            <FormControl>
                               <SelectTrigger>
-                                 <SelectValue placeholder="Select Language" />
+                                 <SelectValue placeholder={t("language.placeholder")} />
                               </SelectTrigger>
                            </FormControl>
                            <SelectContent>
-                              <SelectItem value="ENGLISH">English</SelectItem>
-                              <SelectItem value="INDONESIA">Indonesia</SelectItem>
+                              <SelectItem value="ENGLISH">{t("language.english")}</SelectItem>
+                              <SelectItem value="INDONESIA">{t("language.indonesia")}</SelectItem>
                            </SelectContent>
                         </Select>
 
@@ -175,16 +192,16 @@ export default function UpdateProfileForm({ getUser }: Props) {
                   name="currency"
                   render={({ field }) => (
                      <FormItem>
-                        <FormLabel>Currency</FormLabel>
+                        <FormLabel>{t("currency.label")}</FormLabel>
                         <Select disabled={isSubmitting} onValueChange={field.onChange} defaultValue={field.value}>
                            <FormControl>
                               <SelectTrigger>
-                                 <SelectValue placeholder="Select Currency" />
+                                 <SelectValue placeholder={t("currency.placeholder")} />
                               </SelectTrigger>
                            </FormControl>
                            <SelectContent>
-                              <SelectItem value="IDR">IDR</SelectItem>
-                              <SelectItem value="USD">USD</SelectItem>
+                              <SelectItem value="IDR">{t("currency.idr")}</SelectItem>
+                              <SelectItem value="USD">{t("currency.usd")}</SelectItem>
                            </SelectContent>
                         </Select>
                         <FormMessage />
@@ -195,7 +212,7 @@ export default function UpdateProfileForm({ getUser }: Props) {
             <FormError message={error} />
             <FormSuccess message={success} />
             <Button className="w-full" type="submit">
-               Update
+               {t("update")}
             </Button>
          </form>
       </Form>

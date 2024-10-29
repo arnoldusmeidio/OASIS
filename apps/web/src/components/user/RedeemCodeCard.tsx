@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { useUserStore } from "@/stores/useUserStore";
 import { toast } from "sonner";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 interface Props {
    getUser: () => void;
@@ -13,6 +14,7 @@ interface Props {
 
 export default function RedeemCodeCard({ getUser }: Props) {
    const { user } = useUserStore();
+   const t = useTranslations("UserProfile.RedeemCode");
    const [refCode, setRefCode] = useState("");
 
    async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>): Promise<void | undefined> {
@@ -30,12 +32,12 @@ export default function RedeemCodeCard({ getUser }: Props) {
 
          const resData = await res.json();
          if (resData.ok) {
-            toast("Successfully redeemed the code!", {
-               description: "Earned 10000 points!",
+            toast(`${t("toastSuccess")}`, {
+               description: `${t("toastDescription")}`,
             });
             getUser();
          } else {
-            toast.error("Failed to redeem the code...", {
+            toast.error(`${t("toastError")}`, {
                description: `${resData.message}`,
             });
          }
@@ -46,52 +48,51 @@ export default function RedeemCodeCard({ getUser }: Props) {
    return (
       <Card>
          <CardHeader>
-            <CardTitle>Redeem Referral Code</CardTitle>
-            <CardDescription>Redeem a code from friend here.</CardDescription>
+            <CardTitle>{t("header")}</CardTitle>
+            <CardDescription>{t("description")}</CardDescription>
          </CardHeader>
          <CardContent className="space-y-2">
             <div className="flex items-center space-x-2">
                {user?.customer.hasRedeemedRefCode ? (
-                  <div className="flex items-center space-x-2">
+                  <div className="flex flex-col items-center max-sm:space-y-4 sm:flex-row sm:space-x-2">
                      <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="name" className="text-right">
-                           Code:
+                           {t("code")}
                         </Label>
                         <Input
                            id="name"
-                           placeholder="Code redeemed"
+                           placeholder={t("placeholderRedeemed")}
                            className="col-span-3"
                            value={refCode}
                            onChange={(e) => setRefCode(e.target.value)}
                            disabled
                         />
                      </div>
-                     <Button type="submit" disabled>
-                        Redeem
+                     <Button className="max-sm:w-full" type="submit" disabled>
+                        {t("redeem")}
                      </Button>
                   </div>
                ) : (
-                  <div className="flex items-center space-x-2">
+                  <div className="flex flex-col items-center gap-2 max-sm:space-y-4 sm:flex-row sm:space-x-2">
                      <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="name" className="text-right">
-                           Code:
+                           {t("code")}
                         </Label>
                         <Input
                            id="name"
-                           placeholder="Enter 12 digit code"
+                           placeholder={t("placeholder")}
                            className="col-span-3"
                            value={refCode}
                            onChange={(e) => setRefCode(e.target.value)}
                         />
                      </div>
-                     <Button type="submit" onClick={handleSubmit}>
-                        Redeem
+                     <Button className="max-sm:w-full" type="submit" onClick={handleSubmit}>
+                        {t("redeem")}
                      </Button>
                   </div>
                )}
             </div>
          </CardContent>
-         <CardFooter></CardFooter>
       </Card>
    );
 }

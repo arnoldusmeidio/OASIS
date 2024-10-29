@@ -1,7 +1,7 @@
 "use client";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import Logo from "../header/Logo";
+import TenantLogo from "./Tenant-logo";
 import { Button } from "@/components/ui/button";
 import RegisterButton from "../auth/RegisterButton";
 import LoginButton from "../auth/LoginButton";
@@ -19,7 +19,7 @@ export default function TenantNavbar() {
             <div className="flex justify-between">
                {/* Left */}
                <div className="flex sm:basis-1/3">
-                  <Logo />
+                  <TenantLogo />
                </div>
 
                {/* Middle tagline */}
@@ -56,6 +56,9 @@ export default function TenantNavbar() {
                                  </Button>
                                  <Button variant={"ghost"} className="w-full justify-start" asChild>
                                     <Link href={"/tenant/create-property"}>Create Property</Link>
+                                 </Button>
+                                 <Button variant={"ghost"} className="w-full justify-start" asChild>
+                                    <Link href={"/tenant"}>Home</Link>
                                  </Button>
                               </div>
                               <div>

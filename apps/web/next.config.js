@@ -20,9 +20,16 @@ const nextConfig = {
             protocol: "https",
             hostname: "images.unsplash.com",
          },
+         {
+            protocol: "https",
+            hostname: "plus.unsplash.com",
+         },
+         {
+            protocol: "https",
+            hostname: "res.cloudinary.com",
+         },
       ],
    },
-   trailingSlash: true,
 };
 
 module.exports = withNextIntl(nextConfig);

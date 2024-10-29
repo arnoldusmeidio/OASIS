@@ -1,13 +1,17 @@
-// import { createRoom } from "@/controllers/room/create-room";
+import { createRoom } from "@/controllers/room/create-room";
 // import { deleteRoom } from "@/controllers/room/delete-room";
-// import { getSingleRoom } from "@/controllers/room/get-single-room";
-// import { uploader } from "@/middlewares/uplouder-middleware";
-// import { Router } from "express";
+// import { editRoom } from "@/controllers/room/edit-room";
+import { getSingleRoom } from "@/controllers/room/get-single-room";
+import { uploader } from "@/middlewares/uplouder-middleware";
+import { Router } from "express";
 
-// const router = Router();
-// const upload = uploader();
+const router = Router();
+const upload = uploader();
 
-// router.route("/:propertyId").post(upload.single("pictureUrl"), createRoom);
-// router.route("/:propertyId/:roomId").delete(deleteRoom).get(getSingleRoom);
+router.route("/:propertyId").post(upload.array("roomPictures", 5), createRoom);
 
-// export default router;
+router.route("/:roomId").post(upload.array("roomPictures", 5)).get(getSingleRoom);
+
+export default router;
+
+// .delete(deleteRoom)

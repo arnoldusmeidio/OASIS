@@ -12,12 +12,13 @@ import { useRouter } from "next/navigation";
 import { FormTypeSearch, useFormSearch } from "@/schemas/search-form-schemas";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { SubmitHandler } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 type FormFields = "location" | "dates" | "adults" | "children" | "rooms" | "dates.from" | "dates.to";
 
 export default function Searchbar() {
    const router = useRouter();
-
+   const t = useTranslations("Layout.SearchBar");
    const form = useFormSearch();
 
    const {
@@ -68,7 +69,7 @@ export default function Searchbar() {
                                  {...field}
                                  type="text"
                                  className="w-full border-none bg-transparent pl-2 text-sm focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 xl:w-72"
-                                 placeholder="Where do you want to stay?"
+                                 placeholder={t("location")}
                               />
                            </div>
                         </FormControl>
@@ -134,15 +135,16 @@ export default function Searchbar() {
                         <Button variant="outline" className="flex w-full items-center justify-start gap-2">
                            <User className="h-4 w-4" />
                            <span>
-                              {adults} {Number(adults) > 1 ? "adults" : "adult"}
+                              {adults} {Number(adults) > 1 ? `${t("adult.headerPlural")}` : `${t("adult.header")}`}
                            </span>
                            <span>·</span>
                            <span>
-                              {children} {Number(children) > 0 ? "child" : "children"}
+                              {children}{" "}
+                              {Number(children) > 0 ? `${t("children.headerPlural")}` : `${t("children.header")}`}
                            </span>
                            <span>·</span>
                            <span>
-                              {rooms} {Number(rooms) > 1 ? "rooms" : "room"}
+                              {rooms} {Number(rooms) > 1 ? `${t("room.headerPlural")}` : `${t("room.header")}`}
                            </span>
                         </Button>
                      </PopoverTrigger>
@@ -150,7 +152,7 @@ export default function Searchbar() {
                      <PopoverContent align="start" className="flex flex-col gap-2 text-sm">
                         {/* Adults */}
                         <div className="flex items-center justify-between">
-                           <span>Adults</span>
+                           <span>{t("adult.label")}</span>
                            <div className="flex w-32 items-center justify-between gap-2 rounded-md border-2">
                               <Button
                                  disabled={Number(adults) <= 1}
@@ -168,7 +170,7 @@ export default function Searchbar() {
 
                         {/* Children */}
                         <div className="flex items-center justify-between">
-                           <span>Children</span>
+                           <span>{t("children.label")}</span>
                            <div className="flex w-32 items-center justify-between gap-2 rounded-md border-2">
                               <Button
                                  disabled={Number(children) <= 0}
@@ -186,7 +188,7 @@ export default function Searchbar() {
 
                         {/* Rooms */}
                         <div className="flex items-center justify-between">
-                           <span>Rooms</span>
+                           <span>{t("room.label")}</span>
                            <div className="flex w-32 items-center justify-between gap-2 rounded-md border-2">
                               <Button
                                  disabled={Number(rooms) <= 1}
@@ -210,7 +212,7 @@ export default function Searchbar() {
                   variant={"ghost"}
                   className="text-background bg-main-theme hover:text-background hover:bg-main-theme/80 flex w-full items-center justify-center lg:w-28"
                >
-                  <span>Search</span>
+                  <span>{t("search")}</span>
                   <Search className="text-background h-7 w-7 p-1" />
                </Button>
             </div>

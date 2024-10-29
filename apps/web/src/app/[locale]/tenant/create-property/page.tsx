@@ -2,7 +2,6 @@
 
 import * as z from "zod";
 import { useState } from "react";
-import Room from "../create-room/page";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { propertySchema } from "@/schemas/property-schemas";
@@ -14,8 +13,10 @@ import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Category } from "@/types/property-types";
+import { Cat } from "lucide-react";
 
 export default function Property() {
    const [error, setError] = useState<string | undefined>("");
@@ -29,7 +30,7 @@ export default function Property() {
          propertyName: "",
          propertyAddress: "",
          propertyDescription: "",
-         category: [],
+         category: Category.Hotel,
          pictureUrl: new File([], ""),
       },
       mode: "onBlur",
@@ -39,15 +40,12 @@ export default function Property() {
       formState: { isSubmitting },
    } = form;
 
-   const categories = Object.values(Category).filter((value) => typeof value === "string");
-
    const onSubmit = async (values: z.infer<typeof propertySchema>) => {
       try {
          const formData = new FormData();
          formData.append("propertyName", values.propertyName);
          formData.append("propertyAddress", values.propertyAddress);
          formData.append("propertyDescription", values.propertyDescription);
-         // formData.append("propertyCategory", values.category);
          if (values.pictureUrl) {
             formData.append("pictureUrl", values.pictureUrl);
          }
@@ -134,22 +132,33 @@ export default function Property() {
                               </FormItem>
                            )}
                         />
+
+                        {/* Property Categories */}
+                        <div>
+                           <h3>Property Categories</h3>
+                           {Object.values(Category).map((cat) => (
+                              <div key={cat}>
+                                 <FormField
+                                    control={form.control}
+                                    name="category"
+                                    render={({ field }) => (
+                                       <FormItem>
+                                          <RadioGroup
+                                             className="flex items-center space-x-2"
+                                             value={field.value}
+                                             onValueChange={field.onChange}
+                                          >
+                                             <RadioGroupItem id={cat} value={cat} />
+                                             <Label htmlFor={cat}>{cat}</Label>
+                                          </RadioGroup>
+                                       </FormItem>
+                                    )}
+                                 />
+                              </div>
+                           ))}
+                        </div>
+
                         {/* Property Image */}
-                        {Object.values(Category).map((category) => (
-                           <FormField
-                              key={category}
-                              control={form.control}
-                              name="category"
-                              render={({ field }) => (
-                                 <FormItem>
-                                    <FormLabel>{category}</FormLabel>
-                                    <FormControl></FormControl>
-                                    <FormMessage />
-                                 </FormItem>
-                              )}
-                           />
-                        ))}
-                        {/* Property category */}
                         <FormField
                            control={form.control}
                            name="pictureUrl"

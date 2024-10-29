@@ -1,23 +1,18 @@
 import { Request, Response, NextFunction } from "express";
 
 interface ErrorWithStatusCode extends Error {
-  statusCode?: number;
+   statusCode?: number;
 }
 
-export function error(
-  error: ErrorWithStatusCode,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  const defaultError = {
-    statusCode: error.statusCode || 500,
-    message: error.message || "General error. Sorry, and good luck",
-  };
+export function error(error: ErrorWithStatusCode, req: Request, res: Response, next: NextFunction) {
+   const locale = req.cookies.NEXT_LOCALE;
 
-  console.error(error);
+   const defaultError = {
+      statusCode: error.statusCode || 500,
+      message: error.message || locale == "id" ? "Terjadi kesalahan" : "General error. Sorry, and good luck",
+   };
 
-  return res
-    .status(defaultError.statusCode)
-    .json({ message: defaultError.message });
+   console.error(error);
+
+   return res.status(defaultError.statusCode).json({ message: defaultError.message });
 }

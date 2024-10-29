@@ -5,8 +5,6 @@ import { Request, Response, NextFunction } from "express";
 import prisma from "@/prisma";
 import { ZodError } from "zod";
 import { Resend } from "resend";
-import { updateEmailUserSchema } from "@/schemas/user-schema";
-import { getVerificationTokenByToken } from "@/lib/verification-token";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
