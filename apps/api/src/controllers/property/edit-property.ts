@@ -4,11 +4,9 @@ import cloudinary from "@/config/cloudinary";
 import { RequestWithUserId } from "@/types";
 import fs from "fs/promises";
 
-// Edit Property
-
 export async function editProperty(req: Request, res: Response, next: NextFunction) {
    try {
-      const { propertyName, propertyAddress, propertyDescription, category } = req.body;
+      const { propertyName, propertyAddress, propertyDescription, category, lat, lng } = req.body;
 
       const propertyId = req.params.propertyId; // Get propertyId from URL parameters
 
@@ -42,7 +40,7 @@ export async function editProperty(req: Request, res: Response, next: NextFuncti
                });
                // Remove file after upload
                await fs.unlink(file.path);
-               return { name: cloudinaryData.secure_url }; // Return the URL
+               return { url: cloudinaryData.secure_url }; // Return the URL
             } catch (uploadError) {
                console.error("Error uploading file:", uploadError);
                throw new Error("Error uploading one or more files");
@@ -70,7 +68,9 @@ export async function editProperty(req: Request, res: Response, next: NextFuncti
             address: propertyAddress,
             description: propertyDescription,
             category,
-            pictureUrl: {
+            lng,
+            lat,
+            propertyPictures: {
                create: pictureUrls,
             },
          },

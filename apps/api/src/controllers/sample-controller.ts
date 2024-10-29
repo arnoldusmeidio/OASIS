@@ -30,3 +30,11 @@ export async function createSampleData(req: Request, res: Response) {
 
    return res.status(201).send(newSampleData);
 }
+
+export async function getAllPropertyBeta(req: Request, res: Response) {
+   const sampleProperties = await prisma.property.findMany({
+      include: { room: true },
+   });
+
+   return res.status(200).json({ data: sampleProperties, ok: true });
+}

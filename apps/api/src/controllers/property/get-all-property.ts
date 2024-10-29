@@ -8,6 +8,9 @@ export async function getAllPropertiesPagination(req: Request, res: Response, ne
       const offset = (Number(page) - 1) * Number(limit);
 
       const properties = await prisma.property.findMany({
+         include: {
+            propertyPictures: true,
+         },
          skip: offset,
          take: Number(limit),
       });
