@@ -6,7 +6,7 @@ import fs from "fs/promises";
 
 export async function editProperty(req: Request, res: Response, next: NextFunction) {
    try {
-      const { propertyName, propertyAddress, propertyDescription, category } = req.body;
+      const { propertyName, propertyAddress, propertyDescription, category, lat, lng } = req.body;
 
       const propertyId = req.params.propertyId; // Get propertyId from URL parameters
 

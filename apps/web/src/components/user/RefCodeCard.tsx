@@ -9,6 +9,7 @@ import { useUserStore } from "@/stores/useUserStore";
 import { FaSquareWhatsapp } from "react-icons/fa6";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 interface Props {
    getUser: () => void;
@@ -16,23 +17,24 @@ interface Props {
 
 export default function RefCodeCard({ getUser }: Props) {
    const { user } = useUserStore();
+   const t = useTranslations("UserProfile.ReferralCode");
    const myRefCode = user?.customer?.refCode || "";
 
    const handleCopyClick = async () => {
       try {
          await window.navigator.clipboard.writeText(myRefCode);
-         toast("Copied to clipboard!");
+         toast(`${t("toastSuccess")}`);
       } catch (err) {
          console.error("Unable to copy to clipboard.", err);
-         toast.error("Copy to clipboard failed.");
+         toast.error(`${t("toastError")}`);
       }
    };
 
    return (
       <Card>
          <CardHeader>
-            <CardTitle>Your Referral Code</CardTitle>
-            <CardDescription>Share your code to friends to redeem points.</CardDescription>
+            <CardTitle>{t("header")}</CardTitle>
+            <CardDescription>{t("description")}</CardDescription>
          </CardHeader>
          <CardContent className="space-y-2">
             <div className="flex items-center space-x-2">
@@ -54,7 +56,6 @@ export default function RefCodeCard({ getUser }: Props) {
                </Link>
             </div>
          </CardContent>
-         <CardFooter></CardFooter>
       </Card>
    );
 }

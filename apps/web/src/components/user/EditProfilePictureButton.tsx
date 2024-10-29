@@ -8,26 +8,26 @@ import {
    DialogTrigger,
 } from "@/components/ui/dialog";
 import ChangeProfilePictureForm from "@/components/user/ChangeProfilePictureForm";
+import { useTranslations } from "next-intl";
 
 interface Props {
    getUser: () => void;
 }
 
 export default function EditProfilePictureButton({ getUser }: Props) {
+   const t = useTranslations("UserProfile.ProfilePicture");
 
    return (
       <Dialog>
          <DialogTrigger asChild>
             <Button type="button" variant={"secondary"} size={"sm"}>
-               Edit
+               {t("edit")}
             </Button>
          </DialogTrigger>
-         <DialogContent className="w-[375px]">
+         <DialogContent className="w-[300px] sm:w-[375px]">
             <DialogHeader>
-               <DialogTitle>Change Profile Picture</DialogTitle>
-               <DialogDescription>
-                  Make changes to your profile picture here. Click save when you're done.
-               </DialogDescription>
+               <DialogTitle>{t("header")}</DialogTitle>
+               <DialogDescription>{t("description")}</DialogDescription>
             </DialogHeader>
             <ChangeProfilePictureForm getUser={getUser} />
          </DialogContent>
