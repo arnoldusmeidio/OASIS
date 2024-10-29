@@ -3,11 +3,14 @@ import prisma from "@/prisma";
 
 export const getSingleProperty = async (req: Request, res: Response, next: NextFunction) => {
    try {
-      const { id } = req.params;
+      const { propertyId } = req.params;
 
       const getProperty = await prisma.property.findUnique({
          where: {
-            id: id,
+            id: propertyId,
+         },
+         include: {
+            propertyPictures: true,
          },
       });
 

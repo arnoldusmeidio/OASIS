@@ -6,7 +6,7 @@ import fs from "fs/promises";
 
 export async function editProperty(req: Request, res: Response, next: NextFunction) {
    try {
-      const { propertyName, propertyAddress, propertyDescription, category, lat, lng } = req.body;
+      const { propertyName, propertyAddress, propertyDescription, category } = req.body;
 
       const propertyId = req.params.propertyId; // Get propertyId from URL parameters
 
@@ -58,6 +58,14 @@ export async function editProperty(req: Request, res: Response, next: NextFuncti
          return res.status(404).json({ message: "Property not found" });
       }
 
+      const geo = await fetch(
+         `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(propertyAddress)}&key=${process.env.GOOGLE_MAPS_API_KEY}`,
+      );
+
+      const data = await geo.json();
+      const { lat, lng } = data?.results?.[0]?.geometry.location;
+      const { formatted_address } = data?.results[0];
+
       const keluar = await prisma.property.update({
          where: {
             id: propertyId,
@@ -65,7 +73,7 @@ export async function editProperty(req: Request, res: Response, next: NextFuncti
          data: {
             tenantId,
             name: propertyName,
-            address: propertyAddress,
+            address: formatted_address,
             description: propertyDescription,
             category,
             lng,

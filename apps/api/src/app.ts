@@ -10,6 +10,7 @@ import walletRouter from "./routers/wallet-router";
 import { verifyToken } from "./middlewares/auth-middleware";
 import { notFoundMiddleware } from "./middlewares/not-found-middleware";
 import room from "./routers/room-route";
+import customer from "./routers/customer-router";
 import { tenantGuard } from "@/middlewares/auth-middleware";
 import { error } from "./middlewares/error-middleware";
 import cookieParser from "cookie-parser";
@@ -43,7 +44,7 @@ const createApp = () => {
    app.use("/api/v1/users", verifyToken, userRouter);
 
    // property Route
-   app.use("/api/v1/property", verifyToken, property);
+   app.use("/api/v1/property", customer);
 
    //tenant Route
    app.use("/api/v1/tenant", verifyToken, tenantGuard, property);
