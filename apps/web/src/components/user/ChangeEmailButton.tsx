@@ -8,20 +8,23 @@ import {
    DialogTrigger,
 } from "@/components/ui/dialog";
 import ChangeEmailForm from "@/components/auth/ChangeEmailForm";
+import { useTranslations } from "next-intl";
 
 export default function ChangeEmailButton() {
+   const t = useTranslations("UserProfile.Email");
+
    return (
       <div>
          <Dialog>
             <DialogTrigger asChild>
                <Button type="button" variant={"secondary"} size={"sm"}>
-                  Change
+                  {t("change")}
                </Button>
             </DialogTrigger>
             <DialogContent className="w-[300px] sm:w-[375px]">
                <DialogHeader>
-                  <DialogTitle>Change Email</DialogTitle>
-                  <DialogDescription>Make changes to your email here. Click save when you're done.</DialogDescription>
+                  <DialogTitle>{t("header")}</DialogTitle>
+                  <DialogDescription>{t("description")}</DialogDescription>
                </DialogHeader>
                <ChangeEmailForm />
             </DialogContent>

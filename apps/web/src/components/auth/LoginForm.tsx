@@ -9,7 +9,6 @@ import { loginSchema } from "@/schemas/auth-schemas";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
-import { toast } from "sonner";
 
 import CardWrapper from "@/components/auth/CardWrapper";
 import { Input } from "@/components/ui/input";

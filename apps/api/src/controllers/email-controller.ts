@@ -11,6 +11,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 // Email confirmation for registration
 export async function emailVerification(req: Request, res: Response, next: NextFunction) {
    try {
+      const locale = req.cookies.NEXT_LOCALE;
       const parsedData = emailVerificationSchema.parse(req.body);
       const { email } = parsedData;
 
@@ -18,7 +19,10 @@ export async function emailVerification(req: Request, res: Response, next: NextF
          where: { email },
       });
 
-      if (existingUser) return res.status(200).json({ message: "Email has already been used", ok: false });
+      if (existingUser)
+         return res
+            .status(409)
+            .json({ message: locale == "id" ? "Email sudah terpakai" : "Email has already been used", ok: false });
 
       const existingValidToken = await prisma.verificationToken.findFirst({
          where: {
@@ -27,7 +31,10 @@ export async function emailVerification(req: Request, res: Response, next: NextF
          },
       });
 
-      if (existingValidToken) return res.status(200).json({ message: "Please check your email", ok: true });
+      if (existingValidToken)
+         return res
+            .status(200)
+            .json({ message: locale == "id" ? "Silahkan cek email anda" : "Please check your email", ok: true });
 
       // Generate confirmation token
       const token = await generateVerificationToken(email);
@@ -41,11 +48,13 @@ export async function emailVerification(req: Request, res: Response, next: NextF
       });
 
       if (error) {
-         return res.status(400).json({ message: "Something went wrong", ok: false });
+         return res
+            .status(400)
+            .json({ message: locale == "id" ? "Terjadi kesalahan" : "Something went wrong", ok: false });
       }
 
       return res.status(200).json({
-         message: "Email sent. Please check your email",
+         message: locale == "id" ? "Email terkirim. Cek email anda" : "Email sent. Please check your email",
          ok: true,
       });
    } catch (error) {
@@ -60,6 +69,7 @@ export async function emailVerification(req: Request, res: Response, next: NextF
 // Email confirmation for updating email
 export async function emailUpdateVerification(req: Request, res: Response, next: NextFunction) {
    try {
+      const locale = req.cookies.NEXT_LOCALE;
       const parsedData = emailVerificationSchema.parse(req.body);
       const { email } = parsedData;
 
@@ -81,7 +91,10 @@ export async function emailUpdateVerification(req: Request, res: Response, next:
          where: { email },
       });
 
-      if (existingEmail) return res.status(409).json({ message: "Email has already been used", ok: false });
+      if (existingEmail)
+         return res
+            .status(409)
+            .json({ message: locale == "id" ? "Email sudah terpakai" : "Email has already been used", ok: false });
 
       const existingValidToken = await prisma.verificationToken.findFirst({
          where: {
@@ -90,7 +103,10 @@ export async function emailUpdateVerification(req: Request, res: Response, next:
          },
       });
 
-      if (existingValidToken) return res.status(200).json({ message: "Please check your email", ok: true });
+      if (existingValidToken)
+         return res
+            .status(200)
+            .json({ message: locale == "id" ? "Silahkan cek email anda" : "Please check your email", ok: true });
 
       // Generate confirmation token
       const token = await generateVerificationToken(email);
@@ -104,11 +120,13 @@ export async function emailUpdateVerification(req: Request, res: Response, next:
       });
 
       if (error) {
-         return res.status(400).json({ message: "Something went wrong", ok: false });
+         return res
+            .status(400)
+            .json({ message: locale == "id" ? "Terjadi kesalahan" : "Something went wrong", ok: false });
       }
 
       return res.status(200).json({
-         message: "Email sent. Please check your email",
+         message: locale == "id" ? "Email terkirim. Cek email anda" : "Email sent. Please check your email",
          ok: true,
       });
    } catch (error) {
@@ -123,6 +141,7 @@ export async function emailUpdateVerification(req: Request, res: Response, next:
 // Email for resetting password
 export async function passwordResetEmail(req: Request, res: Response, next: NextFunction) {
    try {
+      const locale = req.cookies.NEXT_LOCALE;
       const parsedData = emailVerificationSchema.parse(req.body);
       const { email } = parsedData;
 
@@ -133,7 +152,10 @@ export async function passwordResetEmail(req: Request, res: Response, next: Next
          },
       });
 
-      if (existingValidToken) return res.status(200).json({ message: "Please check your email", ok: true });
+      if (existingValidToken)
+         return res
+            .status(200)
+            .json({ message: locale == "id" ? "Silahkan cek email anda" : "Please check your email", ok: true });
 
       // Generate confirmation token
       const token = await generatePasswordResetToken(email);
@@ -147,11 +169,16 @@ export async function passwordResetEmail(req: Request, res: Response, next: Next
       });
 
       if (error) {
-         return res.status(400).json({ message: "Something went wrong", ok: false });
+         return res
+            .status(400)
+            .json({ message: locale == "id" ? "Terjadi kesalahan" : "Something went wrong", ok: false });
       }
 
       return res.status(200).json({
-         message: "Reset link sent. Please check your email",
+         message:
+            locale == "id"
+               ? "Tautan reset telah dikirim. Silakan periksa email Anda"
+               : "Reset link sent. Please check your email",
          ok: true,
       });
    } catch (error) {

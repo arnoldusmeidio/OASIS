@@ -7,12 +7,14 @@ import { useEffect, useState } from "react";
 import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export default function NewVerificationForm() {
    const [error, setError] = useState<string | undefined>("");
    const [success, setSuccess] = useState<string | undefined>("");
    const searchParams = useSearchParams();
    const token = searchParams.get("token");
+   const t = useTranslations("UserProfile");
 
    const router = useRouter();
 
@@ -36,6 +38,7 @@ export default function NewVerificationForm() {
             if (!data.ok) {
                setSuccess("");
                setError(data.message);
+               router.push("/");
             } else {
                setError("");
                setSuccess(data.message);
@@ -45,14 +48,14 @@ export default function NewVerificationForm() {
             }
          } catch (error) {
             console.error(error);
-            setError("Something went wrong!");
+            setError(`${t("error")}`);
          }
       }
       updateEmail();
    }, []);
 
    return (
-      <CardWrapper headerLabel="Confirming your verification">
+      <CardWrapper headerLabel={t("confirmEmail")}>
          <div className="flex h-[200px] w-full items-center justify-center">
             {!success && !error && <BeatLoader />}
             <FormError message={error} />
