@@ -129,7 +129,7 @@ model Room {
 
   type         String
   description  String @db.VarChar(1000)
-  defaultPrice Float?
+  defaultPrice Float
   roomCapacity Int
 
   bookings     Booking[]

@@ -4,8 +4,11 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUserStore } from "@/stores/useUserStore";
 import { toast } from "sonner";
-import Image from "next/image";
+import TenantSkeleton from "@/components/tenant/TenantSkeleton";
+import TenantCard from "@/components/tenant/tenantCard";
+
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
 
 export default function Tenant() {
    const [properties, setProperties] = useState([]);
@@ -61,27 +64,20 @@ export default function Tenant() {
    return (
       <div className="p-4">
          {isLoading ? (
-            <p>Loading...</p>
+            <TenantSkeleton />
          ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-               {properties.map((property: any) => (
-                  <div key={property.id}>
-                     <Card>
-                        <CardHeader>
-                           <Image
-                              src={property.propertyPictures?.[0]?.url}
-                              height={200}
-                              width={300}
-                              alt={"property images"}
-                              className="h-50 w-50"
-                           />
-                        </CardHeader>
-                        <CardTitle>{property.name}</CardTitle>
-                        <CardDescription>{property.description}</CardDescription>
-                     </Card>
-                  </div>
-               ))}
-            </div>
+            <Link href="/tenant/property-detail">
+               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {properties.map((property: any) => (
+                     <TenantCard
+                        key={property.id}
+                        img={property.propertyPictures?.[0]?.url}
+                        propertyName={property.name}
+                        propertyDescription={property.description}
+                     />
+                  ))}
+               </div>
+            </Link>
          )}
       </div>
    );
