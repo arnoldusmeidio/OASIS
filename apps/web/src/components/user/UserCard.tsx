@@ -11,6 +11,7 @@ import { User } from "lucide-react";
 import RefCodeCard from "./RefCodeCard";
 import RedeemCodeCard from "./RedeemCodeCard";
 import WalletCard from "./WalletCard";
+import { useTranslations } from "next-intl";
 
 interface Props {
    getUser: () => void;
@@ -18,16 +19,17 @@ interface Props {
 
 export default function UserCard({ getUser }: Props) {
    const { user } = useUserStore();
+   const t = useTranslations("UserProfile");
 
    return (
       <Card>
          <CardHeader>
-            <span className="text-2xl font-bold">User Profile</span>
+            <span className="text-2xl font-bold">{t("title")}</span>
          </CardHeader>
          <CardContent className="flex flex-col">
-            <div className="flex flex-col gap-4 sm:flex-row sm:justify-center sm:gap-10">
+            <div className="flex flex-col gap-4 xl:flex-row xl:justify-center xl:gap-10">
                <div className="flex flex-col items-center gap-2 self-center">
-                  <Avatar className="h-20 w-20 lg:h-32 lg:w-32">
+                  <Avatar className="h-20 w-20 sm:h-32 sm:w-32">
                      <AvatarImage src={user?.pictureUrl} alt="Profile picture" />
                      <AvatarFallback>
                         <User className="h-10 w-10 lg:h-14 lg:w-14" />
@@ -38,10 +40,10 @@ export default function UserCard({ getUser }: Props) {
                {user?.customer && (
                   <div>
                      <div className="flex items-center justify-center gap-4 py-4 sm:flex-col sm:items-start">
-                        <Tabs defaultValue="refcode" className="w-[400px]">
+                        <Tabs defaultValue="refcode" className="w-full min-w-[300px] xl:w-[450px]">
                            <TabsList>
-                              <TabsTrigger value="refcode">Referral Code</TabsTrigger>
-                              <TabsTrigger value="redeem">Redeem Code</TabsTrigger>
+                              <TabsTrigger value="refcode">{t("ReferralCode.title")}</TabsTrigger>
+                              <TabsTrigger value="redeem">{t("RedeemCode.title")}</TabsTrigger>
                            </TabsList>
                            <TabsContent value="refcode">
                               <RefCodeCard getUser={getUser} />
@@ -58,7 +60,7 @@ export default function UserCard({ getUser }: Props) {
 
             <div className="mt-6 flex items-end justify-between gap-2">
                <div className="w-full space-y-2">
-                  <Label>Email</Label>
+                  <Label>{t("email")}</Label>
                   <Input placeholder={user?.email || "example@mail.com"} type="email" disabled={true} />
                </div>
                {user?.accountProvider === "CREDENTIALS" && <ChangeEmailButton />}

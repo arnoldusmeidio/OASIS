@@ -129,7 +129,7 @@ model Room {
 
   type         String
   description  String @db.VarChar(1000)
-  defaultPrice Float?
+  defaultPrice Float
   roomCapacity Int
 
   bookings     Booking[]
@@ -163,6 +163,9 @@ model PropertyPictures {
 
   propertyId String
   property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  // roomId String
+  // room   Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
 }
 
 model RoomPictures {

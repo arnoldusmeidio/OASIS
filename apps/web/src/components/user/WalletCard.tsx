@@ -13,6 +13,7 @@ import {
 import { useUserStore } from "@/stores/useUserStore";
 import { useState, useEffect } from "react";
 import { currency } from "@/lib/currency";
+import { useTranslations } from "next-intl";
 
 interface Props {
    getUser: () => void;
@@ -22,6 +23,7 @@ export default function WalletCard({ getUser }: Props) {
    const { user } = useUserStore();
    const [currencyLoading, setCurrencyLoading] = useState(true);
    const [currencyRates, setCurrencyRates] = useState<number | null>(null);
+   const t = useTranslations("UserProfile.Wallet");
 
    useEffect(() => {
       async function getCurrencyRates() {
@@ -62,12 +64,12 @@ export default function WalletCard({ getUser }: Props) {
       <Dialog>
          <DialogTrigger asChild>
             <Button type="button" variant={"default"} size={"sm"} className="w-full">
-               Your Wallet
+               {t("trigger")}
             </Button>
          </DialogTrigger>
-         <DialogContent className="w-[375px]">
+         <DialogContent className="w-[300px] sm:w-[375px]">
             <DialogHeader>
-               <DialogTitle>Your Oasis Wallet</DialogTitle>
+               <DialogTitle>{t("header")}</DialogTitle>
                <DialogDescription></DialogDescription>
             </DialogHeader>
             {user?.customer && (
@@ -75,7 +77,7 @@ export default function WalletCard({ getUser }: Props) {
                   {currencyRates !== null && (
                      <div className="flex items-center justify-center gap-4 sm:flex-col sm:items-start">
                         <div className="space-y-1">
-                           <p className="text-muted-foreground text-sm">Balance</p>
+                           <p className="text-muted-foreground text-sm">{t("balance")}</p>
                            <p className="text-sm font-medium leading-none">
                               {currencyRates == 1
                                  ? currency(user?.wallet.balance, "IDR", currencyRates)
@@ -83,7 +85,7 @@ export default function WalletCard({ getUser }: Props) {
                            </p>
                         </div>
                         <div className="space-y-1">
-                           <p className="text-muted-foreground text-sm">Points</p>
+                           <p className="text-muted-foreground text-sm">{t("points")}</p>
                            <p className="text-sm font-medium leading-none">
                               {currencyRates == 1
                                  ? currency(user?.wallet.points, "IDR", currencyRates)
@@ -97,7 +99,7 @@ export default function WalletCard({ getUser }: Props) {
             <DialogFooter className="sm:justify-end">
                <DialogClose asChild>
                   <Button type="button" variant="secondary">
-                     Close
+                     {t("close")}
                   </Button>
                </DialogClose>
             </DialogFooter>

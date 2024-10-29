@@ -26,7 +26,6 @@ const nextConfig = {
          },
       ],
    },
-   trailingSlash: true,
 };
 
 module.exports = withNextIntl(nextConfig);
