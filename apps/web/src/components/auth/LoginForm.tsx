@@ -64,12 +64,11 @@ export default function LoginForm() {
          } else {
             setError("");
             setSuccess(data.message);
-            toast.success(data.message, { duration: 1500 });
             form.reset();
             if (data.role == "tenant") {
-               router.push("/tenant");
+               router.push(`/tenant/?success=${encodeURIComponent(data.message)}`);
             } else {
-               router.push("/");
+               router.push(`/?success=${encodeURIComponent(data.message)}`);
             }
             router.refresh();
          }

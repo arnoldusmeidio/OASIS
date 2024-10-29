@@ -16,6 +16,7 @@ import FormSuccess from "@/components/FormSuccess";
 
 import { profilePictureSchema } from "@/schemas/profile-schemas";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useTranslations } from "next-intl";
 
 interface Props {
    getUser: () => void;
@@ -23,6 +24,7 @@ interface Props {
 
 export default function ChangeProfilePictureForm({ getUser }: Props) {
    const { user } = useUserStore();
+   const t = useTranslations("UserProfile");
 
    const [error, setError] = useState<string | undefined>("");
    const [success, setSuccess] = useState<string | undefined>("");
@@ -65,7 +67,7 @@ export default function ChangeProfilePictureForm({ getUser }: Props) {
          }
       } catch (error) {
          console.error(error);
-         setError("Something went wrong!");
+         setError(`${t("error")}`);
       }
    };
 
@@ -85,7 +87,7 @@ export default function ChangeProfilePictureForm({ getUser }: Props) {
                      name="pictureUrl"
                      render={({ field }) => (
                         <FormItem>
-                           <FormLabel>Profile Picture</FormLabel>
+                           <FormLabel>{t("ProfilePicture.profilePicture")}</FormLabel>
                            <FormControl>
                               <Input
                                  disabled={isSubmitting}
@@ -109,7 +111,7 @@ export default function ChangeProfilePictureForm({ getUser }: Props) {
                <FormError message={error} />
                <FormSuccess message={success} />
                <Button className="w-full" type="submit" disabled={isSubmitting}>
-                  Save
+                  {t("ProfilePicture.save")}
                </Button>
             </form>
          </Form>
