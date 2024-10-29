@@ -232,3 +232,9 @@ a {
       @apply bg-background text-foreground;
    }
 }
+
+.disabled-button {
+   pointer-events: none;
+   opacity: 0.5;
+   cursor: not-allowed;
+}
