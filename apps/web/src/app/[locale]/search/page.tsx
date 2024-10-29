@@ -62,7 +62,6 @@ export default function SearchPage({ searchParams }: Props) {
             },
          );
          const data = await response.json();
-         console.log(data);
          if (data.ok) {
             setProperties(data.data);
             setTotalPropertiesFound(data.meta.totalProperties);

@@ -22,14 +22,12 @@ export default async function middleware(request: NextRequest) {
    }
 
    if (segments.join("/") === "user/bookings/") {
-      console.log(userData?.role);
       if (userData?.role !== "customer") {
          request.nextUrl.pathname = `/${locale}/unauthorized`;
       }
    }
 
    if (segments[0] === "tenant") {
-      console.log(userData?.role);
       if (userData?.role !== "tenant") {
          request.nextUrl.pathname = `/${locale}/unauthorized`;
       }

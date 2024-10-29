@@ -7,7 +7,6 @@ import property from "./routers/property-router";
 import userRouter from "./routers/user-router";
 import bookingRouter from "./routers/booking-router";
 import walletRouter from "./routers/wallet-router";
-import customer from "./routers/customer-router";
 import { verifyToken } from "./middlewares/auth-middleware";
 import { notFoundMiddleware } from "./middlewares/not-found-middleware";
 import room from "./routers/room-route";
