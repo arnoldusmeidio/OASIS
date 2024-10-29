@@ -10,9 +10,7 @@ import walletRouter from "./routers/wallet-router";
 import { verifyToken } from "./middlewares/auth-middleware";
 import { notFoundMiddleware } from "./middlewares/not-found-middleware";
 import room from "./routers/room-route";
-
 import { tenantGuard } from "@/middlewares/auth-middleware";
-
 import { error } from "./middlewares/error-middleware";
 import cookieParser from "cookie-parser";
 import { getAllPropertyBeta } from "./controllers/sample-controller";
