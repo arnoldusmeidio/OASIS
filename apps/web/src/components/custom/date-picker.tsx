@@ -44,7 +44,10 @@ export function DatePicker({ className }: React.HTMLAttributes<HTMLDivElement>) 
 
    React.useEffect(() => {
       async function fetchPrices() {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/playgrounds/${roomId}/status`);
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings/${roomId}/status`, {
+            method: "GET",
+            credentials: "include",
+         });
          const data = await response.json();
 
          setRoomStatus(data.data);

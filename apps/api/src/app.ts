@@ -10,7 +10,6 @@ import walletRouter from "./routers/wallet-router";
 import { verifyToken } from "./middlewares/auth-middleware";
 import { notFoundMiddleware } from "./middlewares/not-found-middleware";
 import room from "./routers/room-route";
-import dateRoomRoutes from "./routers/date-room-route";
 import { tenantGuard } from "@/middlewares/auth-middleware";
 import { error } from "./middlewares/error-middleware";
 import cookieParser from "cookie-parser";
@@ -59,7 +58,7 @@ const createApp = () => {
    app.use("/api/v1/wallets", verifyToken, walletRouter);
 
    // Playground Route for testing
-   app.use("/api/v1/playgrounds", dateRoomRoutes);
+   app.use("/api/v1/playgrounds", getAllPropertyBeta);
 
    // Not found handler
    app.use(notFoundMiddleware);

@@ -12,11 +12,12 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { RoomStatus } from "@/types/room-status";
 import { checkRoomBooking } from "@/helpers/check-room-booking";
 import { checkRoomPrice } from "@/helpers/check-room-price";
 import { Router } from "next/router";
+import { includes } from "cypress/types/lodash";
 
 export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLDivElement>) {
    const [date, setDate] = useState<DateRange | undefined>({
@@ -32,12 +33,12 @@ export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLD
    const [roomStatus, setRoomStatus] = useState<RoomStatus>();
    const [numberOfMonths, setNumberOfMonths] = useState<number>(2);
 
+   const router = useRouter();
+
    if (!roomId) {
       return <h1>No Room Id provided</h1>;
    }
    async function onSubmit() {
-      //console.log(date);
-      // console.log(JSON.stringify({ date }));
       try {
          const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings/${roomId}`, {
             method: "POST",
@@ -46,11 +47,11 @@ export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLD
             credentials: "include",
          });
 
-         if (res.ok!) {
+         if (!res.ok) {
             toast.error("Unable to book", { duration: 1500 });
          } else {
-            // console.log(res);
             toast.success("Booking Successfully Created", { duration: 1500 });
+            router.push("/user/bookings");
          }
       } catch (error) {
          console.error(error);
@@ -76,7 +77,10 @@ export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLD
 
    useEffect(() => {
       async function fetchPrices() {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/playgrounds/${roomId}/status`);
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings/${roomId}/status`, {
+            method: "GET",
+            credentials: "include",
+         });
          const data = await response.json();
 
          setRoomStatus(data.data);
