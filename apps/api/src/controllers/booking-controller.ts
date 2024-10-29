@@ -106,17 +106,15 @@ export async function createBooking(req: Request, res: Response, next: NextFunct
          });
       }
 
-      // const parsedData = bookingSchema.parse(req.body);
-      // const { startDate, endDate } = parsedData;
       const { date } = req.body;
       const bookingNumber = crypto.randomBytes(3).toString("hex").toUpperCase();
 
       //if (endDate < startDate) return res.status(400).json({ message: "Invalid Datetime", ok: false });
       if (!date) return res.status(400).json({ message: "Invalid Datetime", ok: false });
 
-      const startDate = new Date(date.from.slice(0, 10).concat("T00:00:00.000Z"));
+      const startDate = new Date(date.from.slice(0, 10).concat("T17:00:00.000Z"));
       const endDate = new Date(
-         date.to ? date.to.slice(0, 10).concat("T00:00:00.000Z") : date.from.slice(0, 10).concat("T00:00:00.000Z"),
+         date.to ? date.to.slice(0, 10).concat("T17:00:00.000Z") : date.from.slice(0, 10).concat("T17:00:00.000Z"),
       );
 
       const newBooking = { startDate, endDate };
@@ -138,7 +136,6 @@ export async function createBooking(req: Request, res: Response, next: NextFunct
             ],
          },
       });
-      //console.log(existingBookings);
 
       const isDateRangeAvailable = (
          existingBookings: { startDate: Date; endDate: Date }[],

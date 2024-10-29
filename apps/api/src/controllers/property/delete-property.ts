@@ -15,7 +15,7 @@ export const deleteProperty = async (req: RequestWithUserId, res: Response, next
          include: { tenant: true, propertyPictures: true }, // Include picture URLs
       });
 
-      // Check if the property exists and if it belongs to the tenant
+      //       // Check if the property exists and if it belongs to the tenant
       if (!property || !property.tenant) {
          return res.status(404).json({ message: "Property or Tenant not found" });
       }
@@ -34,7 +34,7 @@ export const deleteProperty = async (req: RequestWithUserId, res: Response, next
          }
       }
 
-      // Delete the property from the database
+      //       // Delete the property from the database
       await prisma.property.delete({
          where: { id: propertyId },
       });

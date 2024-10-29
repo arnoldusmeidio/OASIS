@@ -14,4 +14,4 @@ router.route("/:roomId").post(upload.array("roomPictures", 5)).get(getSingleRoom
 
 export default router;
 
-//.delete(deleteRoom)
+// .delete(deleteRoom)

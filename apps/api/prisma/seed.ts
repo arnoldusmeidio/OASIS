@@ -122,6 +122,20 @@ async function inputData() {
       },
    });
 
+   const yamada = await prisma.user.create({
+      data: {
+         name: "Yamada Darkness",
+         email: "yamada123@mail.com",
+         password: hashedPassword,
+         customer: {
+            create: {
+               refCode: crypto.randomBytes(6).toString("hex").toUpperCase(),
+            },
+         },
+         accountProvider: "CREDENTIALS",
+      },
+   });
+
    const budi = await prisma.user.create({
       data: {
          name: "Budi Woodpecker",
@@ -1521,7 +1535,7 @@ async function inputData() {
 
    const alex = await prisma.user.create({
       data: {
-         name: "Alex",
+         name: "Alex Dino",
          email: "alex123@mail.com",
          password: hashedPassword,
          customer: {
