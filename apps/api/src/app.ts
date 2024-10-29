@@ -15,6 +15,7 @@ import { tenantGuard } from "@/middlewares/auth-middleware";
 
 import { error } from "./middlewares/error-middleware";
 import cookieParser from "cookie-parser";
+import { getAllPropertyBeta } from "./controllers/sample-controller";
 
 const createApp = () => {
    const app = express();
@@ -49,12 +50,18 @@ const createApp = () => {
    //tenant Route
    app.use("/api/v1/tenant", verifyToken, tenantGuard, property);
 
+   //room route
+   app.use("/api/v1/room", verifyToken, tenantGuard, room);
+
    // Booking Route
    app.use("/api/v1/bookings", verifyToken, bookingRouter);
 
    // Wallet Route
    app.use("/api/v1/wallets", verifyToken, walletRouter);
-  
+
+   // Playground Route for testing
+   app.use("/api/v1/playgrounds", getAllPropertyBeta);
+
    // Not found handler
    app.use(notFoundMiddleware);
 
