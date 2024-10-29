@@ -52,60 +52,75 @@ async function inputData() {
    const uniqueIdRoom28 = `room-${(Date.now() + 27).toString().slice(-9)}`;
    const uniqueIdRoom29 = `room-${(Date.now() + 28).toString().slice(-9)}`;
 
-   const uniqueIdBooking1 = `booking-${Date.now().toString().slice(-9)}`;
-   const uniqueIdBooking2 = `booking-${(Date.now() + 1).toString().slice(-9)}`;
-   const uniqueIdBooking3 = `booking-${(Date.now() + 2).toString().slice(-9)}`;
-   const uniqueIdBooking4 = `booking-${(Date.now() + 3).toString().slice(-9)}`;
-   const uniqueIdBooking5 = `booking-${(Date.now() + 4).toString().slice(-9)}`;
-   const uniqueIdBooking6 = `booking-${(Date.now() + 5).toString().slice(-9)}`;
-   const uniqueIdBooking7 = `booking-${(Date.now() + 6).toString().slice(-9)}`;
-   const uniqueIdBooking8 = `booking-${(Date.now() + 7).toString().slice(-9)}`;
-   const uniqueIdBooking9 = `booking-${(Date.now() + 8).toString().slice(-9)}`;
-   const uniqueIdBooking10 = `booking-${(Date.now() + 9).toString().slice(-9)}`;
-   const uniqueIdBooking11 = `booking-${(Date.now() + 10).toString().slice(-9)}`;
-   const uniqueIdBooking12 = `booking-${(Date.now() + 11).toString().slice(-9)}`;
-   const uniqueIdBooking13 = `booking-${(Date.now() + 12).toString().slice(-9)}`;
-   const uniqueIdBooking14 = `booking-${(Date.now() + 13).toString().slice(-9)}`;
-   const uniqueIdBooking15 = `booking-${(Date.now() + 14).toString().slice(-9)}`;
-   const uniqueIdBooking16 = `booking-${(Date.now() + 15).toString().slice(-9)}`;
-   const uniqueIdBooking17 = `booking-${(Date.now() + 16).toString().slice(-9)}`;
-   const uniqueIdBooking18 = `booking-${(Date.now() + 17).toString().slice(-9)}`;
-   const uniqueIdBooking19 = `booking-${(Date.now() + 18).toString().slice(-9)}`;
-   const uniqueIdBooking20 = `booking-${(Date.now() + 19).toString().slice(-9)}`;
-   const uniqueIdBooking21 = `booking-${(Date.now() + 20).toString().slice(-9)}`;
-   const uniqueIdBooking22 = `booking-${(Date.now() + 21).toString().slice(-9)}`;
-   const uniqueIdBooking23 = `booking-${(Date.now() + 22).toString().slice(-9)}`;
-   const uniqueIdBooking24 = `booking-${(Date.now() + 23).toString().slice(-9)}`;
-   const uniqueIdBooking25 = `booking-${(Date.now() + 24).toString().slice(-9)}`;
-   const uniqueIdBooking26 = `booking-${(Date.now() + 25).toString().slice(-9)}`;
-   const uniqueIdBooking27 = `booking-${(Date.now() + 26).toString().slice(-9)}`;
-   const uniqueIdBooking28 = `booking-${(Date.now() + 27).toString().slice(-9)}`;
-   const uniqueIdBooking29 = `booking-${(Date.now() + 28).toString().slice(-9)}`;
-   const uniqueIdBooking30 = `booking-${(Date.now() + 29).toString().slice(-9)}`;
-   const uniqueIdBooking31 = `booking-${(Date.now() + 30).toString().slice(-9)}`;
-   const uniqueIdBooking32 = `booking-${(Date.now() + 31).toString().slice(-9)}`;
-   const uniqueIdBooking33 = `booking-${(Date.now() + 32).toString().slice(-9)}`;
-   const uniqueIdBooking34 = `booking-${(Date.now() + 33).toString().slice(-9)}`;
-   const uniqueIdBooking35 = `booking-${(Date.now() + 34).toString().slice(-9)}`;
-   const uniqueIdBooking36 = `booking-${(Date.now() + 35).toString().slice(-9)}`;
-   const uniqueIdBooking37 = `booking-${(Date.now() + 36).toString().slice(-9)}`;
-   const uniqueIdBooking38 = `booking-${(Date.now() + 37).toString().slice(-9)}`;
-   const uniqueIdBooking39 = `booking-${(Date.now() + 38).toString().slice(-9)}`;
-   const uniqueIdBooking40 = `booking-${(Date.now() + 39).toString().slice(-9)}`;
-   const uniqueIdBooking41 = `booking-${(Date.now() + 40).toString().slice(-9)}`;
-   const uniqueIdBooking42 = `booking-${(Date.now() + 41).toString().slice(-9)}`;
-   const uniqueIdBooking43 = `booking-${(Date.now() + 42).toString().slice(-9)}`;
-   const uniqueIdBooking44 = `booking-${(Date.now() + 43).toString().slice(-9)}`;
-   const uniqueIdBooking45 = `booking-${(Date.now() + 44).toString().slice(-9)}`;
-   const uniqueIdBooking46 = `booking-${(Date.now() + 45).toString().slice(-9)}`;
-   const uniqueIdBooking47 = `booking-${(Date.now() + 46).toString().slice(-9)}`;
-   const uniqueIdBooking48 = `booking-${(Date.now() + 47).toString().slice(-9)}`;
-   const uniqueIdBooking49 = `booking-${(Date.now() + 48).toString().slice(-9)}`;
-   const uniqueIdBooking50 = `booking-${(Date.now() + 49).toString().slice(-9)}`;
-   const uniqueIdBooking51 = `booking-${(Date.now() + 50).toString().slice(-9)}`;
-   const uniqueIdBooking52 = `booking-${(Date.now() + 51).toString().slice(-9)}`;
-   const uniqueIdBooking53 = `booking-${(Date.now() + 52).toString().slice(-9)}`;
-   const uniqueIdBooking54 = `booking-${(Date.now() + 53).toString().slice(-9)}`;
+   const uniqueIdBooking1 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking2 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking3 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking4 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking5 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking6 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking7 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking8 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking9 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking10 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking11 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking12 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking13 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking14 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking15 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking16 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking17 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking18 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking19 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking20 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking21 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking22 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking23 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking24 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking25 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking26 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking27 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking28 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking29 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking30 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking31 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking32 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking33 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking34 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking35 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking36 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking37 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking38 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking39 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking40 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking41 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking42 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking43 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking44 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking45 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking46 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking47 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking48 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking49 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking50 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking51 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking52 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking53 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking54 = crypto.randomBytes(3).toString("hex").toUpperCase();
+
+   const yamada = await prisma.user.create({
+      data: {
+         name: "Yamada Darkness",
+         email: "yamada123@mail.com",
+         password: hashedPassword,
+         customer: {
+            create: {
+               refCode: crypto.randomBytes(6).toString("hex").toUpperCase(),
+            },
+         },
+         accountProvider: "CREDENTIALS",
+         wallet: { create: {} },
+      },
+   });
 
    const budi = await prisma.user.create({
       data: {
