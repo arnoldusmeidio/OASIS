@@ -5,15 +5,16 @@ export function checkRoomPrice(date: Date, roomStatus: RoomStatus | undefined): 
    const targetTime = date.getTime();
 
    if (roomPrice) {
-      for (const rate of roomPrice) {
-         const startTime = new Date(rate.startDate).getTime();
-         const endTime = new Date(rate.endDate).getTime();
+      for (const price of roomPrice) {
+         const startTime = new Date(price.startDate).getTime();
+         const endTime = new Date(price.endDate).getTime();
 
          if (targetTime >= startTime && targetTime <= endTime) {
-            return rate.price;
+            return price.price / 1000;
          }
       }
    }
 
-   return roomStatus?.defaultPrice;
+   const initPrice = roomStatus?.defaultPrice;
+   return initPrice! / 1000;
 }
