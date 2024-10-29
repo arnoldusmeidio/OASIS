@@ -18,7 +18,10 @@ import { checkRoomBooking } from "@/helpers/check-room-booking";
 import { checkRoomPrice } from "@/helpers/check-room-price";
 
 export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLDivElement>) {
-   const [date, setDate] = useState<DateRange | undefined>();
+   const [date, setDate] = useState<DateRange | undefined>({
+      from: undefined,
+      to: undefined,
+   });
 
    const form = useForm();
 
@@ -33,7 +36,7 @@ export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLD
    }
    async function onSubmit() {
       //console.log(date);
-      console.log(JSON.stringify({ date }));
+      // console.log(JSON.stringify({ date }));
       try {
          const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings/${roomId}`, {
             method: "POST",

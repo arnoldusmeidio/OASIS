@@ -3,5 +3,5 @@ export interface RoomStatus {
    title: string;
    defaultPrice: number;
    roomPrice: { startDate: string; endDate: string; price: number }[];
-   booking: { startDate: string; endDate: string }[];
+   bookings: { startDate: string; endDate: string }[];
 }

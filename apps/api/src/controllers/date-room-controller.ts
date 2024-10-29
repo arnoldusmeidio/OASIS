@@ -5,7 +5,6 @@ const prisma = new PrismaClient();
 
 export async function getRoomStatus(req: Request, res: Response) {
    const { id } = req.params;
-   console.log("test");
    try {
       const status = await prisma.room.findUnique({
          where: { id: id },
