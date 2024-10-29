@@ -50,6 +50,9 @@ const createApp = () => {
    //tenant Route
    app.use("/api/v1/tenant", verifyToken, tenantGuard, property);
 
+   //room route
+   app.use("/api/v1/room", verifyToken, tenantGuard, room);
+
    // Booking Route
    app.use("/api/v1/bookings", verifyToken, bookingRouter);
 

@@ -12,7 +12,7 @@ export const deleteProperty = async (req: RequestWithUserId, res: Response, next
       // Fetch the property and include the tenant and picture URLs
       const property = await prisma.property.findUnique({
          where: { id: propertyId },
-         include: { tenant: true, pictureUrl: true }, // Include picture URLs
+         include: { tenant: true, propertyPictures: true }, // Include picture URLs
       });
 
       // Check if the property exists and if it belongs to the tenant
@@ -27,8 +27,8 @@ export const deleteProperty = async (req: RequestWithUserId, res: Response, next
       }
 
       // Loop through each picture URL and delete from Cloudinary
-      for (const pic of property.pictureUrl) {
-         const publicId = pic.name.split("/").pop()?.split(".")[0]; // Assuming 'name' holds the URL or path
+      for (const pic of property.propertyPictures) {
+         const publicId = pic.url.split("/").pop()?.split(".")[0]; // Assuming 'name' holds the URL or path
          if (publicId) {
             await cloudinary.uploader.destroy(`images/${publicId}`);
          }

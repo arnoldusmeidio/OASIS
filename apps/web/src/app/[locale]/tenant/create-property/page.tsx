@@ -133,8 +133,6 @@ export default function Property() {
                            )}
                         />
 
-                        {/* Property category */}
-
                         {/* Property Categories */}
                         <div>
                            <h3>Property Categories</h3>

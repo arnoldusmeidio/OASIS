@@ -25,7 +25,7 @@ enum Currency {
 }
 
 enum Category {
-  Vila
+  Villa
   Hotel
   Apartment
 }
@@ -129,16 +129,15 @@ model Room {
 
   type         String
   description  String @db.VarChar(1000)
-  defaultPrice Float
+  defaultPrice Float?
   roomCapacity Int
 
   bookings     Booking[]
   roomPrice    RoomPrice[]
   roomPictures RoomPictures[]
 
-  propertyId  String
-  property    Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  RoomPicture RoomPicture[]
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@unique([type, propertyId], name: "uniqueRoom")
 }
@@ -152,7 +151,7 @@ model RoomPrice {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  Room Room @relation(fields: [roomId], references: [id])
+  Room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
 }
 
 model PropertyPictures {
@@ -164,9 +163,6 @@ model PropertyPictures {
 
   propertyId String
   property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-
-  // roomId String
-  // room   Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
 }
 
 model RoomPictures {

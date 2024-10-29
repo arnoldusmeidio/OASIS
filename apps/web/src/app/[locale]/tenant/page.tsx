@@ -69,11 +69,11 @@ export default function Tenant() {
                      <Card>
                         <CardHeader>
                            <Image
-                              src={property.pictureUrl}
+                              src={property.propertyPictures?.[0]?.url}
                               height={200}
                               width={300}
                               alt={"property images"}
-                              className="h-20 w-20"
+                              className="h-50 w-50"
                            />
                         </CardHeader>
                         <CardTitle>{property.name}</CardTitle>
