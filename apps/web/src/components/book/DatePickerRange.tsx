@@ -16,6 +16,7 @@ import { useParams } from "next/navigation";
 import { RoomStatus } from "@/types/room-status";
 import { checkRoomBooking } from "@/helpers/check-room-booking";
 import { checkRoomPrice } from "@/helpers/check-room-price";
+import { Router } from "next/router";
 
 export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLDivElement>) {
    const [date, setDate] = useState<DateRange | undefined>({
@@ -45,8 +46,12 @@ export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLD
             credentials: "include",
          });
 
-         console.log(res);
-         toast.success("Booking Successfully Created", { duration: 1500 });
+         if (res.ok!) {
+            toast.error("Unable to book", { duration: 1500 });
+         } else {
+            // console.log(res);
+            toast.success("Booking Successfully Created", { duration: 1500 });
+         }
       } catch (error) {
          console.error(error);
       }
