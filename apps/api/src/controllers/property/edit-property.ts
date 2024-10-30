@@ -6,11 +6,9 @@ import fs from "fs/promises";
 
 export async function editProperty(req: Request, res: Response, next: NextFunction) {
    try {
-      const { propertyName, propertyAddress, propertyDescription, category } = req.body;
+      const { propertyName, propertyAddress, propertyDescription, category, propertyCity } = req.body;
 
       const propertyId = req.params.propertyId; // Get propertyId from URL parameters
-
-      console.log(req.params.propertyid);
 
       const id = (req as RequestWithUserId).user?.id;
 
@@ -77,6 +75,7 @@ export async function editProperty(req: Request, res: Response, next: NextFuncti
             description: propertyDescription,
             category,
             lng,
+            city: propertyCity,
             lat,
             propertyPictures: {
                create: pictureUrls,

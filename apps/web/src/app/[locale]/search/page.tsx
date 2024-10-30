@@ -128,7 +128,6 @@ export default function SearchPage({ searchParams }: Props) {
                <h3 className="text-xl font-semibold">
                   {searchParams.location}: {totalPropertiesFound} properties found
                </h3>
-
                <div className="search-result mt-5 space-y-2">
                   {properties.map((item, idx: number) => (
                      <div key={idx} className="flex justify-between space-x-4 space-y-2 rounded-lg border p-5">
@@ -174,7 +173,6 @@ export default function SearchPage({ searchParams }: Props) {
                                        {item.reviews.length > 0 && `${item.reviews.length} reviews`}
                                     </p>
                                  </div>
-
                                  <p className="text-background flex-shink-0 flex h-10 w-10 items-center justify-center rounded-lg bg-[#1a61ef] text-sm font-bold max-sm:order-1 lg:h-12 lg:w-12 lg:text-lg">
                                     {item.reviews.length > 0
                                        ? (

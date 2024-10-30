@@ -8,10 +8,11 @@ export const propertySchema = z.object({
    propertyAddress: z.string().min(1, { message: "Property Address is required" }),
    propertyDescription: z.string().min(1, { message: "Property Description is required" }),
    category: z.nativeEnum(Category),
-   pictureUrl: z
-      .instanceof(File)
+   propertyCity: z.string().min(1, { message: "Property City is required" }),
+   propertyPictures: z
+      .array(z.instanceof(File))
       .refine(
-         (files) => ACCEPTED_IMAGE_TYPES.includes(files.type),
+         (files) => files.every((file) => ACCEPTED_IMAGE_TYPES.includes(file.type)),
          "Only .jpg, .jpeg, .png, and .webp formats are supported",
       ),
 });
