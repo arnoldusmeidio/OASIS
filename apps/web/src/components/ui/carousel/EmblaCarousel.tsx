@@ -6,14 +6,16 @@ import { NextButton, PrevButton, usePrevNextButtons } from "./EmblaCarouselArrow
 import { DotButton, useDotButton } from "./EmblaCarouselDotButton";
 import Image from "next/image";
 import Autoplay from "embla-carousel-autoplay";
+import { Property } from "@/types/property-types";
+import { Link } from "@/i18n/routing";
 
 type PropType = {
-   slides: { img: string; id: string; propertyName: string; location: string }[];
+   properties: Property[];
    options?: EmblaOptionsType;
 };
 
 const EmblaCarousel: React.FC<PropType> = (props) => {
-   const { slides, options } = props;
+   const { properties, options } = props;
    const [emblaRef, emblaApi] = useEmblaCarousel(options, [
       Fade(),
       Autoplay({ playOnInit: true, stopOnMouseEnter: true, stopOnInteraction: false, delay: 5000 }),
@@ -27,23 +29,24 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
       <div className="embla h-auto">
          <div className="embla__viewport" ref={emblaRef}>
             <div className="embla__container">
-               {slides.map((item) => (
-                  <div
+               {properties?.map((item) => (
+                  <Link
+                     href={`/search/property/${item.id}`}
                      className="embla__slide relative h-[300px] sm:h-[400px] lg:h-[500px] xl:h-[600px] 2xl:h-[700px]"
                      key={item.id}
                   >
                      <Image
                         className="embla__slide__img"
-                        src={item.img}
+                        src={item.propertyPictures?.[0]?.url}
                         alt="Your alt text"
                         width={1920}
                         height={1080}
                      />
                      <div className="text-background text-shadow bg-foreground/30 absolute left-10 top-5 flex flex-col gap-2 rounded-2xl p-2 align-middle lg:left-16 lg:top-10">
-                        <span className="text-xs sm:text-base md:text-lg lg:text-xl">{item.propertyName}</span>
-                        <span className="text-xs lg:text-base">{item.location}</span>
+                        <span className="text-xs sm:text-base md:text-lg lg:text-xl">{item.name}</span>
+                        <span className="text-xs lg:text-base">Rating: {item.averageRating?.star.toFixed(1)} / 10</span>
                      </div>
-                  </div>
+                  </Link>
                ))}
             </div>
          </div>

@@ -136,3 +136,43 @@ export async function getSearchedPropertiesPagination(req: Request, res: Respons
       next(error);
    }
 }
+
+//get Search Pagination
+export async function getPopularProperties(req: Request, res: Response, next: NextFunction) {
+   try {
+      const rating = await prisma.review.groupBy({
+         by: ["propertyId"],
+         _avg: { star: true },
+         orderBy: {
+            _avg: {
+               star: "desc",
+            },
+         },
+         take: 6,
+      });
+
+      const propertiesId = rating.map((property) => property.propertyId);
+
+      const topProperties = await prisma.property.findMany({
+         where: {
+            id: { in: propertiesId },
+         },
+         include: {
+            propertyPictures: true,
+         },
+      });
+
+      const topPropertiesWithRatings = topProperties.map((property) => ({
+         ...property,
+         averageRating: rating.find((rating) => rating.propertyId === property.id)?._avg,
+      }));
+
+      const sortedTopProperties = topPropertiesWithRatings.sort((a, b) => {
+         return (b.averageRating?.star || 0) - (a.averageRating?.star || 0);
+      });
+
+      return res.status(200).json({ data: sortedTopProperties, ok: true });
+   } catch (error) {
+      next(error);
+   }
+}

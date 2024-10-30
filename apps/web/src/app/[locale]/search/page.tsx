@@ -132,7 +132,7 @@ export default function SearchPage({ searchParams }: Props) {
                <div className="search-result mt-5 space-y-2">
                   {properties.map((item, idx: number) => (
                      <div key={idx} className="flex justify-between space-x-4 space-y-2 rounded-lg border p-5">
-                        <div className="h-auto w-64 max-sm:basis-1/2">
+                        <div className="h-auto w-64 content-center max-sm:basis-1/2">
                            <Link href={`/search/property/${item.id}`}>
                               <AspectRatio ratio={1 / 1}>
                                  <Image
@@ -186,15 +186,18 @@ export default function SearchPage({ searchParams }: Props) {
                                  </p>
                               </div>
 
-                              <div className="sm:text-right">
+                              <div className="flex flex-col gap-2 sm:text-right">
                                  <p className="text-xs md:text-sm lg:text-base">
                                     capacity: {item.room?.[0]?.roomCapacity} persons
                                  </p>
-                                 <p className="text-lg font-bold md:text-xl lg:text-2xl">
-                                    {!currencyRate
-                                       ? currency(item.room?.[0]?.roomPrice[0]?.price, "IDR", 1)
-                                       : currency(item.room?.[0]?.roomPrice[0]?.price, user?.currency, currencyRate)}
-                                 </p>
+                                 <div>
+                                    <p className="text-xs md:text-sm lg:text-base">Price per night:</p>
+                                    <p className="font-bold md:text-xl lg:text-2xl">
+                                       {!currencyRate
+                                          ? currency(item.room?.[0]?.roomPrice[0]?.price, "IDR", 1)
+                                          : currency(item.room?.[0]?.roomPrice[0]?.price, user?.currency, currencyRate)}
+                                    </p>
+                                 </div>
                               </div>
                            </div>
                         </div>

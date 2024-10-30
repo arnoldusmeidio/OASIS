@@ -13,6 +13,7 @@ export interface Property {
    lng: number;
    name: string;
    tenantId: string;
+   averageRating: { star: number };
    propertyPictures: {
       url: string;
    }[];
