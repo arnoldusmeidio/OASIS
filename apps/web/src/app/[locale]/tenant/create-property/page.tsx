@@ -9,7 +9,7 @@ import { Form, FormField, FormControl, FormItem, FormLabel, FormMessage } from "
 import { useFieldArray, useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { Card } from "@/components/ui/card";
 import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
