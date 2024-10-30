@@ -2,7 +2,8 @@
 
 import { BeatLoader } from "react-spinners";
 import CardWrapper from "@/components/auth/CardWrapper";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { useEffect, useState } from "react";
 import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
