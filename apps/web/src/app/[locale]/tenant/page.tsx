@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { useUserStore } from "@/stores/useUserStore";
 import { toast } from "sonner";
 import TenantSkeleton from "@/components/tenant/TenantSkeleton";
@@ -16,7 +17,7 @@ import {
 } from "@/components/ui/pagination";
 import { Property } from "@/types/property-types";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import PaginationComponent from "@/components/tenant/Pagination-button";
 
 interface Paginations {

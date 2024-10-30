@@ -7,7 +7,7 @@ import RegisterButton from "../auth/RegisterButton";
 import LoginButton from "../auth/LoginButton";
 import LogoutButton from "../auth/LogoutButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { Menu, User } from "lucide-react";
 import { useUserStore } from "@/stores/useUserStore";
 

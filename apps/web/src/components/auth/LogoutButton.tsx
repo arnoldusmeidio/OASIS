@@ -1,7 +1,7 @@
 "use client";
 
 import { useUserStore } from "@/stores/useUserStore";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { toast } from "sonner";
 
 interface LogoutButtonProps {

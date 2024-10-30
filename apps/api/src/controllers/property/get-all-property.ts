@@ -65,9 +65,18 @@ export async function getSearchedPropertiesPagination(req: Request, res: Respons
 
       const properties = await prisma.property.findMany({
          where: {
-            address: {
-               contains: location as string,
-            },
+            OR: [
+               {
+                  name: {
+                     contains: location as string,
+                  },
+               },
+               {
+                  address: {
+                     contains: location as string,
+                  },
+               },
+            ],
          },
          include: {
             reviews: true,

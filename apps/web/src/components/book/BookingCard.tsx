@@ -27,9 +27,9 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { Booking } from "@/types/booking";
 import { Button, buttonVariants } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { Skeleton } from "../ui/skeleton";
 
 export default function BookingCard() {

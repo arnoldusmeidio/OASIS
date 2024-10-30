@@ -3,7 +3,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import UserCard from "@/components/user/UserCard";
 import { useUserStore } from "@/stores/useUserStore";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { useEffect, useState } from "react";
 
 export default function ProfilePage() {

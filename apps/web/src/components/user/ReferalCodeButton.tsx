@@ -14,7 +14,7 @@ import { Input } from "../ui/input";
 import { Copy } from "lucide-react";
 import { useUserStore } from "@/stores/useUserStore";
 import { FaSquareWhatsapp } from "react-icons/fa6";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 
 interface Props {
    getUser: () => void;
