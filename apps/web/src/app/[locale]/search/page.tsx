@@ -4,11 +4,14 @@ import SearchNavbar from "@/components/header/SearchNavbar";
 import SearchSkeleton from "@/components/SearchSkeleton";
 import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useEffect, useState } from "react";
 import { currency } from "@/lib/currency";
 import { useUserStore } from "@/stores/useUserStore";
 import { Property } from "@/types/property-types";
+import { toast } from "sonner";
+import FormError from "@/components/FormError";
+import useCurrencyStore from "@/stores/useCurrencyStore";
 
 type Props = {
    searchParams: SearchParams;
@@ -28,8 +31,8 @@ export default function SearchPage({ searchParams }: Props) {
    const [totalPropertiesFound, setTotalPropertiesFound] = useState(0);
    const [isLoading, setIsLoading] = useState(true);
    const [currencyLoading, setCurrencyLoading] = useState(true);
-   const [currencyRates, setCurrencyRates] = useState<number | null>(null);
    const { user } = useUserStore();
+   const { currencyRate, error, getCurrencyRate } = useCurrencyStore();
 
    function getRatingDescription(rating: number) {
       if (rating < 1 || rating > 10) {
@@ -50,64 +53,54 @@ export default function SearchPage({ searchParams }: Props) {
       }
    }
 
-   useEffect(() => {
-      async function getCurrencyRates() {
-         try {
-            if (user?.currency == "USD") {
-               const response = await fetch(
-                  "https://api.freecurrencyapi.com/v1/latest?currencies=USD&base_currency=IDR",
-                  {
-                     headers: {
-                        apikey: process.env.NEXT_PUBLIC_FREE_CURRENCY_KEY as string,
-                     },
-                  },
-               );
-               const data = await response.json();
-               if (data.data) {
-                  setCurrencyRates(data.data.USD);
-               } else {
-                  setCurrencyRates(1);
-               }
-            } else {
-               setCurrencyRates(1);
-            }
-         } catch (error) {
-            console.error(error);
-         } finally {
-            setCurrencyLoading(false); // FINISH LOADING CURRENCY RATE
-         }
-      }
-
-      async function getProperties() {
-         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/property/search`, {
+   async function getProperties() {
+      try {
+         setIsLoading(true);
+         const response = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/property/search?location=${searchParams.location}`,
+            {
                credentials: "include",
-            });
-            const data = await response.json();
-            console.log(data);
-            if (data.ok) {
-               setProperties(data.data);
-               setTotalPropertiesFound(data.meta.totalProperties);
-            }
-         } catch (error) {
-            console.error(error);
-         } finally {
+            },
+         );
+         const data = await response.json();
+         if (data.ok) {
+            setProperties(data.data);
+            setTotalPropertiesFound(data.meta.totalProperties);
             setIsLoading(false);
          }
+      } catch (error) {
+         console.error(error);
+         toast.error("Something went wrong!");
       }
+   }
 
-      async function fetchData() {
-         await getCurrencyRates();
-         await getProperties();
+   useEffect(() => {
+      getProperties();
+      if (user?.currency && user.currency != "IDR") {
+         setCurrencyLoading(true);
+         getCurrencyRate();
+         setCurrencyLoading(false);
+      } else {
+         setCurrencyLoading(false);
       }
+   }, [user?.currency, getCurrencyRate, searchParams]);
 
-      fetchData();
-   }, [user]);
+   if (error)
+      return (
+         <>
+            <SearchNavbar />
+            <main>
+               <div className="max-w-[500px] justify-self-center">
+                  <FormError message={error} />
+               </div>
+            </main>
+         </>
+      );
 
    return (
       <>
          <SearchNavbar />
-         {isLoading || currencyLoading || currencyRates === null ? (
+         {isLoading || currencyLoading ? (
             <SearchSkeleton />
          ) : (
             <main>
@@ -135,7 +128,7 @@ export default function SearchPage({ searchParams }: Props) {
                                  <AspectRatio ratio={1 / 1}>
                                     <Image
                                        className="rounded-lg object-cover"
-                                       src={item.propertyPictures[0].url}
+                                       src={item.propertyPictures?.[0]?.url}
                                        alt="image of property"
                                        loading="lazy"
                                        fill
@@ -186,12 +179,12 @@ export default function SearchPage({ searchParams }: Props) {
 
                                  <div className="sm:text-right">
                                     <p className="text-xs md:text-sm lg:text-base">
-                                       capacity: {item.room[0].roomCapacity} persons
+                                       capacity: {item.room?.[0]?.roomCapacity} persons
                                     </p>
                                     <p className="text-lg font-bold md:text-xl lg:text-2xl">
-                                       {currencyRates == 1
-                                          ? currency(item.room[0].roomPrice[0].price, "IDR", currencyRates)
-                                          : currency(item.room[0].roomPrice[0].price, user?.currency, currencyRates)}
+                                       {!currencyRate
+                                          ? currency(item.room?.[0]?.roomPrice[0]?.price, "IDR", 1)
+                                          : currency(item.room?.[0]?.roomPrice[0]?.price, user?.currency, currencyRate)}
                                     </p>
                                  </div>
                               </div>

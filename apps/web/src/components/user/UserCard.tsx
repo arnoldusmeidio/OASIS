@@ -60,7 +60,7 @@ export default function UserCard({ getUser }: Props) {
 
             <div className="mt-6 flex items-end justify-between gap-2">
                <div className="w-full space-y-2">
-                  <Label>{t("email")}</Label>
+                  <Label>{t("Email.email")}</Label>
                   <Input placeholder={user?.email || "example@mail.com"} type="email" disabled={true} />
                </div>
                {user?.accountProvider === "CREDENTIALS" && <ChangeEmailButton />}

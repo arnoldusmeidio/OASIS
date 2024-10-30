@@ -37,7 +37,7 @@
       "ProfilePicture": {
          "edit": "Edit",
          "header": "Change Profile Picture",
-         "description": "Make changes to your profile picture here. Click save when you&apos;re done",
+         "description": "Make changes to your profile picture here. Click save when you're done",
          "profilePicture": "Profile Picture",
          "save": "Save"
       },
@@ -69,7 +69,13 @@
       },
       "edit": "Edit",
       "change": "Change",
-      "email": "Email",
+      "Email": {
+         "email": "Email",
+         "change": "Change",
+         "header": "Change Email",
+         "description": "Make changes to your email here. Click save when you're done",
+         "save": "Save"
+      },
       "name": "Name",
       "namePlaceholder": "Your Name",
       "currentPassword": "Current Password",
@@ -88,6 +94,7 @@
          "usd": "USD"
       },
       "update": "Update",
-      "error": "Something went wrong!"
+      "error": "Something went wrong!",
+      "confirmEmail": "Confirming your verification"
    }
 }

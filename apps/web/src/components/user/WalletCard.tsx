@@ -14,6 +14,7 @@ import { useUserStore } from "@/stores/useUserStore";
 import { useState, useEffect } from "react";
 import { currency } from "@/lib/currency";
 import { useTranslations } from "next-intl";
+import useCurrencyStore from "@/stores/useCurrencyStore";
 
 interface Props {
    getUser: () => void;
@@ -22,43 +23,17 @@ interface Props {
 export default function WalletCard({ getUser }: Props) {
    const { user } = useUserStore();
    const [currencyLoading, setCurrencyLoading] = useState(true);
-   const [currencyRates, setCurrencyRates] = useState<number | null>(null);
+   const { currencyRate, error, getCurrencyRate } = useCurrencyStore();
    const t = useTranslations("UserProfile.Wallet");
 
    useEffect(() => {
-      async function getCurrencyRates() {
-         try {
-            if (user?.currency == "USD") {
-               const response = await fetch(
-                  "https://api.freecurrencyapi.com/v1/latest?currencies=USD&base_currency=IDR",
-                  {
-                     headers: {
-                        apikey: process.env.NEXT_PUBLIC_FREE_CURRENCY_KEY as string,
-                     },
-                  },
-               );
-               const data = await response.json();
-               if (data.data) {
-                  setCurrencyRates(data.data.USD);
-               } else {
-                  setCurrencyRates(1);
-               }
-            } else {
-               setCurrencyRates(1);
-            }
-         } catch (error) {
-            console.error(error);
-         } finally {
-            setCurrencyLoading(false); // FINISH LOADING CURRENCY RATE
-         }
+      if (user?.currency && user.currency != "IDR") {
+         getCurrencyRate();
+         setCurrencyLoading(false);
+      } else {
+         setCurrencyLoading(false);
       }
-
-      async function fetchData() {
-         await getCurrencyRates();
-      }
-
-      fetchData();
-   }, [user]);
+   }, [user?.currency, getCurrencyRate]);
 
    return (
       <Dialog>
@@ -74,22 +49,22 @@ export default function WalletCard({ getUser }: Props) {
             </DialogHeader>
             {user?.customer && (
                <div className="flex items-center space-x-2">
-                  {currencyRates !== null && (
+                  {!currencyLoading && (
                      <div className="flex items-center justify-center gap-4 sm:flex-col sm:items-start">
                         <div className="space-y-1">
                            <p className="text-muted-foreground text-sm">{t("balance")}</p>
                            <p className="text-sm font-medium leading-none">
-                              {currencyRates == 1
-                                 ? currency(user?.wallet.balance, "IDR", currencyRates)
-                                 : currency(user?.wallet?.balance, user?.currency, currencyRates)}
+                              {!currencyRate
+                                 ? currency(user?.wallet.balance, "IDR", 1)
+                                 : currency(user?.wallet?.balance, user?.currency, currencyRate)}
                            </p>
                         </div>
                         <div className="space-y-1">
                            <p className="text-muted-foreground text-sm">{t("points")}</p>
                            <p className="text-sm font-medium leading-none">
-                              {currencyRates == 1
-                                 ? currency(user?.wallet.points, "IDR", currencyRates)
-                                 : currency(user?.wallet?.points, user?.currency, currencyRates)}
+                              {!currencyRate
+                                 ? currency(user?.wallet.points, "IDR", 1)
+                                 : currency(user?.wallet?.points, user?.currency, currencyRate)}
                            </p>
                         </div>
                      </div>

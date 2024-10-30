@@ -9,8 +9,8 @@ router.route("/").get(getAllPropertiesPagination).get(getSingleProperty);
 
 router.route("/room").get(getSingleRoom);
 
-router.route("/:propertyId").get(getSingleProperty);
+router.route("/search").get(getSearchedPropertiesPagination);
 
-router.route("/property/search").get(getSearchedPropertiesPagination);
+router.route("/:propertyId").get(getSingleProperty);
 
 export default router;

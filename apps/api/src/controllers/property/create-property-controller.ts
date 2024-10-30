@@ -38,7 +38,7 @@ export const createProperty = async (req: Request, res: Response, next: NextFunc
                   folder: "images",
                });
                // Remove file after upload
-               // await fs.unlink(file.path);
+               await fs.unlink(file.path);
                return { url: cloudinaryData.secure_url }; // Return the URL
             } catch (uploadError) {
                console.error("Error uploading file:", uploadError);

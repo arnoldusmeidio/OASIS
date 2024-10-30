@@ -14,9 +14,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export default function ChangeEmailForm() {
+   const t = useTranslations("UserProfile.Email");
    const [error, setError] = useState<string | undefined>("");
    const [success, setSuccess] = useState<string | undefined>("");
 
@@ -91,7 +94,7 @@ export default function ChangeEmailForm() {
             <FormError message={error} />
             <FormSuccess message={success} />
             <Button className="w-full" type="submit" disabled={isSubmitting}>
-               Save
+               {t("save")}
             </Button>
          </form>
       </Form>

@@ -12,12 +12,11 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { RoomStatus } from "@/types/room-status";
 import { checkRoomBooking } from "@/helpers/check-room-booking";
 import { checkRoomPrice } from "@/helpers/check-room-price";
-import { Router } from "next/router";
-import { includes } from "cypress/types/lodash";
 
 export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLDivElement>) {
    const [date, setDate] = useState<DateRange | undefined>({

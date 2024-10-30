@@ -2,7 +2,8 @@
 
 import { useUserStore } from "@/stores/useUserStore";
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { toast } from "sonner";
 import SearchNavbar from "@/components/header/SearchNavbar";
 import Banner from "@/components/Banner";
@@ -46,7 +47,7 @@ export default function Home() {
       }
       getUser();
       setIsLoading(false);
-   }, []);
+   }, [user?.language]);
 
    return (
       <>

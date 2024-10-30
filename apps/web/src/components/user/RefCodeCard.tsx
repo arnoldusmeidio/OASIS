@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Copy } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useUserStore } from "@/stores/useUserStore";
 import { FaSquareWhatsapp } from "react-icons/fa6";
 import { useState } from "react";

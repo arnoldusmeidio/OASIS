@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { FormTypeSearch, useFormSearch } from "@/schemas/search-form-schemas";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { SubmitHandler } from "react-hook-form";

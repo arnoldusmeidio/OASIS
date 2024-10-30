@@ -69,7 +69,13 @@
       },
       "edit": "Ubah",
       "change": "Ganti",
-      "email": "Email",
+      "Email": {
+         "email": "Email",
+         "change": "Ubah",
+         "header": "Ubah Email",
+         "description": "Lakukan perubahan pada email Anda di sini. Klik simpan jika sudah selesai",
+         "save": "Simpan"
+      },
       "name": "Nama",
       "namePlaceholder": "Nama Anda",
       "currentPassword": "Kata Sandi Saat Ini",
@@ -88,6 +94,7 @@
          "usd": "USD"
       },
       "update": "Perbarui",
-      "error": "Terjadi kesalahan!"
+      "error": "Terjadi kesalahan!",
+      "confirmEmail": "Mengonfirmasi verifikasi Anda"
    }
 }

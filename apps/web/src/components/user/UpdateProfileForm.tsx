@@ -66,7 +66,6 @@ export default function UpdateProfileForm({ getUser }: Props) {
 
             setError("");
             setSuccess(data.message);
-            getUser();
 
             router.replace(
                // @ts-expect-error -- TypeScript will validate that only known `params`
@@ -75,6 +74,7 @@ export default function UpdateProfileForm({ getUser }: Props) {
                { pathname, params },
                { locale: nextLocale },
             );
+            getUser();
          }
       } catch (error) {
          console.error(error);

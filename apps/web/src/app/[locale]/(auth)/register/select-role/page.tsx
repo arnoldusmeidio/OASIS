@@ -9,7 +9,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { updateRoleSchema } from "@/schemas/auth-schemas";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import RoleCardWrapper from "@/components/auth/RoleCardWrapper";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { toast } from "sonner";
 
 export default function SelectRolePage() {

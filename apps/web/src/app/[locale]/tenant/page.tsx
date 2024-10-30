@@ -154,6 +154,18 @@ export default function Tenant() {
             </div>
          )}
          <></>
+         {page && (
+            <div className="my-10">
+               <PaginationComponent
+                  currentPage={page.currentPage}
+                  totalPages={page.totalPages}
+                  onPageChange={(newPage) => {
+                     fetchProperties(newPage);
+                  }}
+               />
+            </div>
+         )}
+         <></>
       </div>
    );
 }

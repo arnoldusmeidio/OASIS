@@ -54,11 +54,30 @@ export async function getAllPropertiesPagination(req: Request, res: Response, ne
 //get Search Pagination
 export async function getSearchedPropertiesPagination(req: Request, res: Response, next: NextFunction) {
    try {
-      const test = req.body;
-      const { page = 1, limit = 10 } = req.query;
+      const locale = req.cookies.NEXT_LOCALE;
+      const { page = 1, limit = 10, location } = req.query;
       const offset = (Number(page) - 1) * Number(limit);
 
+      if (!location)
+         return res
+            .status(404)
+            .json({ message: locale == "id" ? "Masukan lokasi" : "Please input the location", ok: false });
+
       const properties = await prisma.property.findMany({
+         where: {
+            OR: [
+               {
+                  name: {
+                     contains: location as string,
+                  },
+               },
+               {
+                  address: {
+                     contains: location as string,
+                  },
+               },
+            ],
+         },
          include: {
             reviews: true,
             propertyPictures: true,
@@ -74,7 +93,13 @@ export async function getSearchedPropertiesPagination(req: Request, res: Respons
          take: Number(limit),
       });
 
-      const totalProperties = await prisma.property.count();
+      const totalProperties = await prisma.property.count({
+         where: {
+            address: {
+               contains: location as string,
+            },
+         },
+      });
 
       return res.status(200).json({
          data: properties,
