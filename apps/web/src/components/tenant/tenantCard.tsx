@@ -27,10 +27,10 @@ export default function TenantCard({ img, propertyName, children, link }: Props)
                </AspectRatio>
             </Link>
          </div>
-         <div className="flex flex-col gap-2">
+         <div className="mb-2 flex flex-col gap-2">
             <h3 className="mt-3 w-fit text-lg font-semibold">{propertyName}</h3>
          </div>
-         {children}
+         <div>{children}</div>
       </div>
    );
 }

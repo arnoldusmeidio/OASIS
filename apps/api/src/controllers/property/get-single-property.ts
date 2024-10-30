@@ -11,6 +11,11 @@ export const getSingleProperty = async (req: Request, res: Response, next: NextF
          },
          include: {
             propertyPictures: true,
+            room: {
+               include: {
+                  roomPictures: true,
+               },
+            },
          },
       });
 

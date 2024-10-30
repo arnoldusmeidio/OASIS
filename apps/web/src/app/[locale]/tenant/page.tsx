@@ -112,7 +112,7 @@ export default function Tenant() {
          {isLoading ? (
             <TenantSkeleton />
          ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-20 sm:grid-cols-2 lg:grid-cols-3">
                {properties.map((property) => (
                   <div key={property.id}>
                      <TenantCard
@@ -120,10 +120,10 @@ export default function Tenant() {
                         link={`/tenant/property-detail/${property.id}`}
                         propertyName={property.name}
                      >
-                        <div className="my-5 flex justify-between">
+                        <div className="flex-col">
                            <AlertDialog>
                               <AlertDialogTrigger asChild>
-                                 <Button variant="destructive" className="w-fit">
+                                 <Button variant="destructive" className="mb-4 w-full">
                                     Delete your property
                                  </Button>
                               </AlertDialogTrigger>
@@ -146,7 +146,7 @@ export default function Tenant() {
                                  </AlertDialogFooter>
                               </AlertDialogContent>
                            </AlertDialog>
-                           <Button onClick={() => handleEdit(property.id)} className="mx-3 w-fit">
+                           <Button onClick={() => handleEdit(property.id)} className="w-full">
                               Edit your Property
                            </Button>
                         </div>

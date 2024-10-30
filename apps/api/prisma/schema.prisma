@@ -109,6 +109,7 @@ model Property {
   address   String
   lat       Float
   lng       Float
+  city      String
 
   description      String             @db.VarChar(1000)
   category         Category

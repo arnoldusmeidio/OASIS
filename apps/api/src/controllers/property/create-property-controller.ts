@@ -23,7 +23,7 @@ export const createProperty = async (req: Request, res: Response, next: NextFunc
          return res.status(400).json({ message: "Tenant ID not found" });
       }
 
-      const { propertyName, propertyAddress, propertyDescription, category } = req.body;
+      const { propertyName, propertyAddress, propertyDescription, category, propertyCity } = req.body;
 
       // Check if files were uploaded
       if (!req.files || (Array.isArray(req.files) && req.files.length === 0)) {
@@ -62,6 +62,7 @@ export const createProperty = async (req: Request, res: Response, next: NextFunc
             address: formatted_address,
             lng,
             lat,
+            city: propertyCity,
             description: propertyDescription,
             category,
             propertyPictures: {
@@ -70,7 +71,7 @@ export const createProperty = async (req: Request, res: Response, next: NextFunc
          },
       });
 
-      return res.status(201).json({ message: "Property created" });
+      return res.status(201).json({ message: "Property created", ok: true });
    } catch (error) {
       next(error);
    }
