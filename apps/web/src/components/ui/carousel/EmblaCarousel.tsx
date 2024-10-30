@@ -43,8 +43,11 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                         height={1080}
                      />
                      <div className="text-background text-shadow bg-foreground/30 absolute left-10 top-5 flex flex-col gap-2 rounded-2xl p-2 align-middle lg:left-16 lg:top-10">
-                        <span className="text-xs sm:text-base md:text-lg lg:text-xl">{item.name}</span>
-                        <span className="text-xs lg:text-base">Rating: {item.averageRating?.star.toFixed(1)} / 10</span>
+                        <div className="flex flex-col">
+                           <span className="text-xs sm:text-base md:text-lg lg:text-xl">{item.name}</span>
+                           <span className="text-xs lg:text-base">{item.city}</span>
+                        </div>
+                        <span className="text-xs lg:text-sm">Rating: {item.averageRating?.star.toFixed(1)} / 10</span>
                      </div>
                   </Link>
                ))}

@@ -115,6 +115,7 @@ export default function Home() {
                                  <MediumCard
                                     img={item.propertyPictures?.[0]?.url}
                                     propertyName={item.name}
+                                    location={item.city}
                                     rating={item.averageRating.star}
                                  />
                               </Link>

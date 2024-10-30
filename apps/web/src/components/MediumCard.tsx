@@ -24,8 +24,11 @@ export default function MediumCard({ img, propertyName, location, rating }: Prop
             </AspectRatio>
          </div>
          <div className="flex flex-col gap-2">
-            <h3 className="mt-3 text-lg font-semibold">{propertyName}</h3>
-            <h3 className="text-muted-foreground text-base">Rating: {rating.toFixed(1)} / 10</h3>
+            <div>
+               <h3 className="mt-3 text-lg font-semibold">{propertyName}</h3>
+               <h4 className="text-muted-foreground text-base">{location}</h4>
+            </div>
+            <h5 className="text-muted-foreground text-sm">Rating: {rating.toFixed(1)} / 10</h5>
          </div>
       </div>
    );
