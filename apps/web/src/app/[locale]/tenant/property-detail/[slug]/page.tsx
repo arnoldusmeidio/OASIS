@@ -39,11 +39,12 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
                      alt="Property picture"
                      width={300}
                      height={300}
+                     className="rounded-lg"
                   />
                   <div>
                      <p>{getProperty.name}</p>
                      <p>{getProperty.description}</p>
-                     <div className="w-10 rounded-xl border-2 border-black">
+                     <div className="w-fit rounded-xl border-2 border-black">
                         <p>{getProperty.category}</p>
                      </div>
                   </div>

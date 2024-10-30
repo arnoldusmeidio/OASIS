@@ -66,12 +66,12 @@ export default function EditProperty({ propertyId }: EditPropertyProps) {
          formData.append("propertyName", values.propertyName);
          formData.append("propertyAddress", values.propertyAddress);
          formData.append("propertyDescription", values.propertyDescription);
-         formData.append("category", values.category);
          formData.append("propertyCity", values.propertyCity);
+         formData.append("category", values.category);
          images.forEach((file) => formData.append("propertyPictures", file));
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/tenant/`, {
-            method: "POST",
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/tenant/${propertyId}`, {
+            method: "PUT",
             body: formData,
             credentials: "include",
          });

@@ -18,7 +18,7 @@ export async function getAllPropertiesPagination(req: Request, res: Response, ne
          return res.status(400).json({ message: "Tenant ID not found" });
       }
 
-      const { page = 1, limit = 3 } = req.query;
+      const { page = 1, limit = 6 } = req.query;
       const offset = (Number(page) - 1) * Number(limit);
 
       const properties = await prisma.property.findMany({
