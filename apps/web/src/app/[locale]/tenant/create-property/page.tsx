@@ -46,6 +46,7 @@ export default function Property() {
          formData.append("propertyName", values.propertyName);
          formData.append("propertyAddress", values.propertyAddress);
          formData.append("propertyDescription", values.propertyDescription);
+         formData.append("propertyCategory", values.category);
          if (values.pictureUrl) {
             formData.append("pictureUrl", values.pictureUrl);
          }

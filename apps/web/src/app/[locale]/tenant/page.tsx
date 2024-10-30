@@ -39,6 +39,8 @@ export default function Tenant() {
    const router = useRouter();
    const [page, setPage] = useState<Paginations>();
    const [isDelete, setIsDelete] = useState(null);
+   const [propertyToEdit, setPropertyToEdit] = useState<string | null>(null);
+
    useEffect(() => {
       async function getUser() {
          try {
@@ -61,6 +63,7 @@ export default function Tenant() {
          }
       }
       getUser();
+      fetchProperties();
       setIsLoading(false);
    }, []);
 
@@ -99,9 +102,10 @@ export default function Tenant() {
       }
    };
 
-   useEffect(() => {
-      fetchProperties();
-   }, []);
+   const handleEdit = (id: string) => {
+      setPropertyToEdit(id);
+      router.push(`/tenant/edit-property/${id}`);
+   };
 
    return (
       <div className="p-4">
@@ -111,33 +115,42 @@ export default function Tenant() {
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                {properties.map((property) => (
                   <div key={property.id}>
-                     <Link href={`/tenant/property-detail/${property.id}`}>
-                        <TenantCard
-                           img={property.propertyPictures?.[0]?.url}
-                           propertyName={property.name}
-                           propertyDescription={property.description}
-                        />
-                     </Link>
-                     <div className="my-5 transform cursor-pointer gap-4 transition duration-300 ease-out hover:scale-105">
-                        <AlertDialog>
-                           <AlertDialogTrigger asChild>
-                              <Button variant="outline">Delete your property</Button>
-                           </AlertDialogTrigger>
-                           <AlertDialogContent>
-                              <AlertDialogHeader>
-                                 <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                                 <AlertDialogDescription>
-                                    This action cannot be undone. This will permanently delete your account and remove
-                                    your data from our servers.
-                                 </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                 <AlertDialogAction onClick={() => handleDelete(property.id)}>Delete</AlertDialogAction>
-                              </AlertDialogFooter>
-                           </AlertDialogContent>
-                        </AlertDialog>
-                     </div>
+                     <TenantCard
+                        img={property.propertyPictures?.[0]?.url}
+                        link={`/tenant/property-detail/${property.id}`}
+                        propertyName={property.name}
+                     >
+                        <div className="my-5 flex justify-between">
+                           <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                 <Button variant="destructive" className="w-fit">
+                                    Delete your property
+                                 </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                 <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                       This action cannot be undone. This will permanently delete your account and
+                                       remove your data from our servers.
+                                    </AlertDialogDescription>
+                                 </AlertDialogHeader>
+                                 <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction
+                                       onClick={() => handleDelete(property.id)}
+                                       className="bg-destructive"
+                                    >
+                                       Delete
+                                    </AlertDialogAction>
+                                 </AlertDialogFooter>
+                              </AlertDialogContent>
+                           </AlertDialog>
+                           <Button onClick={() => handleEdit(property.id)} className="mx-3 w-fit">
+                              Edit your Property
+                           </Button>
+                        </div>
+                     </TenantCard>
                   </div>
                ))}
             </div>
@@ -153,19 +166,6 @@ export default function Tenant() {
                />
             </div>
          )}
-         <></>
-         {page && (
-            <div className="my-10">
-               <PaginationComponent
-                  currentPage={page.currentPage}
-                  totalPages={page.totalPages}
-                  onPageChange={(newPage) => {
-                     fetchProperties(newPage);
-                  }}
-               />
-            </div>
-         )}
-         <></>
       </div>
    );
 }
