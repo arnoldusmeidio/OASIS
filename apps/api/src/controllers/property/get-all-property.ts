@@ -55,7 +55,7 @@ export async function getAllPropertiesPagination(req: Request, res: Response, ne
 export async function getSearchedPropertiesPagination(req: Request, res: Response, next: NextFunction) {
    try {
       const locale = req.cookies.NEXT_LOCALE;
-      const { page = 1, limit = 10, location } = req.query;
+      const { page = 1, limit = 10, location, totalperson } = req.query;
       const offset = (Number(page) - 1) * Number(limit);
 
       if (!location)
@@ -77,11 +77,19 @@ export async function getSearchedPropertiesPagination(req: Request, res: Respons
                   },
                },
             ],
+            room: {
+               some: {
+                  roomCapacity: { gte: Number(totalperson) },
+               },
+            },
          },
          include: {
             reviews: true,
             propertyPictures: true,
             room: {
+               where: {
+                  roomCapacity: { gte: Number(totalperson) },
+               },
                include: {
                   roomPrice: {
                      orderBy: { price: "asc" },
@@ -95,8 +103,22 @@ export async function getSearchedPropertiesPagination(req: Request, res: Respons
 
       const totalProperties = await prisma.property.count({
          where: {
-            address: {
-               contains: location as string,
+            OR: [
+               {
+                  name: {
+                     contains: location as string,
+                  },
+               },
+               {
+                  address: {
+                     contains: location as string,
+                  },
+               },
+            ],
+            room: {
+               some: {
+                  roomCapacity: { gte: Number(totalperson) },
+               },
             },
          },
       });

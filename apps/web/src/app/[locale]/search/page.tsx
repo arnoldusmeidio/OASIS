@@ -12,6 +12,7 @@ import { Property } from "@/types/property-types";
 import { toast } from "sonner";
 import FormError from "@/components/FormError";
 import useCurrencyStore from "@/stores/useCurrencyStore";
+import PaginationComponent from "@/components/tenant/Pagination-button";
 
 type Props = {
    searchParams: SearchParams;
@@ -26,13 +27,21 @@ type SearchParams = {
    checkout: string;
 };
 
+interface Paginations {
+   currentPage: number;
+   totalPages: number;
+   totalProperties: number;
+}
+
 export default function SearchPage({ searchParams }: Props) {
    const [properties, setProperties] = useState<Property[]>([]);
    const [totalPropertiesFound, setTotalPropertiesFound] = useState(0);
    const [isLoading, setIsLoading] = useState(true);
    const [currencyLoading, setCurrencyLoading] = useState(true);
    const { user } = useUserStore();
+   const [page, setPage] = useState<Paginations>();
    const { currencyRate, error, getCurrencyRate } = useCurrencyStore();
+   const totalPerson = Number(searchParams.group_adults) + Number(searchParams.group_children);
 
    function getRatingDescription(rating: number) {
       if (rating < 1 || rating > 10) {
@@ -53,11 +62,11 @@ export default function SearchPage({ searchParams }: Props) {
       }
    }
 
-   async function getProperties() {
+   async function getProperties(pages = 1) {
       try {
          setIsLoading(true);
          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/property/search?location=${searchParams.location}`,
+            `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/property/search?page=${pages}&location=${searchParams.location}&totalperson=${totalPerson}`,
             {
                credentials: "include",
             },
@@ -65,6 +74,7 @@ export default function SearchPage({ searchParams }: Props) {
          const data = await response.json();
          if (data.ok) {
             setProperties(data.data);
+            setPage(data.meta);
             setTotalPropertiesFound(data.meta.totalProperties);
             setIsLoading(false);
          }
@@ -103,7 +113,7 @@ export default function SearchPage({ searchParams }: Props) {
          {isLoading || currencyLoading ? (
             <SearchSkeleton />
          ) : (
-            <main>
+            <main className="bg-background h-full min-h-screen">
                <div className="mx-auto max-w-7xl p-6 lg:px-8">
                   <h2 className="pb-3 text-3xl font-bold">Your Search Results</h2>
 
@@ -120,7 +130,7 @@ export default function SearchPage({ searchParams }: Props) {
                      {searchParams.location}: {totalPropertiesFound} properties found
                   </h3>
 
-                  <div className="mt-5 space-y-2">
+                  <div className="search-result mt-5 space-y-2">
                      {properties.map((item, idx: number) => (
                         <div key={idx} className="flex justify-between space-x-4 space-y-2 rounded-lg border p-5">
                            <div className="h-auto w-64 max-sm:basis-1/2">
@@ -191,6 +201,18 @@ export default function SearchPage({ searchParams }: Props) {
                            </div>
                         </div>
                      ))}
+                     {page && (
+                        <div className="my-10">
+                           <PaginationComponent
+                              currentPage={page.currentPage}
+                              totalPages={page.totalPages}
+                              onPageChange={(newPage) => {
+                                 getProperties(newPage);
+                                 window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to the top smoothly
+                              }}
+                           />
+                        </div>
+                     )}
                   </div>
                </div>
             </main>
