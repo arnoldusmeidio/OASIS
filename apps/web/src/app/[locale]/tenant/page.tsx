@@ -1,23 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useUserStore } from "@/stores/useUserStore";
 import { toast } from "sonner";
 import TenantSkeleton from "@/components/tenant/TenantSkeleton";
 import TenantCard from "@/components/tenant/tenantCard";
-
 import {
-   Pagination,
-   PaginationContent,
-   PaginationItem,
-   PaginationNext,
-   PaginationPrevious,
-} from "@/components/ui/pagination";
+   AlertDialog,
+   AlertDialogAction,
+   AlertDialogCancel,
+   AlertDialogContent,
+   AlertDialogDescription,
+   AlertDialogFooter,
+   AlertDialogHeader,
+   AlertDialogTitle,
+   AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 import { Property } from "@/types/property-types";
 
-import Link from "next/link";
 import PaginationComponent from "@/components/tenant/Pagination-button";
+import { Button } from "@/components/ui/button";
+import { Link, useRouter } from "@/i18n/routing";
 
 interface Paginations {
    currentPage: number;
@@ -33,7 +38,7 @@ export default function Tenant() {
    const successMessage = searchParams.get("success");
    const router = useRouter();
    const [page, setPage] = useState<Paginations>();
-
+   const [isDelete, setIsDelete] = useState(null);
    useEffect(() => {
       async function getUser() {
          try {
@@ -75,6 +80,25 @@ export default function Tenant() {
       }
    };
 
+   const handleDelete = async (id: string) => {
+      try {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/tenant/${id}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+         });
+         if (!response.ok) throw new Error("Failed to delete property");
+
+         const data = await response.json();
+         setIsDelete(data.data);
+
+         setProperties((prevProperties) => prevProperties.filter((property) => property.id !== id));
+         fetchProperties();
+      } catch (error) {
+         console.error(error);
+      }
+   };
+
    useEffect(() => {
       fetchProperties();
    }, []);
@@ -86,13 +110,35 @@ export default function Tenant() {
          ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                {properties.map((property) => (
-                  <Link href={`/tenant/property-detail/${property.id}`} key={property.id}>
-                     <TenantCard
-                        img={property.propertyPictures?.[0]?.url}
-                        propertyName={property.name}
-                        propertyDescription={property.description}
-                     />
-                  </Link>
+                  <div key={property.id}>
+                     <Link href={`/tenant/property-detail/${property.id}`}>
+                        <TenantCard
+                           img={property.propertyPictures?.[0]?.url}
+                           propertyName={property.name}
+                           propertyDescription={property.description}
+                        />
+                     </Link>
+                     <div className="my-5 transform cursor-pointer gap-4 transition duration-300 ease-out hover:scale-105">
+                        <AlertDialog>
+                           <AlertDialogTrigger asChild>
+                              <Button variant="outline">Delete your property</Button>
+                           </AlertDialogTrigger>
+                           <AlertDialogContent>
+                              <AlertDialogHeader>
+                                 <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                 <AlertDialogDescription>
+                                    This action cannot be undone. This will permanently delete your account and remove
+                                    your data from our servers.
+                                 </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                 <AlertDialogAction onClick={() => handleDelete(property.id)}>Delete</AlertDialogAction>
+                              </AlertDialogFooter>
+                           </AlertDialogContent>
+                        </AlertDialog>
+                     </div>
+                  </div>
                ))}
             </div>
          )}
