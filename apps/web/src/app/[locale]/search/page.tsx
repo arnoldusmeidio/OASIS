@@ -113,109 +113,107 @@ export default function SearchPage({ searchParams }: Props) {
          {isLoading || currencyLoading ? (
             <SearchSkeleton />
          ) : (
-            <main className="bg-background h-full min-h-screen">
-               <div className="mx-auto max-w-7xl p-6 lg:px-8">
-                  <h2 className="pb-3 text-3xl font-bold">Your Search Results</h2>
+            <div className="mx-auto max-w-7xl p-6 lg:px-8">
+               <h2 className="pb-3 text-3xl font-bold">Your Search Results</h2>
 
-                  <h3 className="pb-3">
-                     Dates of trips
-                     <span className="ml-2 italic">
-                        {searchParams.checkin} to {searchParams.checkout}
-                     </span>
-                  </h3>
+               <h3 className="pb-3">
+                  Dates of trips
+                  <span className="ml-2 italic">
+                     {searchParams.checkin} to {searchParams.checkout}
+                  </span>
+               </h3>
 
-                  <hr className="mb-5" />
+               <hr className="mb-5" />
 
-                  <h3 className="text-xl font-semibold">
-                     {searchParams.location}: {totalPropertiesFound} properties found
-                  </h3>
+               <h3 className="text-xl font-semibold">
+                  {searchParams.location}: {totalPropertiesFound} properties found
+               </h3>
 
-                  <div className="search-result mt-5 space-y-2">
-                     {properties.map((item, idx: number) => (
-                        <div key={idx} className="flex justify-between space-x-4 space-y-2 rounded-lg border p-5">
-                           <div className="h-auto w-64 max-sm:basis-1/2">
-                              <Link href={"/"}>
-                                 <AspectRatio ratio={1 / 1}>
-                                    <Image
-                                       className="rounded-lg object-cover"
-                                       src={item.propertyPictures?.[0]?.url}
-                                       alt="image of property"
-                                       loading="lazy"
-                                       fill
-                                       sizes="max-width: 256px"
-                                    />
-                                 </AspectRatio>
+               <div className="search-result mt-5 space-y-2">
+                  {properties.map((item, idx: number) => (
+                     <div key={idx} className="flex justify-between space-x-4 space-y-2 rounded-lg border p-5">
+                        <div className="h-auto w-64 max-sm:basis-1/2">
+                           <Link href={`/search/property/${item.id}`}>
+                              <AspectRatio ratio={1 / 1}>
+                                 <Image
+                                    className="rounded-lg object-cover"
+                                    src={item.propertyPictures?.[0]?.url}
+                                    alt="image of property"
+                                    loading="lazy"
+                                    fill
+                                    sizes="max-width: 256px"
+                                 />
+                              </AspectRatio>
+                           </Link>
+                        </div>
+
+                        <div className="flex flex-1 flex-col justify-around gap-2 max-sm:basis-1/2 sm:flex-row sm:justify-between sm:space-x-5">
+                           <div>
+                              <Link
+                                 href={`/search/property/${item.id}`}
+                                 className="text-base font-bold text-[#1a61ef] hover:underline md:text-xl lg:text-2xl"
+                              >
+                                 {item.name}
                               </Link>
+                              <p className="hidden text-xs sm:flex lg:text-base">{item.description}</p>
                            </div>
 
-                           <div className="flex flex-1 flex-col justify-around gap-2 max-sm:basis-1/2 sm:flex-row sm:justify-between sm:space-x-5">
-                              <div>
-                                 <Link
-                                    href={"/"}
-                                    className="text-base font-bold text-[#1a61ef] hover:underline md:text-xl lg:text-2xl"
-                                 >
-                                    {item.name}
-                                 </Link>
-                                 <p className="hidden text-xs sm:flex lg:text-base">{item.description}</p>
-                              </div>
-
-                              <div className="flex flex-col justify-between gap-2">
-                                 <div className="flex items-center gap-2 sm:items-start sm:justify-end sm:space-x-2 sm:text-right">
-                                    <div className="items-start gap-2 max-sm:order-2 max-sm:items-center sm:flex sm:flex-col sm:items-end">
-                                       <p className="text-xs sm:font-bold md:text-sm lg:text-base">
-                                          {item.reviews.length > 0
-                                             ? getRatingDescription(
-                                                  item.reviews.reduce((acc: number, review) => {
-                                                     return acc + review.star;
-                                                  }, 0) / item.reviews.length,
-                                               )
-                                             : null}
-                                       </p>
-                                       <p className="text-xs sm:flex md:text-sm lg:text-base">
-                                          {item.reviews.length > 0 && `${item.reviews.length} reviews`}
-                                       </p>
-                                    </div>
-
-                                    <p className="text-background flex-shink-0 flex h-10 w-10 items-center justify-center rounded-lg bg-[#1a61ef] text-sm font-bold max-sm:order-1 lg:h-12 lg:w-12 lg:text-lg">
+                           <div className="flex flex-col justify-between gap-2">
+                              <div className="flex items-center gap-2 sm:items-start sm:justify-end sm:space-x-2 sm:text-right">
+                                 <div className="items-start gap-2 max-sm:order-2 max-sm:items-center sm:flex sm:flex-col sm:items-end">
+                                    <p className="text-xs sm:font-bold md:text-sm lg:text-base">
                                        {item.reviews.length > 0
-                                          ? (
+                                          ? getRatingDescription(
                                                item.reviews.reduce((acc: number, review) => {
                                                   return acc + review.star;
-                                               }, 0) / item.reviews.length
-                                            ).toFixed(1)
-                                          : "N/A"}
+                                               }, 0) / item.reviews.length,
+                                            )
+                                          : null}
+                                    </p>
+                                    <p className="text-xs sm:flex md:text-sm lg:text-base">
+                                       {item.reviews.length > 0 && `${item.reviews.length} reviews`}
                                     </p>
                                  </div>
 
-                                 <div className="sm:text-right">
-                                    <p className="text-xs md:text-sm lg:text-base">
-                                       capacity: {item.room?.[0]?.roomCapacity} persons
-                                    </p>
-                                    <p className="text-lg font-bold md:text-xl lg:text-2xl">
-                                       {!currencyRate
-                                          ? currency(item.room?.[0]?.roomPrice[0]?.price, "IDR", 1)
-                                          : currency(item.room?.[0]?.roomPrice[0]?.price, user?.currency, currencyRate)}
-                                    </p>
-                                 </div>
+                                 <p className="text-background flex-shink-0 flex h-10 w-10 items-center justify-center rounded-lg bg-[#1a61ef] text-sm font-bold max-sm:order-1 lg:h-12 lg:w-12 lg:text-lg">
+                                    {item.reviews.length > 0
+                                       ? (
+                                            item.reviews.reduce((acc: number, review) => {
+                                               return acc + review.star;
+                                            }, 0) / item.reviews.length
+                                         ).toFixed(1)
+                                       : "N/A"}
+                                 </p>
+                              </div>
+
+                              <div className="sm:text-right">
+                                 <p className="text-xs md:text-sm lg:text-base">
+                                    capacity: {item.room?.[0]?.roomCapacity} persons
+                                 </p>
+                                 <p className="text-lg font-bold md:text-xl lg:text-2xl">
+                                    {!currencyRate
+                                       ? currency(item.room?.[0]?.roomPrice[0]?.price, "IDR", 1)
+                                       : currency(item.room?.[0]?.roomPrice[0]?.price, user?.currency, currencyRate)}
+                                 </p>
                               </div>
                            </div>
                         </div>
-                     ))}
-                     {page && (
-                        <div className="my-10">
-                           <PaginationComponent
-                              currentPage={page.currentPage}
-                              totalPages={page.totalPages}
-                              onPageChange={(newPage) => {
-                                 getProperties(newPage);
-                                 window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to the top smoothly
-                              }}
-                           />
-                        </div>
-                     )}
-                  </div>
+                     </div>
+                  ))}
+                  {page && (
+                     <div className="my-10">
+                        <PaginationComponent
+                           currentPage={page.currentPage}
+                           totalPages={page.totalPages}
+                           onPageChange={(newPage) => {
+                              getProperties(newPage);
+                              window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to the top smoothly
+                           }}
+                        />
+                     </div>
+                  )}
                </div>
-            </main>
+            </div>
          )}
       </>
    );
