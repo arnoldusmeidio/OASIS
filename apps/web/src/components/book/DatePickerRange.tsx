@@ -174,7 +174,9 @@ export default function DatePickerForm({ className, roomId, currencyRate }: Date
                            <div className="flex flex-col items-center justify-center">
                               <span>{date.getDate()}</span>
                               <span className="text-[10px] text-green-500">
-                                 {checkRoomPrice(date, roomStatus, currencyRate)}
+                                 {user?.currency != "IDR"
+                                    ? checkRoomPrice(date, roomStatus, currencyRate)
+                                    : checkRoomPrice(date, roomStatus)}
                               </span>
                            </div>
                         );
