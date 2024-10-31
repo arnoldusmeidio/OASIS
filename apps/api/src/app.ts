@@ -7,14 +7,16 @@ import property from "./routers/property-router";
 import userRouter from "./routers/user-router";
 import bookingRouter from "./routers/booking-router";
 import walletRouter from "./routers/wallet-router";
+import paymentRouter from "./routers/payment-router";
 import customer from "./routers/customer-router";
-import { verifyToken } from "./middlewares/auth-middleware";
+import { customerGuard, verifyToken } from "./middlewares/auth-middleware";
 import { notFoundMiddleware } from "./middlewares/not-found-middleware";
 import room from "./routers/room-route";
 import { tenantGuard } from "@/middlewares/auth-middleware";
 import { error } from "./middlewares/error-middleware";
 import cookieParser from "cookie-parser";
 import { getAllPropertyBeta } from "./controllers/sample-controller";
+import { paymentNotification } from "./controllers/payment-controller";
 
 const createApp = () => {
    const app = express();
@@ -53,10 +55,16 @@ const createApp = () => {
    app.use("/api/v1/room", verifyToken, tenantGuard, room);
 
    // Booking Route
-   app.use("/api/v1/bookings", verifyToken, bookingRouter);
+   app.use("/api/v1/bookings", verifyToken, customerGuard, bookingRouter);
 
    // Wallet Route
-   app.use("/api/v1/wallets", verifyToken, walletRouter);
+   app.use("/api/v1/wallets", verifyToken, customerGuard, walletRouter);
+
+   // Payment Route
+   app.use("/api/v1/payments", verifyToken, customerGuard, paymentRouter);
+
+   // Notifications Route
+   app.use("/api/v1/notifications", paymentNotification);
 
    // Playground Route for testing
    app.use("/api/v1/playgrounds", getAllPropertyBeta);
