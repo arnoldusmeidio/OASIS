@@ -16,6 +16,10 @@ export async function getRoomStatus(req: Request, res: Response) {
          },
       });
 
+      if (!status) {
+         return res.status(404).json({ message: "No rooms found", ok: false });
+      }
+
       return res.status(200).json({
          data: {
             id: status?.id,
