@@ -171,7 +171,7 @@ export default function BookingCard() {
                                                       credentials: "include",
                                                    },
                                                 );
-                                                toast.success("Booking Successfully Cancelled", { duration: 1500 });
+                                                toast("Booking Successfully Cancelled", { duration: 1500 });
                                                 eventGetter();
                                              } catch (error) {
                                                 console.error(error);

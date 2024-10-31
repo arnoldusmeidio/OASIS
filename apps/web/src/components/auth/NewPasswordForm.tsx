@@ -57,7 +57,7 @@ export default function NewPasswordForm() {
          } else {
             setError("");
             setSuccess(data.message);
-            toast.success(data.message);
+            toast(data.message);
             form.reset();
             router.push("/login");
             router.refresh();
