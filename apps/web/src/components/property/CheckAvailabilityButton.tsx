@@ -10,13 +10,19 @@ import {
    DialogTitle,
    DialogTrigger,
 } from "@/components/ui/dialog";
-import { useUserStore } from "@/stores/useUserStore";
-import { useState, useEffect } from "react";
-import { currency } from "@/lib/currency";
-import { useTranslations } from "next-intl";
-import useCurrencyStore from "@/stores/useCurrencyStore";
+import DatePickerForm from "@/components/book/DatePickerRange";
 
-export default function CheckAvailabilityButton() {
+export default function CheckAvailabilityButton({
+   roomId,
+   propertyName,
+   roomType,
+   currencyRate,
+}: {
+   roomId: string;
+   propertyName: string;
+   roomType: string;
+   currencyRate: number | null;
+}) {
    return (
       <Dialog>
          <DialogTrigger asChild>
@@ -29,19 +35,15 @@ export default function CheckAvailabilityButton() {
                Check Availability
             </Button>
          </DialogTrigger>
-         <DialogContent className="w-[300px] sm:w-[375px]">
-            <DialogHeader>
+         <DialogContent className="h-[400px] w-[350px] sm:w-[375px]">
+            <DialogHeader className="text-left">
                <DialogTitle>Select Booking Dates</DialogTitle>
-               <DialogDescription></DialogDescription>
+               <DialogDescription className="flex flex-col gap-1">
+                  <span>Property Name: {propertyName}</span>
+                  <span>Room Type: {roomType}</span>
+               </DialogDescription>
             </DialogHeader>
-
-            <DialogFooter className="sm:justify-end">
-               <DialogClose asChild>
-                  <Button type="button" variant="secondary">
-                     Close
-                  </Button>
-               </DialogClose>
-            </DialogFooter>
+            <DatePickerForm roomId={roomId} currencyRate={currencyRate} />
          </DialogContent>
       </Dialog>
    );

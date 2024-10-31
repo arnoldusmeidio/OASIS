@@ -67,9 +67,9 @@ export default function page({ params }: { params: { slug: string } }) {
          {isLoading || !property || currencyLoading ? (
             <PropertySkeleton />
          ) : (
-            <div className="mx-auto max-w-7xl p-4 pt-0 lg:px-8">
+            <div className="mx-auto w-[375px] max-w-7xl p-4 pt-0 min-[500px]:w-[500px] sm:w-[640px] md:w-[768px] lg:w-[1024px] lg:px-8 xl:w-[1280px] 2xl:w-[80rem]">
                {/* Carousel of property pics */}
-               <div className="h-auto w-full overflow-hidden rounded-lg sm:h-[300px] lg:h-[400px] xl:h-[500px] 2xl:h-[600px]">
+               <div className="h-auto w-auto overflow-hidden rounded-lg sm:h-[300px] lg:h-[400px] xl:h-[500px] 2xl:h-[600px]">
                   <PropertyPicturesCarousel property={property} />
                </div>
 
@@ -107,10 +107,12 @@ export default function page({ params }: { params: { slug: string } }) {
                                           : currency(room?.defaultPrice, user?.currency, currencyRate)}
                                     </p>
                                  </div>
-                                 {/* <Button className="bg-blue-600 px-4 py-2 text-white hover:bg-blue-600">
-                                    Check Availability
-                                 </Button> */}
-                                 <CheckAvailabilityButton />
+                                 <CheckAvailabilityButton
+                                    roomId={room?.id}
+                                    propertyName={property?.name}
+                                    roomType={room?.type}
+                                    currencyRate={currencyRate}
+                                 />
                               </div>
                            </CardContent>
                         </Card>
@@ -142,7 +144,7 @@ export default function page({ params }: { params: { slug: string } }) {
                   </div>
                </div>
 
-               {/* Booking and Amenities */}
+               {/* Amenities */}
                <div className="mt-4 flex justify-between">
                   <div className="flex flex-col gap-2">
                      <span className="block">Amenities:</span>

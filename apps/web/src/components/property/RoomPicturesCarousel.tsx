@@ -26,8 +26,8 @@ export default function RoomPicturesCarousel({ room }: Props) {
                         <Image
                            src={pic.url || "/placeholder.jpg"}
                            alt={`Room picture ${i + 1}`}
-                           width={400}
-                           height={300}
+                           width={1500}
+                           height={1000}
                            className="h-60 w-full rounded-lg object-cover"
                         />
                      </CarouselItem>
@@ -38,8 +38,8 @@ export default function RoomPicturesCarousel({ room }: Props) {
             <Image
                src={room.roomPictures[0]?.url || "/placeholder.jpg"}
                alt="Room picture"
-               width={400}
-               height={300}
+               width={1500}
+               height={1000}
                className="h-60 w-full rounded-lg object-cover pt-5"
             />
          )}

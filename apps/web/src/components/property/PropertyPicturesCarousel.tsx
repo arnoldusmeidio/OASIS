@@ -28,8 +28,8 @@ export default function PropertyPicturesCarousel({ property }: Props) {
                            <Image
                               src={picture.url || "/placeholder.jpg"}
                               alt={`Property picture ${index + 1}`}
-                              width={800}
-                              height={400}
+                              width={1500}
+                              height={1000}
                               className="w-full rounded-lg object-cover"
                            />
                         </div>
@@ -42,8 +42,8 @@ export default function PropertyPicturesCarousel({ property }: Props) {
             <Image
                src={property.propertyPictures[0]?.url || "/placeholder.jpg"}
                alt="Property picture"
-               width={800}
-               height={400}
+               width={1500}
+               height={1000}
                className="w-full rounded-lg object-cover"
             />
          )}
