@@ -169,8 +169,8 @@ async function inputData() {
          description: "A beautiful Hotel with ocean views.",
          address: "Jl. Rawa Buaya No.2, Jakarta",
          city: "Jakarta",
-         lat: -70.631467,
-         lng: 210.201955,
+         lat: -6.158117400000001,
+         lng: 106.7307957,
          category: "Hotel",
          propertyPictures: {
             create: [
