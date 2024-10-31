@@ -66,7 +66,7 @@ export default function SearchPage({ searchParams }: Props) {
       try {
          setIsLoading(true);
          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/property/search?page=${pages}&location=${searchParams.location}&totalperson=${totalPerson}`,
+            `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/property/search?page=${pages}&location=${searchParams.location}&totalperson=${totalPerson}&checkin=${searchParams.checkin}&checkout=${searchParams.checkout}&roomsrequired=${searchParams.no_rooms}`,
             {
                credentials: "include",
             },

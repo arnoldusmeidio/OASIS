@@ -53,7 +53,7 @@ export default function ResetForm() {
          } else {
             setError("");
             setSuccess(data.message);
-            toast.success(data.message);
+            toast(data.message);
             form.reset();
             router.refresh();
          }

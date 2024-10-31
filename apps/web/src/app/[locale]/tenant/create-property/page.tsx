@@ -78,7 +78,7 @@ export default function EditProperty({ propertyId }: EditPropertyProps) {
 
          const data = await response.json();
          if (data.ok) {
-            toast.success(data.message, { duration: 1000 });
+            toast(data.message, { duration: 1000 });
             setSuccess(data.message);
             form.reset();
             setImages([]); // Clear images after form reset
