@@ -41,47 +41,47 @@ export default function Home() {
    const checkout = `${checkout_year}-${checkout_month}-${checkout_monthday}`;
 
    useEffect(() => {
-      async function getProperties() {
+      const fetchData = async () => {
          try {
             setIsLoading(true);
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/property/popular`, {
-               credentials: "include",
-            });
-            const data = await response.json();
-            if (data.ok) {
-               setProperties(data.data);
-            }
-         } catch (error) {
-            console.error(error);
-            toast.error("Something went wrong!");
-         }
-      }
 
-      async function getUser() {
-         try {
-            const user = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users`, {
-               credentials: "include",
-            });
-            const data = await user.json();
-            if (data.ok) {
-               setUser(data.data);
-               if (!data.data.tenant && !data.data.customer) {
+            // Fetch user and properties concurrently
+            const [userResponse, propertiesResponse] = await Promise.all([
+               fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users`, { credentials: "include" }),
+               fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/property/popular`, { credentials: "include" }),
+            ]);
+
+            const userData = await userResponse.json();
+            const propertiesData = await propertiesResponse.json();
+
+            if (!userData.ok) {
+               console.error(userData.message);
+            } else {
+               setUser(userData.data);
+               if (!userData.data.tenant && !userData.data.customer) {
                   router.push("/select-role");
                   router.refresh();
                }
                if (successMessage) {
-                  toast.success(successMessage, { duration: 1500 });
+                  toast(successMessage, { duration: 1500 });
                }
+            }
+
+            if (!propertiesData.ok) {
+               toast.error(propertiesData.message);
+            } else {
+               setProperties(propertiesData.data);
             }
          } catch (error) {
             console.error(error);
+            toast.error("Something went wrong!");
+         } finally {
+            setIsLoading(false); // Set loading state only once, at the end
          }
-      }
+      };
 
-      getUser();
-      getProperties();
-      setIsLoading(false);
-   }, [user?.language]);
+      fetchData();
+   }, [successMessage]);
 
    return (
       <>

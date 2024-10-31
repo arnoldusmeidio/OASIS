@@ -41,7 +41,7 @@ export default function SelectRolePage() {
          if (!data.ok) {
             toast.error(data.message);
          } else {
-            toast.success(data.message);
+            toast(data.message);
             form.reset();
             if (data.role == "tenant") {
                router.push("/tenant");

@@ -43,7 +43,7 @@ export default function NewVerificationForm() {
             } else {
                setError("");
                setSuccess(data.message);
-               toast.success(data.message);
+               toast(data.message);
                router.push("/user/profile");
                router.refresh();
             }
