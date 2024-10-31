@@ -1,37 +1,18 @@
 import * as z from "zod";
+import { Category } from "@/types/property-types";
 
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-
-export const createRoomSchema = z.object({
-   roomName: z.string().min(1, { message: "Room Name is required" }),
-   roomDescription: z.string().min(1, { message: "Room Description is required" }),
-   roomPictureUrl: z
-      .instanceof(File)
-      .refine(
-         (files) => ACCEPTED_IMAGE_TYPES.includes(files.type),
-         "Only .jpg, .jpeg, .png, and .webp formats are supported",
-      ),
-
-   roomPrice: z
-      .string()
-      .min(1, { message: "Price is required" })
-      .transform((val) => Number(val)), // Transform string to number for validation
-   roomCapacity: z
-      .string()
-      .min(1, { message: "Room Capacity is required" })
-      .transform((val) => Number(val)), // Transform string to number for validation
-});
 
 export const propertySchema = z.object({
    propertyName: z.string().min(1, { message: "Property Name is required" }),
    propertyAddress: z.string().min(1, { message: "Property Address is required" }),
    propertyDescription: z.string().min(1, { message: "Property Description is required" }),
-   propertyImage: z
-      .instanceof(File)
+   category: z.nativeEnum(Category),
+   propertyCity: z.string().min(1, { message: "Property City is required" }),
+   propertyPictures: z
+      .array(z.instanceof(File))
       .refine(
-         (files) => ACCEPTED_IMAGE_TYPES.includes(files.type),
+         (files) => files.every((file) => ACCEPTED_IMAGE_TYPES.includes(file.type)),
          "Only .jpg, .jpeg, .png, and .webp formats are supported",
       ),
-
-   room: z.array(createRoomSchema).min(1, { message: "There should be at least 1 room" }),
 });

@@ -7,12 +7,12 @@ import { ZodError } from "zod";
 import { authorizationUrl, oauth2Client } from "@/config/google";
 import { google } from "googleapis";
 import { getVerificationTokenByToken } from "@/lib/verification-token";
-import { RequestWithUserId } from "@/types";
 import { getPasswordResetTokenByToken } from "@/lib/password-reset-token";
 
 // Register user
 export async function register(req: Request, res: Response, next: NextFunction) {
    try {
+      const locale = req.cookies.NEXT_LOCALE;
       const parsedData = registerSchema.parse(req.body);
       const { name, password, role, token } = parsedData;
       const selectRole = {
@@ -20,13 +20,17 @@ export async function register(req: Request, res: Response, next: NextFunction) 
       };
       const existingToken = await getVerificationTokenByToken(token);
 
-      if (!existingToken) return res.status(400).json({ message: "Invalid Token", ok: false });
+      if (!existingToken)
+         return res.status(400).json({ message: locale == "id" ? "Token Tidak Sah" : "Invalid Token", ok: false });
 
       const existingUser = await prisma.user.findUnique({
          where: { email: existingToken.email },
       });
 
-      if (existingUser) return res.status(409).json({ message: "Email has already been used", ok: false });
+      if (existingUser)
+         return res
+            .status(409)
+            .json({ message: locale == "id" ? "Email sudah terpakai" : "Email has already been used", ok: false });
 
       const salt = await genSalt(10);
       const hashedPassword = await hash(password, salt);
@@ -45,7 +49,9 @@ export async function register(req: Request, res: Response, next: NextFunction) 
          where: { id: existingToken.id },
       });
 
-      return res.status(201).json({ message: "User successfully created", ok: true });
+      return res
+         .status(201)
+         .json({ message: locale == "id" ? "Berhasil membuat akun" : "User successfully created", ok: true });
    } catch (error) {
       if (error instanceof ZodError) {
          return res.status(400).json({ message: error.errors[0].message, ok: false });
@@ -58,6 +64,7 @@ export async function register(req: Request, res: Response, next: NextFunction) 
 // Login
 export async function login(req: Request, res: Response, next: NextFunction) {
    try {
+      let locale = req.cookies.NEXT_LOCALE;
       const parsedData = loginSchema.parse(req.body);
       const { email, password, rememberMe } = parsedData;
 
@@ -69,12 +76,18 @@ export async function login(req: Request, res: Response, next: NextFunction) {
          },
       });
 
-      if (!user) return res.status(404).json({ message: "Invalid Email / Password", ok: false });
+      if (!user)
+         return res
+            .status(404)
+            .json({ message: locale == "id" ? "Email / Kata Sandi Salah" : "Invalid Email / Password", ok: false });
 
       const isValidPassword = await compare(password, user?.password!);
+      if (!isValidPassword)
+         return res
+            .status(401)
+            .json({ message: locale == "id" ? "Email / Kata Sandi Salah" : "Invalid Email / Password", ok: false });
 
-      if (!isValidPassword) return res.status(401).json({ message: "Invalid Email / Password", ok: false });
-
+      locale = user.language == "INDONESIA" ? "id" : "en";
       let role = "";
 
       if (user.tenant !== null) {
@@ -88,6 +101,12 @@ export async function login(req: Request, res: Response, next: NextFunction) {
          expiresIn: rememberMe ? "30d" : "1d",
       });
 
+      res.cookie("NEXT_LOCALE", locale, {
+         httpOnly: false,
+         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30 * 365),
+         sameSite: "lax",
+      });
+
       return res
          .cookie("token", token, {
             httpOnly: true,
@@ -98,7 +117,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
             secure: true, // turn off while check on thunderclient
          })
          .status(200)
-         .json({ message: "Login success", ok: true });
+         .json({ message: locale == "id" ? "Berhasil masuk" : "Login success", ok: true, role });
    } catch (error) {
       if (error instanceof ZodError) {
          return res.status(400).json({ message: error.errors[0].message, ok: false });
@@ -129,7 +148,9 @@ export async function googleLoginCallback(req: Request, res: Response, next: Nex
       const { data } = await oauth2.userinfo.get();
 
       if (!data.email || !data.name || !data.id) {
-         return res.redirect(`${process.env.CLIENT_PORT}/login?error=Invalid%20User`);
+         return res.redirect(
+            `${process.env.CLIENT_PORT}/login?error=${encodeURIComponent("Invalid User Data / Data User Tidak Sah")}`,
+         );
       }
 
       const existingUser = await prisma.user.findUnique({
@@ -140,7 +161,7 @@ export async function googleLoginCallback(req: Request, res: Response, next: Nex
       if (existingUser) {
          if (existingUser?.accountProvider !== "GOOGLE")
             return res.redirect(
-               `${process.env.CLIENT_PORT}/register?error=Email%20has%20already%20been%20used%20with%20another%20provider`,
+               `${process.env.CLIENT_PORT}/register?error=${encodeURIComponent("Email has already been used by another provide / Email sudah terpakai provider lain")}`,
             );
       }
 
@@ -157,11 +178,17 @@ export async function googleLoginCallback(req: Request, res: Response, next: Nex
       }
 
       let role = null;
+      let locale = "en";
 
-      if (existingUser?.tenant !== null) {
-         role = "tenant";
-      } else if (existingUser?.customer !== null) {
-         role = "customer";
+      if (existingUser) {
+         if (existingUser.tenant) {
+            role = "tenant";
+         } else if (existingUser.customer) {
+            role = "customer";
+         }
+         if (existingUser.language == "INDONESIA") {
+            locale = "id";
+         }
       }
 
       const jwtPayload = { name: data.name, email: data.email, id: data.id, role };
@@ -169,29 +196,48 @@ export async function googleLoginCallback(req: Request, res: Response, next: Nex
          expiresIn: "30d",
       });
 
-      res.cookie("token", token, {
-         httpOnly: true,
-         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
-         sameSite: "none", // need to change on production to be true
-         secure: true, // turn off while check on thunderclient
-      }).redirect(`${process.env.CLIENT_PORT}/?success=Login%20success`);
+      res.cookie("NEXT_LOCALE", locale, {
+         httpOnly: false,
+         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30 * 365),
+         sameSite: "lax",
+      });
+
+      const successMessage = locale == "id" ? "Berhasil masuk" : "Login success";
+
+      return res
+         .cookie("token", token, {
+            httpOnly: true,
+            expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+            sameSite: "none", // need to change on production to be true
+            secure: true, // turn off while check on thunderclient
+         })
+         .redirect(
+            role == "tenant"
+               ? `${process.env.CLIENT_PORT}/tenant?success=${encodeURIComponent(successMessage)}`
+               : `${process.env.CLIENT_PORT}/?success=${encodeURIComponent(successMessage)}`,
+         );
    } catch (error) {
-      return res.redirect(`${process.env.CLIENT_PORT}/login?error=Something%20went%20wrong!`);
+      return res.redirect(`${process.env.CLIENT_PORT}/login?error=${encodeURIComponent("Something went wrong!")}`);
    }
 }
 
 // Update user password
 export async function updateUserPassword(req: Request, res: Response, next: NextFunction) {
    try {
+      let locale = req.cookies.NEXT_LOCALE;
       const parsedData = newPasswordSchema.parse(req.body);
       const { token, password } = parsedData;
 
       const existingToken = await getPasswordResetTokenByToken(token);
-      if (!existingToken) return res.status(404).json({ message: "Invalid Token", ok: false });
+      if (!existingToken)
+         return res.status(404).json({ message: locale == "id" ? "Token Tidak Sah" : "Invalid Token", ok: false });
 
       const hasExpired = new Date(existingToken.expires) < new Date();
 
-      if (hasExpired) return res.status(400).json({ message: "Token has expired", ok: false });
+      if (hasExpired)
+         return res
+            .status(400)
+            .json({ message: locale == "id" ? "Token sudah kedaluwarsa" : "Token has expired", ok: false });
 
       const user = await prisma.user.findUnique({
          where: {
@@ -201,7 +247,7 @@ export async function updateUserPassword(req: Request, res: Response, next: Next
 
       if (!user)
          return res.status(404).json({
-            message: "User not found",
+            message: locale == "id" ? "User tidak ditemukan" : "User not found",
             ok: false,
          });
 
@@ -221,7 +267,10 @@ export async function updateUserPassword(req: Request, res: Response, next: Next
          where: { id: existingToken.id },
       });
 
-      res.status(200).json({ message: "Password updated successfully", ok: true });
+      res.status(200).json({
+         message: locale == "id" ? "Kata sandi berhasil diperbarui" : "Password updated successfully",
+         ok: true,
+      });
    } catch (error) {
       if (error instanceof ZodError) {
          return res.status(400).json({ message: error.errors[0].message, ok: false });
@@ -234,9 +283,12 @@ export async function updateUserPassword(req: Request, res: Response, next: Next
 // Logout
 export async function logout(req: Request, res: Response, next: NextFunction) {
    try {
+      const locale = req.cookies.NEXT_LOCALE;
       res.clearCookie("token");
 
-      return res.status(200).json({ message: "Successfully logged out.", ok: true });
+      return res
+         .status(200)
+         .json({ message: locale == "id" ? "Berhasil keluar" : "Successfully logged out", ok: true });
    } catch (error) {
       next(error);
    }

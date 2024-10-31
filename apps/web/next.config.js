@@ -1,10 +1,16 @@
+const createNextIntlPlugin = require("next-intl/plugin");
+
+const withNextIntl = createNextIntlPlugin();
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
    images: {
       remotePatterns: [
          {
             protocol: "https",
-            hostname: "lh3.googleusercontent.com",
+            hostname: "*.googleusercontent.com",
+            port: "",
+            pathname: "**",
          },
          {
             protocol: "https",
@@ -14,8 +20,19 @@ const nextConfig = {
             protocol: "https",
             hostname: "images.unsplash.com",
          },
+         {
+            protocol: "https",
+            hostname: "plus.unsplash.com",
+         },
+         {
+            protocol: "https",
+            hostname: "res.cloudinary.com",
+         },
       ],
+   },
+   env: {
+      _next_intl_trailing_slash: "", // Set this to the required string value if specified in your documentation
    },
 };
 
-module.exports = nextConfig;
+module.exports = withNextIntl(nextConfig);

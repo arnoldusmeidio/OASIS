@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 
 export default function ResetForm() {
    const [error, setError] = useState<string | undefined>("");
@@ -53,7 +53,7 @@ export default function ResetForm() {
          } else {
             setError("");
             setSuccess(data.message);
-            toast.success(data.message);
+            toast(data.message);
             form.reset();
             router.refresh();
          }
