@@ -1,7 +1,8 @@
 "use client";
 
 import FormError from "@/components/FormError";
-import Navbar from "@/components/Navbar";
+import SearchNavbar from "@/components/header/SearchNavbar";
+import PropertyPicturesCarousel from "@/components/property/PropertyPicturesCarousel";
 import SearchSkeleton from "@/components/SearchSkeleton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Property } from "@/types/property-types";
@@ -35,7 +36,7 @@ export default function page({ params }: { params: { slug: string } }) {
    if (!isLoading && !property) {
       return (
          <>
-            <Navbar />
+            <SearchNavbar />
             <div className="">
                <div className="max-w-[500px] justify-self-center">
                   <FormError message={error} />
@@ -47,11 +48,12 @@ export default function page({ params }: { params: { slug: string } }) {
 
    return (
       <>
-         <Navbar />
-         {isLoading ? (
+         <SearchNavbar />
+         {isLoading || !property ? (
             <SearchSkeleton />
          ) : (
             <div className="mx-auto max-w-7xl p-6 lg:px-8">
+               <PropertyPicturesCarousel property={property} />
                <h2 className="text-lg font-bold">{property?.name}</h2>
                <h3>{property?.address}</h3>
                <div>

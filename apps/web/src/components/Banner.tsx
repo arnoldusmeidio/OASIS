@@ -1,7 +1,6 @@
 import * as React from "react";
 import EmblaCarousel from "@/components/ui/carousel/EmblaCarousel";
 import { EmblaOptionsType } from "embla-carousel";
-import { bannerData } from "@/static-db";
 import { Property } from "@/types/property-types";
 const OPTIONS: EmblaOptionsType = { loop: true, duration: 30 };
 
