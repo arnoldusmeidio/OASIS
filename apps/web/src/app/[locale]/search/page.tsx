@@ -43,6 +43,8 @@ export default function SearchPage({ searchParams }: Props) {
    const { currencyRate, error, getCurrencyRate } = useCurrencyStore();
    const totalPerson = Number(searchParams.group_adults) + Number(searchParams.group_children);
 
+   const searchedQueries = `?location=${searchParams.location}&group_adults=${searchParams.group_adults}&group_children=${searchParams.group_children}&checkin=${searchParams.checkin}&checkout=${searchParams.checkout}`;
+
    function getRatingDescription(rating: number) {
       if (rating < 1 || rating > 10) {
          return "Invalid rating";
@@ -97,19 +99,13 @@ export default function SearchPage({ searchParams }: Props) {
 
    if (error)
       return (
-         <>
-            <SearchNavbar />
-            <main>
-               <div className="max-w-[500px] justify-self-center">
-                  <FormError message={error} />
-               </div>
-            </main>
-         </>
+         <div className="max-w-[500px] justify-self-center">
+            <FormError message={error} />
+         </div>
       );
 
    return (
       <>
-         <SearchNavbar />
          {isLoading || currencyLoading ? (
             <SearchSkeleton />
          ) : (
@@ -132,7 +128,7 @@ export default function SearchPage({ searchParams }: Props) {
                   {properties.map((item, idx: number) => (
                      <div key={idx} className="flex justify-between space-x-4 space-y-2 rounded-lg border p-5">
                         <div className="h-auto w-64 content-center max-sm:basis-1/2">
-                           <Link href={`/search/property/${item.id}`}>
+                           <Link href={`/search/property/${item.id}${searchedQueries}`}>
                               <AspectRatio ratio={1 / 1}>
                                  <Image
                                     className="rounded-lg object-cover"
@@ -149,7 +145,7 @@ export default function SearchPage({ searchParams }: Props) {
                         <div className="flex flex-1 flex-col justify-around gap-2 max-sm:basis-1/2 sm:flex-row sm:justify-between sm:space-x-5">
                            <div>
                               <Link
-                                 href={`/search/property/${item.id}`}
+                                 href={`/search/property/${item.id}${searchedQueries}`}
                                  className="text-base font-bold text-[#1a61ef] hover:underline md:text-xl lg:text-2xl"
                               >
                                  {item.name}
@@ -189,11 +185,11 @@ export default function SearchPage({ searchParams }: Props) {
                                     capacity: {item.room?.[0]?.roomCapacity} persons
                                  </p>
                                  <div>
-                                    <p className="text-xs md:text-sm lg:text-base">Price per night:</p>
+                                    <p className="text-xs md:text-sm lg:text-base">Price per night starts from:</p>
                                     <p className="font-bold md:text-xl lg:text-2xl">
                                        {!currencyRate
-                                          ? currency(item.room?.[0]?.roomPrice[0]?.price, "IDR", 1)
-                                          : currency(item.room?.[0]?.roomPrice[0]?.price, user?.currency, currencyRate)}
+                                          ? currency(item.room?.[0]?.defaultPrice, "IDR", 1)
+                                          : currency(item.room?.[0]?.defaultPrice, user?.currency, currencyRate)}
                                     </p>
                                  </div>
                               </div>

@@ -203,7 +203,6 @@ export async function getSearchedPropertiesPagination(req: Request, res: Respons
          take: Number(limit),
       });
 
-
       // Filter properties by room availability for the requested number of rooms
       const availableProperties = properties.filter((property) => {
          const availableRooms = property.room.filter(
