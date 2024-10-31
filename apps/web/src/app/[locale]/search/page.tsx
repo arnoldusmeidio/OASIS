@@ -99,19 +99,13 @@ export default function SearchPage({ searchParams }: Props) {
 
    if (error)
       return (
-         <>
-            <SearchNavbar />
-            <main>
-               <div className="max-w-[500px] justify-self-center">
-                  <FormError message={error} />
-               </div>
-            </main>
-         </>
+         <div className="max-w-[500px] justify-self-center">
+            <FormError message={error} />
+         </div>
       );
 
    return (
       <>
-         <SearchNavbar />
          {isLoading || currencyLoading ? (
             <SearchSkeleton />
          ) : (
@@ -191,11 +185,11 @@ export default function SearchPage({ searchParams }: Props) {
                                     capacity: {item.room?.[0]?.roomCapacity} persons
                                  </p>
                                  <div>
-                                    <p className="text-xs md:text-sm lg:text-base">Price per night:</p>
+                                    <p className="text-xs md:text-sm lg:text-base">Price per night starts from:</p>
                                     <p className="font-bold md:text-xl lg:text-2xl">
                                        {!currencyRate
-                                          ? currency(item.room?.[0]?.roomPrice[0]?.price, "IDR", 1)
-                                          : currency(item.room?.[0]?.roomPrice[0]?.price, user?.currency, currencyRate)}
+                                          ? currency(item.room?.[0]?.defaultPrice, "IDR", 1)
+                                          : currency(item.room?.[0]?.defaultPrice, user?.currency, currencyRate)}
                                     </p>
                                  </div>
                               </div>
