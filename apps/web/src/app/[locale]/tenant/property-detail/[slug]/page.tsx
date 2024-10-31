@@ -4,11 +4,17 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Property } from "@/types/property-types";
 import { Card, CardContent } from "@/components/ui/card";
+import CurrentLocButton from "@/components/tenant/maps-button";
+import { APIProvider, Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function PropertyDetails({ params }: { params: { slug: string } }) {
    const [getProperty, setGetProperty] = useState<Property>();
    const [isLoading, setIsLoading] = useState(true);
+   const [userLoc, setUserLoc] = useState<{ lat: number; lng: number }>();
 
    useEffect(() => {
       const propertyGetter = async () => {
@@ -18,6 +24,11 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
                headers: { "Content-Type": "application/json" },
                credentials: "include",
             });
+            if (navigator.geolocation) {
+               navigator.geolocation.getCurrentPosition((loc) => {
+                  setUserLoc({ lat: loc.coords.latitude, lng: loc.coords.longitude });
+               });
+            }
 
             const getData = await get.json();
             setGetProperty(getData.data);
@@ -30,61 +41,142 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
       propertyGetter();
    }, [params.slug]);
 
+   console.log(getProperty);
+
    return (
-      <>
+      <div className="mx-auto w-full max-w-6xl p-4">
          {isLoading ? (
-            <p>Loading...</p>
+            <h1>sabar ya compilingnya Lama...</h1>
          ) : getProperty ? (
-            <div className="mx-auto w-3/5">
-               {getProperty.propertyPictures?.length === 1 ? (
-                  // Single Card Display
-                  <Card className="w-full overflow-hidden rounded-lg shadow-lg">
-                     <Image
-                        src={getProperty.propertyPictures[0].url || "/placeholder.jpg"}
-                        alt="Property picture"
-                        width={600}
-                        height={400}
-                        className="h-60 w-full object-cover"
-                     />
-                     <CardContent>
-                        <h2 className="text-lg font-semibold">{getProperty.name}</h2>
-                        <p className="text-sm text-gray-600">{getProperty.description}</p>
-                        <div className="mt-2 w-fit rounded-xl border-2 border-black px-2 py-1">
-                           <p className="text-xs font-medium">{getProperty.category}</p>
-                        </div>
-                     </CardContent>
-                  </Card>
-               ) : (
-                  // Carousel Display for Multiple Images
-                  <Carousel className="w-full rounded-lg shadow-lg">
+            <>
+               <h1 className="my-5 text-2xl font-bold text-gray-800">{getProperty.name}</h1>
+
+               {/* Property Image Section */}
+               {getProperty.propertyPictures.length > 1 ? (
+                  <Carousel className="w-full rounded-lg shadow-md">
                      <CarouselContent>
                         {getProperty.propertyPictures.map((picture, index) => (
                            <CarouselItem key={index}>
-                              <Image
-                                 src={picture.url || "/placeholder.jpg"}
-                                 alt={`Property picture ${index + 1}`}
-                                 width={600}
-                                 height={400}
-                                 className="h-60 w-full rounded-lg object-cover"
-                              />
+                              <Link href={`/tenant/room-detail/${getProperty.id}`}>
+                                 <Image
+                                    src={picture.url || "/placeholder.jpg"}
+                                    alt={`Property picture ${index + 1}`}
+                                    width={800}
+                                    height={400}
+                                    className="h-72 w-full rounded-lg object-cover"
+                                 />
+                              </Link>
                            </CarouselItem>
                         ))}
                      </CarouselContent>
-                     <CarouselPrevious />
-                     <CarouselNext />
-                     <div className="p-4">
-                        <h2 className="text-lg font-semibold">{getProperty.name}</h2>
-                        <p className="text-sm text-gray-600">{getProperty.description}</p>
-                        <div className="mt-2 w-fit rounded-xl border-2 border-black px-2 py-1">
-                           <p className="text-xs font-medium">{getProperty.category}</p>
-                        </div>
-                     </div>
                   </Carousel>
+               ) : (
+                  <Link href={`/tenant/room-detail/${getProperty.id}`}>
+                     <Image
+                        src={getProperty.propertyPictures[0]?.url || "/placeholder.jpg"}
+                        alt="Property picture"
+                        width={800}
+                        height={400}
+                        className="h-72 w-full rounded-lg object-cover"
+                     />
+                  </Link>
                )}
-            </div>
+
+               {/* Property Details */}
+               <div className="my-5 flex flex-col md:flex-row">
+                  <div className="w-full pr-4 md:w-2/3">
+                     <h2 className="text-xl font-semibold">{getProperty.name}</h2>
+                     <p className="mt-1 text-gray-600">{getProperty.description}</p>
+                     <p className="mt-1 text-gray-500">
+                        📍 {getProperty.address}, {getProperty.city}
+                     </p>
+
+                     {/* Property Category */}
+                     <Badge className="mt-2 w-fit bg-blue-100 text-blue-800">{getProperty.category}</Badge>
+
+                     {/* Rooms */}
+                     {getProperty.room.map((room) => (
+                        <Card key={room.id} className="mt-5 rounded-lg shadow-lg">
+                           <CardContent>
+                              {/* Room Image Carousel without Arrow Buttons */}
+                              {room.roomPictures.length > 1 ? (
+                                 <Carousel className="w-full rounded-lg shadow-md">
+                                    <CarouselContent>
+                                       {room.roomPictures.map((pic, i) => (
+                                          <CarouselItem key={i}>
+                                             <Link href={`/tenant/room-detail/${room.id}`}>
+                                                <Image
+                                                   src={pic.url || "/placeholder.jpg"}
+                                                   alt={`Room picture ${i + 1}`}
+                                                   width={400}
+                                                   height={300}
+                                                   className="h-60 w-full rounded-lg object-cover"
+                                                />
+                                             </Link>
+                                          </CarouselItem>
+                                       ))}
+                                    </CarouselContent>
+                                 </Carousel>
+                              ) : (
+                                 <Link href={`/tenant/room-detail/${room.id}`}>
+                                    <Image
+                                       src={room.roomPictures[0]?.url || "/placeholder.jpg"}
+                                       alt="Room picture"
+                                       width={400}
+                                       height={300}
+                                       className="h-60 w-full rounded-lg object-cover"
+                                    />
+                                 </Link>
+                              )}
+
+                              {/* Room Details */}
+                              <h3 className="mt-3 text-lg font-semibold">
+                                 {room.type} (Capacity: {room.roomCapacity})
+                              </h3>
+                              <p className="text-sm text-gray-600">Default Price: ${room.defaultPrice}</p>
+                           </CardContent>
+                        </Card>
+                     ))}
+                  </div>
+
+                  {/* Google Maps */}
+                  <div className="mt-5 h-80 w-full md:mt-0 md:w-1/3">
+                     <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
+                        <Map
+                           defaultCenter={{ lat: getProperty.lat, lng: getProperty.lng }}
+                           defaultZoom={15}
+                           disableDefaultUI={true}
+                           mapId={process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID}
+                        >
+                           <AdvancedMarker position={{ lat: getProperty.lat, lng: getProperty.lng }}>
+                              <Pin />
+                           </AdvancedMarker>
+                           {userLoc && (
+                              <>
+                                 <AdvancedMarker position={userLoc}>
+                                    <Pin />
+                                 </AdvancedMarker>
+                                 {/* <CurrentLocButton userLoc={userLoc} /> */}
+                              </>
+                           )}
+                        </Map>
+                     </APIProvider>
+                  </div>
+               </div>
+
+               {/* Booking and Amenities */}
+               <div className="mt-10 flex justify-between">
+                  <div className="flex flex-wrap space-x-2 text-sm text-gray-600">
+                     <Badge className="bg-green-100 text-green-800">Wi-Fi</Badge>
+                     <Badge className="bg-green-100 text-green-800">Breakfast</Badge>
+                     {/* Add more amenities as needed */}
+                  </div>
+                  <Button className="bg-blue-600 px-4 py-2 text-white">Check Availability</Button>
+               </div>
+            </>
          ) : (
-            <p>No property details available.</p>
+            <p className="text-center text-gray-600">No property found.</p> // Fallback if getProperty is undefined
          )}
-      </>
+      </div>
    );
 }

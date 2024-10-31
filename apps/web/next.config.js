@@ -30,6 +30,9 @@ const nextConfig = {
          },
       ],
    },
+   env: {
+      _next_intl_trailing_slash: "", // Set this to the required string value if specified in your documentation
+   },
 };
 
 module.exports = withNextIntl(nextConfig);
