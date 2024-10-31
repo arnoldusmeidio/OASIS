@@ -44,7 +44,7 @@ export async function getBookingsByBookingNumber(req: Request, res: Response, ne
       });
 
       if (!booking) {
-         return res.send(404).json({ message: "No bookings found", ok: false });
+         return res.status(404).json({ message: "No bookings found", ok: false });
       }
 
       return res.status(200).json({ data: booking, ok: true });
@@ -69,7 +69,7 @@ export async function deleteBookingByBookingNumber(req: Request, res: Response, 
       });
 
       if (!booking) {
-         return res.send(404).json({ message: "No bookings found", ok: false });
+         return res.status(404).json({ message: "No bookings found", ok: false });
       }
 
       await prisma.booking.delete({

@@ -1,9 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/prisma";
 import crypto from "crypto";
 
-const prisma = new PrismaClient();
-
-export async function updateOrderStatus(data: any) {
+export default async function updateBookingStatus(data: any) {
    const hash = crypto
       .createHash("sha512")
       .update(`${data.order_id}${data.status_code}${data.gross_amount}${process.env.MIDTRANS_SERVER_KEY}`)

@@ -32,12 +32,30 @@ import Image from "next/image";
 import { useRouter } from "@/i18n/routing";
 import { Skeleton } from "../ui/skeleton";
 
+interface SnapWindow extends Window {
+   snap?: { embed: (token: string, options: { embedId: string }) => void };
+}
+
 export default function BookingCard() {
    const router = useRouter();
 
    const [isLoading, setIsLoading] = useState(true);
    const [bookingData, setBookingData] = useState({ data: [] });
-   const [dataReplica, setDataReplica] = useState({ data: [] });
+   // const [dataReplica, setDataReplica] = useState({ data: [] });
+
+   useEffect(() => {
+      const myMidtransClientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY;
+      const script = document.createElement("script");
+      script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
+      script.setAttribute("data-client-key", myMidtransClientKey as string);
+
+      document.body.appendChild(script);
+
+      return () => {
+         document.body.removeChild(script);
+      };
+   }, []);
+
    const eventGetter = async () => {
       try {
          const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings`, {
@@ -49,7 +67,7 @@ export default function BookingCard() {
          const resData = await res.json();
          if (resData.ok) {
             setBookingData(resData);
-            setDataReplica(resData);
+            // setDataReplica(resData);
          }
          setIsLoading(false);
       } catch (error) {
@@ -140,7 +158,36 @@ export default function BookingCard() {
                         <CardFooter className="flex gap-4">
                            {e.paymentStatus == "PENDING" ? (
                               <Link href="/">
-                                 <Button className="w-full">Pay Now</Button>
+                                 <Button
+                                    className="w-full"
+                                    onClick={async (ev: React.MouseEvent<HTMLButtonElement>) => {
+                                       ev.preventDefault();
+                                       try {
+                                          const response = await fetch(
+                                             `http://localhost:8000/api/v1/payments/${e.bookingNumber}`,
+                                             {
+                                                method: "POST",
+                                                headers: {
+                                                   "Content-Type": "application/json",
+                                                },
+                                                credentials: "include",
+                                                //body: JSON.stringify({ itemId, quantity }),
+                                             },
+                                          );
+                                          const data = await response.json();
+
+                                          // (window as SnapWindow).snap!.embed(data.data.transaction.token, {
+                                          //    embedId: "snap-container",
+                                          // });
+
+                                          router.push(data.data.transaction.redirect_url);
+                                       } catch (error) {
+                                          console.error(error);
+                                       }
+                                    }}
+                                 >
+                                    Pay Now
+                                 </Button>
                               </Link>
                            ) : (
                               ""
