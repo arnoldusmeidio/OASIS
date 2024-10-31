@@ -187,11 +187,14 @@ export default function EditProperty({ propertyId }: EditPropertyProps) {
                render={({ field }) => (
                   <FormItem>
                      <FormLabel>Property Images</FormLabel>
-                     {/* Custom FormControl for the file input */}
                      <div>
-                        {/* File Input */}
-                        <Input type="file" accept="image/*" multiple onChange={onChange} />
-                        {/* Image Previews */}
+                        <Input
+                           type="file"
+                           accept="image/*"
+                           multiple
+                           onChange={onChange}
+                           disabled={images.length >= 5}
+                        />
                         <div className="mt-2 flex space-x-2">
                            {imagesPreview?.map((img, index) => (
                               <Image

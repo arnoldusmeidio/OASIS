@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createRoomSchema } from "@/schemas/room-schema";
+import { editRoomSchema } from "@/schemas/edit-room-schema";
 import { useForm } from "react-hook-form";
 
 import { Form, FormField, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -20,25 +20,29 @@ import { useSearchParams } from "next/navigation";
 interface AddRoomProps {
    index: number;
    onRemove: () => void;
+   roomId: string;
 }
 
-export default function Room({ index, onRemove }: AddRoomProps) {
+export default function Room({ index, onRemove, roomId }: AddRoomProps) {
    const [error, setError] = useState<string | undefined>("");
    const [success, setSuccess] = useState<string | undefined>("");
    const [images, setImages] = useState<File[]>([]);
    const [imagesPreview, setImagesPreview] = useState<string[]>([]);
 
-   const form = useForm<z.infer<typeof createRoomSchema>>({
-      resolver: zodResolver(createRoomSchema),
+   const form = useForm<z.infer<typeof editRoomSchema>>({
+      resolver: zodResolver(editRoomSchema),
       defaultValues: {
          roomName: "",
          roomDescription: "",
          roomPictures: [],
-         defaultPrice: 0,
+         roomPrice: 0,
          roomCapacity: 0,
       },
       mode: "onBlur",
    });
+
+   const searchParams = useSearchParams();
+   const propertyId = searchParams.get(`propertyId`);
 
    const {
       formState: { isSubmitting },
@@ -54,10 +58,7 @@ export default function Room({ index, onRemove }: AddRoomProps) {
       setImagesPreview((prevPreviews) => [...prevPreviews, ...newPreviews]);
    };
 
-   const searchParams = useSearchParams();
-   const propertyId = searchParams.get(`propertyId`);
-
-   const onSubmit = async (values: z.infer<typeof createRoomSchema>) => {
+   const onSubmit = async (values: z.infer<typeof editRoomSchema>) => {
       try {
          if (!propertyId) {
             setError("Property ID is missing.");
@@ -67,12 +68,12 @@ export default function Room({ index, onRemove }: AddRoomProps) {
          const formData = new FormData();
          formData.append("roomName", values.roomName);
          formData.append("roomDescription", values.roomDescription);
-         formData.append("defaultPrice", values.defaultPrice.toString());
+         formData.append("defaultPrice", values.roomPrice.toString());
          formData.append("roomCapacity", values.roomCapacity.toString());
          images.forEach((file) => formData.append("roomPictures", file));
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/room/${propertyId}`, {
-            method: "POST",
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/room/${roomId}`, {
+            method: "PUT",
             body: formData,
             credentials: "include",
          });
@@ -130,7 +131,7 @@ export default function Room({ index, onRemove }: AddRoomProps) {
                         />
                         <FormField
                            control={form.control}
-                           name={"defaultPrice"}
+                           name={"roomPrice"}
                            render={({ field }) => (
                               <FormItem>
                                  <FormLabel>Default Room Price</FormLabel>
@@ -202,7 +203,7 @@ export default function Room({ index, onRemove }: AddRoomProps) {
                            )}
                         />
                         <Button className="w-full" type="submit">
-                           Create Room
+                           Edit Room
                         </Button>
                      </form>
                   </Form>

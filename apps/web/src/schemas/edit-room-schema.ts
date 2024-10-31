@@ -2,7 +2,7 @@ import * as z from "zod";
 
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
-export const createRoomSchema = z.object({
+export const editRoomSchema = z.object({
    roomName: z.string().min(1, { message: "Room Name is required" }),
    roomDescription: z.string().min(1, { message: "Room Description is required" }),
    roomPictures: z
@@ -15,7 +15,7 @@ export const createRoomSchema = z.object({
       .string()
       .min(1, { message: "Room Capacity is required" })
       .transform((val) => Number(val)), // Transform string to number for validation
-   defaultPrice: z
+   roomPrice: z
       .string()
       .min(1, { message: "Price is required" })
       .transform((val) => Number(val)),
