@@ -35,5 +35,9 @@ export interface Property {
          startDate: Date;
          endDate: Date;
       }[];
+      roomPictures: {
+         // Move roomPictures inside each room object
+         url: string;
+      }[];
    }[];
 }
