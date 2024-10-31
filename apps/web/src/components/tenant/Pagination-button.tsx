@@ -25,7 +25,10 @@ const PaginationComponent: React.FC<Paginations> = ({ currentPage, totalPages, o
          if (i === currentPage || i === 1 || i === totalPages) {
             pages.push(
                <PaginationItem key={i}>
-                  <PaginationLink onClick={() => onPageChange(i)} className={i === currentPage ? "active-button" : ""}>
+                  <PaginationLink
+                     onClick={() => onPageChange(i)}
+                     className={i === currentPage ? "rouded-lg cursor-pointer border-2" : "cursor-pointer"}
+                  >
                      {i}
                   </PaginationLink>
                </PaginationItem>,
@@ -57,7 +60,7 @@ const PaginationComponent: React.FC<Paginations> = ({ currentPage, totalPages, o
                         onPageChange(currentPage - 1);
                      }
                   }}
-                  className={currentPage <= 1 ? "disabled-button" : ""}
+                  className={currentPage <= 1 ? "disabled-button" : "cursor-pointer"}
                />
             </PaginationItem>
             {renderPageNumbers()}
@@ -68,7 +71,7 @@ const PaginationComponent: React.FC<Paginations> = ({ currentPage, totalPages, o
                         onPageChange(currentPage + 1);
                      }
                   }}
-                  className={currentPage >= totalPages ? "disabled-button" : ""}
+                  className={currentPage >= totalPages ? "disabled-button" : "cursor-pointer"}
                />
             </PaginationItem>
          </PaginationContent>

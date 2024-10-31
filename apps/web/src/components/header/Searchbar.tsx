@@ -213,7 +213,7 @@ export default function Searchbar() {
                   className="text-background bg-main-theme hover:text-background hover:bg-main-theme/80 flex w-full items-center justify-center lg:w-28"
                >
                   <span>{t("search")}</span>
-                  <Search className="text-background h-7 w-7 p-1" />
+                  <Search className="text-background h-7 w-7" />
                </Button>
             </div>
          </form>

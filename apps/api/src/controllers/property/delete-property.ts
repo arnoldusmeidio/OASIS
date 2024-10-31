@@ -6,16 +6,14 @@ import { RequestWithUserId } from "@/types"; // Assuming user type in your reque
 // Delete Property
 export const deleteProperty = async (req: RequestWithUserId, res: Response, next: NextFunction) => {
    try {
-      const id = req.user?.id; // Get user ID from request
-      const propertyId = req.params.id; // Get propertyId from URL parameters
+      const id = req.user?.id;
+      const propertyId = req.params.propertyId;
 
-      // Fetch the property and include the tenant and picture URLs
       const property = await prisma.property.findUnique({
          where: { id: propertyId },
-         include: { tenant: true, propertyPictures: true }, // Include picture URLs
+         include: { tenant: true, propertyPictures: true },
       });
 
-      //       // Check if the property exists and if it belongs to the tenant
       if (!property || !property.tenant) {
          return res.status(404).json({ message: "Property or Tenant not found" });
       }
@@ -26,15 +24,13 @@ export const deleteProperty = async (req: RequestWithUserId, res: Response, next
          return res.status(403).json({ message: "Unauthorized to delete this property" });
       }
 
-      // Loop through each picture URL and delete from Cloudinary
       for (const pic of property.propertyPictures) {
-         const publicId = pic.url.split("/").pop()?.split(".")[0]; // Assuming 'name' holds the URL or path
+         const publicId = pic.url.split("/").pop()?.split(".")[0];
          if (publicId) {
             await cloudinary.uploader.destroy(`images/${publicId}`);
          }
       }
 
-      //       // Delete the property from the database
       await prisma.property.delete({
          where: { id: propertyId },
       });

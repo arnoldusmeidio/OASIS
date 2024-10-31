@@ -49,7 +49,7 @@ export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLD
          if (!res.ok) {
             toast.error("Unable to book", { duration: 1500 });
          } else {
-            toast.success("Booking Successfully Created", { duration: 1500 });
+            toast("Booking Successfully Created", { duration: 1500 });
             router.push("/user/bookings");
          }
       } catch (error) {

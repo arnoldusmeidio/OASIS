@@ -29,7 +29,7 @@ export default function LogoutButton({ children, mode = "redirect", asChild }: L
          } else {
             router.push("/login");
             clearUser();
-            toast.success(data.message, { duration: 1500 });
+            toast(data.message, { duration: 1500 });
             router.refresh();
          }
       } catch (error) {
