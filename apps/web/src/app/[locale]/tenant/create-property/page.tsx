@@ -21,7 +21,7 @@ interface EditPropertyProps {
    propertyId: string;
 }
 
-export default function EditProperty({ propertyId }: EditPropertyProps) {
+export default function CreateProperty({ propertyId }: EditPropertyProps) {
    const [error, setError] = useState<string | undefined>(undefined);
    const [success, setSuccess] = useState<string | undefined>(undefined);
    const [images, setImages] = useState<File[]>([]);

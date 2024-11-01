@@ -19,4 +19,13 @@ export const editRoomSchema = z.object({
       .string()
       .min(1, { message: "Price is required" })
       .transform((val) => Number(val)),
+   specialDates: z
+      .array(
+         z.object({
+            date: z.date(),
+            price: z.number().nonnegative({ message: "Price must be a positive number" }),
+         }),
+      )
+      .optional()
+      .default([]),
 });

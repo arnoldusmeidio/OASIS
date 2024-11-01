@@ -154,7 +154,11 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
                                  </div>
                                  <div>
                                     <Button className="my-3 bg-blue-600 px-4 py-2 text-white hover:bg-blue-600">
-                                       <Link href={`/tenant/create-room?propertyId=${getProperty.id}`}>Edit Room</Link>
+                                       <Link
+                                          href={`/tenant/edit-room/${room.id}?propertyId=${getProperty.id}&roomId=${room.id}`}
+                                       >
+                                          Edit Room
+                                       </Link>
                                     </Button>
                                  </div>
                               </div>

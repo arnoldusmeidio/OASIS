@@ -17,11 +17,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Category } from "@/types/property-types";
 
-interface EditPropertyProps {
-   propertyId: string;
-}
-
-export default function EditProperty({ propertyId }: EditPropertyProps) {
+export default function EditProperty({ params }: { params: { slug: string } }) {
    const [error, setError] = useState<string | undefined>(undefined);
    const [success, setSuccess] = useState<string | undefined>(undefined);
    const [images, setImages] = useState<File[]>([]);
@@ -70,7 +66,7 @@ export default function EditProperty({ propertyId }: EditPropertyProps) {
          formData.append("category", values.category);
          images.forEach((file) => formData.append("propertyPictures", file));
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/tenant/${propertyId}`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/tenant/${params.slug}`, {
             method: "PUT",
             body: formData,
             credentials: "include",

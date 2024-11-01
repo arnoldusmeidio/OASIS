@@ -1,33 +1,36 @@
 "use client";
 
 import * as z from "zod";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { editRoomSchema } from "@/schemas/edit-room-schema";
 import { useForm } from "react-hook-form";
-
 import { Form, FormField, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/routing";
 import { useSearchParams } from "next/navigation";
+import TenantDatePicker from "@/components/tenant/Tenant-date-picker";
 
 interface AddRoomProps {
    index: number;
    onRemove: () => void;
-   roomId: string;
 }
 
-export default function Room({ index, onRemove, roomId }: AddRoomProps) {
+export default function Room({ index, onRemove }: AddRoomProps) {
    const [error, setError] = useState<string | undefined>("");
    const [success, setSuccess] = useState<string | undefined>("");
    const [images, setImages] = useState<File[]>([]);
    const [imagesPreview, setImagesPreview] = useState<string[]>([]);
+   const [specialDates, setSpecialDates] = useState<{ date: Date; price: number }[]>([]);
+   const [roomStatus, setRoomStatus] = useState<any>(null); // Change this type based on your roomStatus structure
+
+   const searchParams = useSearchParams();
+   const propertyId = searchParams.get(`propertyId`);
+   const roomId = searchParams.get(`roomId`);
 
    const form = useForm<z.infer<typeof editRoomSchema>>({
       resolver: zodResolver(editRoomSchema),
@@ -37,12 +40,41 @@ export default function Room({ index, onRemove, roomId }: AddRoomProps) {
          roomPictures: [],
          roomPrice: 0,
          roomCapacity: 0,
+         specialDates: [],
       },
       mode: "onBlur",
    });
 
-   const searchParams = useSearchParams();
-   const propertyId = searchParams.get(`propertyId`);
+   useEffect(() => {
+      const fetchRoomStatus = async () => {
+         if (!roomId) return;
+
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/room/${roomId}`, {
+            method: "GET",
+            credentials: "include",
+         });
+         const data = await response.json();
+         if (data.ok) {
+            setRoomStatus(data.roomStatus); // Assuming the API response includes roomStatus
+         } else {
+            console.error("Failed to fetch room status:", data.message);
+         }
+      };
+
+      fetchRoomStatus();
+   }, [roomId]);
+
+   const addSpecialDate = () => {
+      setSpecialDates((prevDates) => [
+         ...prevDates,
+         { date: new Date(), price: 0 }, // Default values
+      ]);
+   };
+
+   const updateSpecialDate = (index: number, field: keyof { date: Date; price: number }, value: any) => {
+      const updatedDates = specialDates.map((item, idx) => (idx === index ? { ...item, [field]: value } : item));
+      setSpecialDates(updatedDates);
+   };
 
    const {
       formState: { isSubmitting },
@@ -52,8 +84,11 @@ export default function Room({ index, onRemove, roomId }: AddRoomProps) {
 
    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newFiles = Array.from(e.target.files || []);
+
       const updatedFiles = [...images, ...newFiles];
+
       setImages(updatedFiles);
+
       const newPreviews = newFiles.map((file) => URL.createObjectURL(file));
       setImagesPreview((prevPreviews) => [...prevPreviews, ...newPreviews]);
    };
@@ -71,12 +106,16 @@ export default function Room({ index, onRemove, roomId }: AddRoomProps) {
          formData.append("defaultPrice", values.roomPrice.toString());
          formData.append("roomCapacity", values.roomCapacity.toString());
          images.forEach((file) => formData.append("roomPictures", file));
+         formData.append("specialDates", JSON.stringify(specialDates));
 
          const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/room/${roomId}`, {
             method: "PUT",
             body: formData,
             credentials: "include",
          });
+
+         const formDataEntries = Array.from(formData.entries());
+         console.log("FormData entries:", formDataEntries);
 
          const data = await response.json();
          if (data.ok) {
@@ -176,7 +215,7 @@ export default function Room({ index, onRemove, roomId }: AddRoomProps) {
                            name="roomPictures"
                            render={({ field }) => (
                               <FormItem>
-                                 <FormLabel>Property Images</FormLabel>
+                                 <FormLabel>Room Images</FormLabel>
                                  <div>
                                     <Input
                                        type="file"
@@ -202,6 +241,24 @@ export default function Room({ index, onRemove, roomId }: AddRoomProps) {
                               </FormItem>
                            )}
                         />
+
+                        {/* {specialDates.map((item, index) => (
+                           <div key={index} className="flex space-x-2">
+                              <input
+                                 type="date"
+                                 value={item.date ? item.date.toISOString().substring(0, 10) : ""}
+                                 onChange={(e) => updateSpecialDate(index, "date", new Date(e.target.value))}
+                              />
+
+                              <input
+                                 type="number"
+                                 value={item.price ?? 0} // Use 0 as a fallback if item.price is undefined or null
+                                 onChange={(e) => updateSpecialDate(index, "price", parseFloat(e.target.value) || 0)}
+                              />
+                           </div>
+                        ))} */}
+
+                        <TenantDatePicker roomId={roomId || ""} roomStatus={roomStatus} setTanggal={setSpecialDates} />
                         <Button className="w-full" type="submit">
                            Edit Room
                         </Button>
