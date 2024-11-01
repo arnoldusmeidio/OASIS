@@ -18,6 +18,7 @@ async function inputData() {
    await prisma.user.deleteMany();
    await prisma.verificationToken.deleteMany();
    await prisma.wallet.deleteMany();
+   await prisma.transferToken.deleteMany();
 
    const salt = await genSalt(10);
    const hashedPassword = await hash("password", salt);
