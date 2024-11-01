@@ -1,4 +1,3 @@
-import { currency } from "@/lib/currency";
 import { RoomStatus } from "@/types/room-status";
 
 export function checkRoomPrice(
