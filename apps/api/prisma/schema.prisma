@@ -186,8 +186,13 @@ model Booking {
   endDate   DateTime
 
   bookingNumber String        @unique
-  paymentStatus PaymentStatus
+  type          BookingType   @default(RESERVATION)
+  paymentType   PaymentType?
+  paymentStatus PaymentStatus @default(PENDING)
+  pictureUrl    String?
+  amountToPay   Float
 
+  token  TransferToken?
   review Review[]
 
   roomId String
@@ -199,9 +204,32 @@ model Booking {
   @@unique([startDate, endDate, roomId, bookingNumber], name: "uniqueBooking")
 }
 
+model TransferToken {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  token   String   @unique
+  expires DateTime
+
+  booking Booking @relation(fields: [id], references: [id], onDelete: Cascade)
+}
+
+enum BookingType {
+  RESERVATION //for user
+  MAINTENANCE //for tenant
+}
+
+enum PaymentType {
+  MANUAL //Manual Transfer
+  PAYGATE //Payment Gateway
+  WALLET //Digital Wallet
+}
+
 enum PaymentStatus {
   PENDING
   PAID
+  CANCELED
 }
 
 model Review {

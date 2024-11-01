@@ -16,7 +16,7 @@ import { tenantGuard } from "@/middlewares/auth-middleware";
 import { error } from "./middlewares/error-middleware";
 import cookieParser from "cookie-parser";
 import { getAllPropertyBeta } from "./controllers/sample-controller";
-import { paymentNotification } from "./controllers/payment-controller";
+import { paymentNotification } from "./controllers/payment/midtrans-payment-controller";
 
 const createApp = () => {
    const app = express();

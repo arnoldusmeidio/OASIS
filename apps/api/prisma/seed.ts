@@ -1563,6 +1563,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking1,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom1,
+                        amountToPay: 1500000,
                      },
                      {
                         id: uniqueIdBooking2,
@@ -1571,6 +1572,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking2,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom5,
+                        amountToPay: 2500000,
                      },
                      {
                         id: uniqueIdBooking3,
@@ -1579,6 +1581,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking3,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom6,
+                        amountToPay: 750000,
                      },
                      {
                         id: uniqueIdBooking4,
@@ -1587,6 +1590,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking4,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom7,
+                        amountToPay: 500000,
                      },
                      {
                         id: uniqueIdBooking5,
@@ -1595,6 +1599,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking5,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom8,
+                        amountToPay: 700000,
                      },
                      {
                         id: uniqueIdBooking6,
@@ -1603,6 +1608,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking6,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom9,
+                        amountToPay: 2800000,
                      },
                      {
                         id: uniqueIdBooking7,
@@ -1611,6 +1617,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking7,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom10,
+                        amountToPay: 1700000,
                      },
                      {
                         id: uniqueIdBooking39,
@@ -1619,6 +1626,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking39,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom13,
+                        amountToPay: 1500000,
                      },
                      {
                         id: uniqueIdBooking40,
@@ -1627,6 +1635,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking40,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom14,
+                        amountToPay: 3000000,
                      },
                      {
                         id: uniqueIdBooking41,
@@ -1635,6 +1644,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking41,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom15,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking42,
@@ -1643,6 +1653,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking42,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom16,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking43,
@@ -1651,6 +1662,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking43,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom17,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking44,
@@ -1659,6 +1671,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking44,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom18,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking45,
@@ -1667,6 +1680,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking45,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom19,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking46,
@@ -1675,6 +1689,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking46,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom20,
+                        amountToPay: 3500000,
                      },
                   ],
                },
@@ -1796,6 +1811,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking8,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom10,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking9,
@@ -1804,6 +1820,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking9,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom11,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking10,
@@ -1812,6 +1829,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking10,
                         paymentStatus: "PENDING",
                         roomId: uniqueIdRoom12,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking11,
@@ -1820,6 +1838,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking11,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom13,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking12,
@@ -1828,6 +1847,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking12,
                         paymentStatus: "PENDING",
                         roomId: uniqueIdRoom14,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking13,
@@ -1836,6 +1856,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking13,
                         paymentStatus: "PENDING",
                         roomId: uniqueIdRoom15,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking14,
@@ -1844,6 +1865,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking14,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom16,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking47,
@@ -1852,6 +1874,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking47,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom21,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking48,
@@ -1860,6 +1883,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking48,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom22,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking49,
@@ -1868,6 +1892,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking49,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom23,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking50,
@@ -1876,6 +1901,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking50,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom24,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking51,
@@ -1884,6 +1910,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking51,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom25,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking52,
@@ -1892,6 +1919,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking52,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom26,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking53,
@@ -1900,6 +1928,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking53,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom27,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking54,
@@ -1908,6 +1937,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking54,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom28,
+                        amountToPay: 3500000,
                      },
                   ],
                },
@@ -2029,6 +2059,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking15,
                         paymentStatus: "PENDING",
                         roomId: uniqueIdRoom17,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking16,
@@ -2037,6 +2068,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking16,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom18,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking17,
@@ -2045,6 +2077,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking17,
                         paymentStatus: "PENDING",
                         roomId: uniqueIdRoom19,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking18,
@@ -2053,6 +2086,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking18,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom20,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking19,
@@ -2061,6 +2095,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking19,
                         paymentStatus: "PENDING",
                         roomId: uniqueIdRoom21,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking34,
@@ -2069,6 +2104,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking34,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom8,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking35,
@@ -2077,6 +2113,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking35,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom9,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking36,
@@ -2085,6 +2122,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking36,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom10,
+                        amountToPay: 3500000,
                      },
 
                      {
@@ -2094,6 +2132,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking28,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom2,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking29,
@@ -2102,6 +2141,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking29,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom3,
+                        amountToPay: 3500000,
                      },
                   ],
                },
@@ -2194,6 +2234,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking20,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom22,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking21,
@@ -2202,6 +2243,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking21,
                         paymentStatus: "PENDING",
                         roomId: uniqueIdRoom23,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking22,
@@ -2210,6 +2252,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking22,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom24,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking23,
@@ -2218,6 +2261,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking23,
                         paymentStatus: "PENDING",
                         roomId: uniqueIdRoom25,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking24,
@@ -2226,6 +2270,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking24,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom26,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking25,
@@ -2234,6 +2279,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking25,
                         paymentStatus: "PENDING",
                         roomId: uniqueIdRoom27,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking26,
@@ -2242,6 +2288,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking26,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom28,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking27,
@@ -2250,6 +2297,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking27,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom1,
+                        amountToPay: 3500000,
                      },
 
                      {
@@ -2259,6 +2307,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking30,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom4,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking31,
@@ -2267,6 +2316,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking31,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom5,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking32,
@@ -2275,6 +2325,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking32,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom6,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking33,
@@ -2283,6 +2334,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking33,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom7,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking37,
@@ -2291,6 +2343,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking37,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom11,
+                        amountToPay: 3500000,
                      },
                      {
                         id: uniqueIdBooking38,
@@ -2299,6 +2352,7 @@ async function inputData() {
                         bookingNumber: uniqueIdBooking38,
                         paymentStatus: "PAID",
                         roomId: uniqueIdRoom12,
+                        amountToPay: 3500000,
                      },
                   ],
                },
