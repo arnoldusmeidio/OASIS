@@ -3,7 +3,7 @@
 import { addDays, differenceInCalendarDays, format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -71,6 +71,7 @@ export default function DatePickerForm({ className, roomId, currencyRate }: Date
 
       handleResize();
       window.addEventListener("resize", handleResize);
+      handleResize(); // Call immediately to set initial value
 
       return () => window.removeEventListener("resize", handleResize);
    }, []);
