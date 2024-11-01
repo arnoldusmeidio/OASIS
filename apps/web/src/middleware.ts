@@ -21,6 +21,18 @@ export default async function middleware(request: NextRequest) {
       }
    }
 
+   if (segments[0] === "search") {
+      if (userData?.role == "tenant") {
+         request.nextUrl.pathname = `/${locale}/unauthorized`;
+      }
+   }
+
+   if (!segments[0]) {
+      if (userData?.role == "tenant") {
+         request.nextUrl.pathname = `/${locale}/unauthorized`;
+      }
+   }
+
    if (segments.join("/") === "user/bookings/") {
       if (userData?.role !== "customer") {
          request.nextUrl.pathname = `/${locale}/unauthorized`;
@@ -41,7 +53,6 @@ export default async function middleware(request: NextRequest) {
 
    return response;
 }
-// export default createMiddleware(routing);
 
 export const config = {
    // Match only internationalized pathnames

@@ -218,7 +218,7 @@ async function inputData() {
                            url: "https://res.cloudinary.com/dbu0u9bln/image/upload/v1730207428/steven-ungermann-CVTmLMv5oG4-unsplash_gzxxno.jpg",
                         },
                         {
-                           url: "https://res.cloudinary.com/dbu0u9bln/image/upload/v1730207445/marvin-meyer-fBdlytm6Hp8-unsplash_smo0hq.jpg",
+                           url: "https://res.cloudinary.com/dbu0u9bln/image/upload/v1730180972/oleksii-piekhov-AN0BAzp8qi8-unsplash_cxuuyn.jpg",
                         },
                      ],
                   },
@@ -264,7 +264,7 @@ async function inputData() {
                            endDate: new Date("2024-11-31"),
                         },
                         {
-                           price: 4500000,
+                           price: 450000,
                            startDate: new Date("2024-11-11"),
                            endDate: new Date("2024-11-18"),
                         },
@@ -357,7 +357,7 @@ async function inputData() {
                   roomPrice: {
                      create: [
                         {
-                           price: 7500000,
+                           price: 750000,
                            startDate: new Date("2024-11-13"),
                            endDate: new Date("2024-11-14"),
                         },
@@ -959,7 +959,7 @@ async function inputData() {
          propertyPictures: {
             create: [
                {
-                  url: "https://res.cloudinary.com/dbu0u9bln/image/upload/v1730181332/Hotel_assset_li0r6g.jpg",
+                  url: "https://res.cloudinary.com/dbu0u9bln/image/upload/v1730465009/jamie-whiffen-yXBeuNhmbNY-unsplash_nbyklx.jpg",
                },
             ],
          },
@@ -981,7 +981,7 @@ async function inputData() {
                   roomPrice: {
                      create: [
                         { price: 320000, startDate: new Date("2024-11-10"), endDate: new Date("2024-11-20") },
-                        { price: 3100000, startDate: new Date("2024-11-21"), endDate: new Date("2024-11-30") },
+                        { price: 310000, startDate: new Date("2024-11-21"), endDate: new Date("2024-11-30") },
                      ],
                   },
                },
