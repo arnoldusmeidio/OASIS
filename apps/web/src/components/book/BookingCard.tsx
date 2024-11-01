@@ -94,7 +94,9 @@ export default function BookingCard() {
             </div>
             <h3 className="flex justify-center gap-2 align-middle">No booking found!</h3>
             <div className="flex justify-center gap-2 align-middle">
-               <Button className="w-[30%] max-w-[30%]">Book Now</Button>
+               <Link href="/" className="w-[30%] max-w-[30%]">
+                  <Button className="w-full">Book Now</Button>
+               </Link>
             </div>
          </div>
       );
@@ -152,6 +154,10 @@ export default function BookingCard() {
                               <div className="flex-1 space-y-1">
                                  <p className="text-sm font-medium leading-none">Payment Status:</p>
                                  <p className="text-muted-foreground text-sm">{e.paymentStatus}</p>
+                              </div>
+                              <div className="flex-1 space-y-1">
+                                 <p className="text-sm font-medium leading-none">Amount to Pay:</p>
+                                 <p className="text-muted-foreground text-sm">{e.amountToPay}</p>
                               </div>
                            </div>
                         </CardContent>

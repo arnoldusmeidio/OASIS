@@ -3,6 +3,14 @@ import prisma from "@/prisma";
 import { RequestWithUserId } from "@/types";
 import crypto from "crypto";
 
+async function getPriceForDate(date: Date, roomId: string, defaultPrice: number) {
+   const peakSeasons = await prisma.roomPrice.findMany({
+      where: { roomId },
+   });
+   const season = peakSeasons.find((season) => date >= season.startDate && date <= season.endDate);
+   return season ? season.price : defaultPrice;
+}
+
 export async function getBookings(req: RequestWithUserId, res: Response, next: NextFunction) {
    try {
       const id = (req as RequestWithUserId).user?.id;
@@ -156,6 +164,28 @@ export async function createBooking(req: Request, res: Response, next: NextFunct
          return true; // No overlap
       };
 
+      const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+      const firstDate = new Date(startDate).getTime();
+      //console.log(booking.startDate);
+      const secondDate = new Date(endDate).getTime();
+      //console.log(booking.endDate);
+      const diffDays = Math.ceil(Math.abs((firstDate - secondDate) / oneDay));
+      //console.log(diffDays);
+      //   const amount = booking.room.defaultPrice * diffDays;
+      //   console.log(amount);
+
+      let totalPrice = 0;
+
+      for (let i = 0; i < diffDays; i++) {
+         const currentDate = new Date(startDate);
+         currentDate.setDate(startDate.getDate() + i);
+
+         const priceForDate = getPriceForDate(currentDate, validRoom.id, validRoom.defaultPrice);
+         totalPrice += await priceForDate;
+      }
+
+      //   console.log(totalPrice);
+
       if (isDateRangeAvailable(existingBookings, newBooking)) {
          const createBooking = await prisma.booking.create({
             data: {
@@ -165,6 +195,7 @@ export async function createBooking(req: Request, res: Response, next: NextFunct
                roomId,
                customerId: user.id,
                paymentStatus: "PENDING",
+               amountToPay: totalPrice,
             },
          });
 

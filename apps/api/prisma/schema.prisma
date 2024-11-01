@@ -190,6 +190,7 @@ model Booking {
   paymentType   PaymentType?
   paymentStatus PaymentStatus @default(PENDING)
   pictureUrl    String?
+  amountToPay   Float
 
   token  TransferToken?
   review Review[]

@@ -5,6 +5,7 @@ export interface Booking {
    paymentType: string;
    startDate: Date;
    endDate: Date;
+   amountToPay: number;
    room: {
       price: number;
       pictureUrl: string;
