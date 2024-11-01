@@ -7,17 +7,17 @@ export default function NotFound() {
       <main className="bg-background flex h-screen text-center">
          {/* Not Found */}
          <div className="m-auto flex w-full max-w-xl flex-col items-center gap-5 p-5 md:p-0">
-            <figure className="flex items-center justify-center py-4">
+            <figure className="flex items-center justify-center py-4 pr-4">
                <Image
                   className="h-[150px] w-auto md:h-[250px]"
-                  src={"/forbidden.svg"}
-                  alt="Illustration of an X mark"
+                  src={"/question-mark.svg"}
+                  alt="Illustration of a person questioning"
                   height={328}
                   width={216}
                />
             </figure>
             <h3 className="font-inter text-third mb-7 text-2xl font-semibold md:text-5xl">
-               <span className="text-third">Sorry, you are not authorized to go there</span>
+               <span className="text-third">Sorry, but we don&apos;t have what you are looking for</span>
             </h3>
             <Link href="/">
                <Button className="w-[300px] text-sm md:text-base">Back to Home Page</Button>

@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import SearchNavbar from "@/components/header/SearchNavbar";
 import Banner from "@/components/Banner";
 import SmallCard from "@/components/SmallCard";
-import { exploreData, bannerData } from "@/static-db";
+import { exploreData } from "@/static-db";
 import MediumCard from "@/components/MediumCard";
 import Footer from "@/components/Footer";
 import { useTranslations } from "next-intl";

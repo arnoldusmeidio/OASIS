@@ -40,9 +40,9 @@ export default function DatePickerForm({ className, roomId, currencyRate }: Date
 
    const router = useRouter();
 
-   if (!roomId) {
-      return <h1>No Room Id provided</h1>;
-   }
+   // if (!roomId) {
+   //    return <h1>No Room Id provided</h1>;
+   // }
    async function onSubmit() {
       try {
          const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings/${roomId}`, {
@@ -63,18 +63,13 @@ export default function DatePickerForm({ className, roomId, currencyRate }: Date
       }
    }
 
-   //custom
    useEffect(() => {
+      // Custom hook to handle resizing and adjust the number of months displayed in the calendar
       function handleResize() {
-         if (window.innerWidth < 768) {
-            setNumberOfMonths(1);
-         } else {
-            setNumberOfMonths(2);
-         }
+         setNumberOfMonths(window.innerWidth < 768 ? 1 : 2);
       }
 
       handleResize();
-
       window.addEventListener("resize", handleResize);
 
       return () => window.removeEventListener("resize", handleResize);
@@ -92,7 +87,7 @@ export default function DatePickerForm({ className, roomId, currencyRate }: Date
       }
 
       fetchPrices();
-   }, []);
+   }, [roomId]);
 
    function handleSelect(selectedDate: DateRange | undefined) {
       if (selectedDate) {
@@ -162,7 +157,7 @@ export default function DatePickerForm({ className, roomId, currencyRate }: Date
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
                <Calendar
-                  initialFocus
+                  // initialFocus
                   mode="range"
                   defaultMonth={date?.from}
                   selected={date}

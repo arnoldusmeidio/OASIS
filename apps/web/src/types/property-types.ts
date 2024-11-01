@@ -19,11 +19,17 @@ export interface Property {
       url: string;
    }[];
    reviews: {
+      createdAt: Date;
       bookingId: string;
       customerId: string;
       id: string;
       review: string;
       star: number;
+      customer: {
+         user: {
+            name: string;
+         };
+      };
    }[];
    room: {
       defaultPrice: number;
@@ -36,7 +42,6 @@ export interface Property {
          endDate: Date;
       }[];
       roomPictures: {
-         // Move roomPictures inside each room object
          url: string;
       }[];
    }[];
