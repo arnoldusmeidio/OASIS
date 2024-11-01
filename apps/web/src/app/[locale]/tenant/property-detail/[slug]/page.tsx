@@ -56,7 +56,7 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
                      className="w-full rounded-lg shadow-md"
                      plugins={[
                         Autoplay({
-                           delay: 2000,
+                           delay: 5000,
                         }),
                      ]}
                   >
@@ -67,8 +67,8 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
                                  <Image
                                     src={picture.url || "/placeholder.jpg"}
                                     alt={`Property picture ${index + 1}`}
-                                    width={800}
-                                    height={400}
+                                    width={1500}
+                                    height={1000}
                                     className="h-72 w-full rounded-lg object-cover"
                                  />
                               </Link>
@@ -81,8 +81,8 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
                      <Image
                         src={getProperty.propertyPictures[0]?.url || "/placeholder.jpg"}
                         alt="Property picture"
-                        width={800}
-                        height={400}
+                        width={1500}
+                        height={1000}
                         className="h-72 w-full rounded-lg object-cover"
                      />
                   </Link>
@@ -112,7 +112,7 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
                                     className="w-full rounded-lg shadow-md"
                                     plugins={[
                                        Autoplay({
-                                          delay: 2000,
+                                          delay: 6000,
                                        }),
                                     ]}
                                  >
@@ -123,8 +123,8 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
                                                 <Image
                                                    src={pic.url || "/placeholder.jpg"}
                                                    alt={`Room picture ${i + 1}`}
-                                                   width={400}
-                                                   height={300}
+                                                   width={1500}
+                                                   height={1000}
                                                    className="h-60 w-full rounded-lg object-cover"
                                                 />
                                              </Link>
@@ -137,8 +137,8 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
                                     <Image
                                        src={room.roomPictures[0]?.url || "/placeholder.jpg"}
                                        alt="Room picture"
-                                       width={400}
-                                       height={300}
+                                       width={1500}
+                                       height={1000}
                                        className="h-60 w-full rounded-lg object-cover"
                                     />
                                  </Link>
