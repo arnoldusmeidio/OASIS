@@ -168,10 +168,10 @@ async function inputData() {
          name: "Oceanview Hotel",
          tenantId: budi.id,
          description: "A beautiful Hotel with ocean views.",
-         address: "Jl. Rawa Buaya No.2, Jakarta",
+         address: "Jl. Binaria 1, RW.10, Ancol, Kec. Pademangan, Jkt Utara, Daerah Khusus Ibukota Jakarta 14430",
          city: "Jakarta",
-         lat: -6.158117400000001,
-         lng: 106.7307957,
+         lat: -6.126926,
+         lng: 106.839294,
          category: "Hotel",
          propertyPictures: {
             create: [
@@ -198,7 +198,7 @@ async function inputData() {
                   id: uniqueIdRoom1,
                   type: "Deluxe Room",
                   description: "Spacious room with a king-sized bed and ocean view.",
-                  defaultPrice: 2500000,
+                  defaultPrice: 250000,
                   roomCapacity: 2,
                   roomPictures: {
                      create: [
@@ -225,12 +225,12 @@ async function inputData() {
                   roomPrice: {
                      create: [
                         {
-                           price: 3500000,
+                           price: 350000,
                            startDate: new Date("2024-11-11"),
                            endDate: new Date("2024-11-31"),
                         },
                         {
-                           price: 3000000,
+                           price: 300000,
                            startDate: new Date("2024-11-01"),
                            endDate: new Date("2024-11-08"),
                         },
@@ -254,12 +254,12 @@ async function inputData() {
                         },
                      ],
                   },
-                  defaultPrice: 4000000,
+                  defaultPrice: 400000,
                   roomCapacity: 4,
                   roomPrice: {
                      create: [
                         {
-                           price: 5000000,
+                           price: 500000,
                            startDate: new Date("2024-11-21"),
                            endDate: new Date("2024-11-31"),
                         },
@@ -315,17 +315,17 @@ async function inputData() {
                         },
                      ],
                   },
-                  defaultPrice: 1500000,
+                  defaultPrice: 150000,
                   roomCapacity: 2,
                   roomPrice: {
                      create: [
                         {
-                           price: 2000000,
+                           price: 200000,
                            startDate: new Date("2024-11-12"),
                            endDate: new Date("2024-11-15"),
                         },
                         {
-                           price: 1800000,
+                           price: 180000,
                            startDate: new Date("2024-11-16"),
                            endDate: new Date("2024-11-19"),
                         },
@@ -352,7 +352,7 @@ async function inputData() {
                         },
                      ],
                   },
-                  defaultPrice: 6000000,
+                  defaultPrice: 600000,
                   roomCapacity: 4,
                   roomPrice: {
                      create: [
@@ -362,7 +362,7 @@ async function inputData() {
                            endDate: new Date("2024-11-14"),
                         },
                         {
-                           price: 7000000,
+                           price: 700000,
                            startDate: new Date("2024-11-17"),
                            endDate: new Date("2024-11-18"),
                         },
@@ -397,7 +397,7 @@ async function inputData() {
                   id: uniqueIdRoom5,
                   type: "Deluxe Suite",
                   description: "Spacious suite with private pool and garden view.",
-                  defaultPrice: 4200000,
+                  defaultPrice: 420000,
                   roomCapacity: 2,
                   roomPictures: {
                      create: [
@@ -408,8 +408,8 @@ async function inputData() {
                   },
                   roomPrice: {
                      create: [
-                        { price: 4600000, startDate: new Date("2024-11-11"), endDate: new Date("2024-11-31") },
-                        { price: 4000000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-08") },
+                        { price: 460000, startDate: new Date("2024-11-11"), endDate: new Date("2024-11-31") },
+                        { price: 400000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-08") },
                      ],
                   },
                },
@@ -441,7 +441,7 @@ async function inputData() {
                   id: uniqueIdRoom6,
                   type: "Standard Room",
                   description: "Modern room with all essential amenities.",
-                  defaultPrice: 2200000,
+                  defaultPrice: 220000,
                   roomCapacity: 2,
                   roomPictures: {
                      create: [
@@ -452,8 +452,8 @@ async function inputData() {
                   },
                   roomPrice: {
                      create: [
-                        { price: 2500000, startDate: new Date("2024-11-15"), endDate: new Date("2024-11-30") },
-                        { price: 2300000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-10") },
+                        { price: 250000, startDate: new Date("2024-11-15"), endDate: new Date("2024-11-30") },
+                        { price: 230000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-10") },
                      ],
                   },
                },
@@ -485,7 +485,7 @@ async function inputData() {
                   id: uniqueIdRoom7,
                   type: "Penthouse Suite",
                   description: "Spacious penthouse with a stunning city view.",
-                  defaultPrice: 5500000,
+                  defaultPrice: 550000,
                   roomCapacity: 4,
                   roomPictures: {
                      create: [
@@ -496,8 +496,8 @@ async function inputData() {
                   },
                   roomPrice: {
                      create: [
-                        { price: 6000000, startDate: new Date("2024-11-11"), endDate: new Date("2024-11-31") },
-                        { price: 5800000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-10") },
+                        { price: 600000, startDate: new Date("2024-11-11"), endDate: new Date("2024-11-31") },
+                        { price: 580000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-10") },
                      ],
                   },
                },
@@ -529,7 +529,7 @@ async function inputData() {
                   id: uniqueIdRoom8,
                   type: "Standard Room",
                   description: "Comfortable room with basic amenities.",
-                  defaultPrice: 1800000,
+                  defaultPrice: 180000,
                   roomCapacity: 2,
                   roomPictures: {
                      create: [
@@ -540,8 +540,8 @@ async function inputData() {
                   },
                   roomPrice: {
                      create: [
-                        { price: 2000000, startDate: new Date("2024-11-11"), endDate: new Date("2024-11-30") },
-                        { price: 1900000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-10") },
+                        { price: 200000, startDate: new Date("2024-11-11"), endDate: new Date("2024-11-30") },
+                        { price: 190000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-10") },
                      ],
                   },
                },
@@ -573,7 +573,7 @@ async function inputData() {
                   id: uniqueIdRoom9,
                   type: "Luxury Suite",
                   description: "A cozy suite with garden and hill views.",
-                  defaultPrice: 3000000,
+                  defaultPrice: 300000,
                   roomCapacity: 2,
                   roomPictures: {
                      create: [
@@ -584,8 +584,8 @@ async function inputData() {
                   },
                   roomPrice: {
                      create: [
-                        { price: 3500000, startDate: new Date("2024-11-11"), endDate: new Date("2024-11-31") },
-                        { price: 3200000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-08") },
+                        { price: 350000, startDate: new Date("2024-11-11"), endDate: new Date("2024-11-31") },
+                        { price: 320000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-08") },
                      ],
                   },
                },
@@ -617,7 +617,7 @@ async function inputData() {
                   id: uniqueIdRoom10,
                   type: "Executive Room",
                   description: "Spacious room with city view.",
-                  defaultPrice: 2700000,
+                  defaultPrice: 270000,
                   roomCapacity: 2,
                   roomPictures: {
                      create: [
@@ -628,8 +628,8 @@ async function inputData() {
                   },
                   roomPrice: {
                      create: [
-                        { price: 2900000, startDate: new Date("2024-11-15"), endDate: new Date("2024-11-30") },
-                        { price: 2800000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-10") },
+                        { price: 290000, startDate: new Date("2024-11-15"), endDate: new Date("2024-11-30") },
+                        { price: 280000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-10") },
                      ],
                   },
                },
@@ -661,7 +661,7 @@ async function inputData() {
                   id: uniqueIdRoom11,
                   type: "Penthouse",
                   description: "Spacious penthouse with a beautiful river view.",
-                  defaultPrice: 6000000,
+                  defaultPrice: 600000,
                   roomCapacity: 4,
                   roomPictures: {
                      create: [
@@ -672,8 +672,8 @@ async function inputData() {
                   },
                   roomPrice: {
                      create: [
-                        { price: 6500000, startDate: new Date("2024-11-11"), endDate: new Date("2024-11-31") },
-                        { price: 6200000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-08") },
+                        { price: 650000, startDate: new Date("2024-11-11"), endDate: new Date("2024-11-31") },
+                        { price: 620000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-08") },
                      ],
                   },
                },
@@ -705,7 +705,7 @@ async function inputData() {
                   id: uniqueIdRoom12,
                   type: "Ocean Suite",
                   description: "Suite with a private balcony overlooking the ocean.",
-                  defaultPrice: 4800000,
+                  defaultPrice: 480000,
                   roomCapacity: 3,
                   roomPictures: {
                      create: [
@@ -716,8 +716,8 @@ async function inputData() {
                   },
                   roomPrice: {
                      create: [
-                        { price: 5200000, startDate: new Date("2024-11-11"), endDate: new Date("2024-11-31") },
-                        { price: 5000000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-08") },
+                        { price: 520000, startDate: new Date("2024-11-11"), endDate: new Date("2024-11-31") },
+                        { price: 500000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-08") },
                      ],
                   },
                },
@@ -749,7 +749,7 @@ async function inputData() {
                   id: uniqueIdRoom13,
                   type: "Private Villa",
                   description: "Spacious villa with private garden and pool.",
-                  defaultPrice: 5800000,
+                  defaultPrice: 580000,
                   roomCapacity: 4,
                   roomPictures: {
                      create: [
@@ -760,8 +760,8 @@ async function inputData() {
                   },
                   roomPrice: {
                      create: [
-                        { price: 6300000, startDate: new Date("2024-11-15"), endDate: new Date("2024-11-30") },
-                        { price: 6000000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-10") },
+                        { price: 630000, startDate: new Date("2024-11-15"), endDate: new Date("2024-11-30") },
+                        { price: 600000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-10") },
                      ],
                   },
                },
@@ -775,8 +775,8 @@ async function inputData() {
          name: "Jogja Heritage Hotel",
          tenantId: woody.id,
          description: "A luxurious hotel near Jogja's cultural sites.",
-         address: "Jl. Malioboro No.12, Jogja",
-         city: "Jogja",
+         address: "Jl. Malioboro No.12, Yogyakarta",
+         city: "Yogyakarta",
          lat: -7.797068,
          lng: 110.370529,
          category: "Hotel",
@@ -793,7 +793,7 @@ async function inputData() {
                   id: uniqueIdRoom14,
                   type: "Heritage Suite",
                   description: "Suite inspired by Jogja's rich cultural heritage.",
-                  defaultPrice: 4500000,
+                  defaultPrice: 450000,
                   roomCapacity: 2,
                   roomPictures: {
                      create: [
@@ -804,8 +804,8 @@ async function inputData() {
                   },
                   roomPrice: {
                      create: [
-                        { price: 5000000, startDate: new Date("2024-11-15"), endDate: new Date("2024-11-30") },
-                        { price: 4800000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-10") },
+                        { price: 500000, startDate: new Date("2024-11-15"), endDate: new Date("2024-11-30") },
+                        { price: 480000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-10") },
                      ],
                   },
                },
@@ -818,9 +818,9 @@ async function inputData() {
       data: {
          name: "Jogja Riverside Villa",
          tenantId: woody.id,
-         description: "A serene riverside villa in the heart of Jogja.",
-         address: "Jl. Tirtodipuran No.13, Jogja",
-         city: "Jogja",
+         description: "A serene riverside villa in the heart of Yogyakarta.",
+         address: "Jl. Tirtodipuran No.13, Yogyakarta",
+         city: "Yogyakarta",
          lat: -7.810849,
          lng: 110.362835,
          category: "Villa",
@@ -837,7 +837,7 @@ async function inputData() {
                   id: uniqueIdRoom15,
                   type: "Riverfront Villa",
                   description: "Villa with direct access to a tranquil riverside view.",
-                  defaultPrice: 5200000,
+                  defaultPrice: 520000,
                   roomCapacity: 4,
                   roomPictures: {
                      create: [
@@ -848,8 +848,8 @@ async function inputData() {
                   },
                   roomPrice: {
                      create: [
-                        { price: 5800000, startDate: new Date("2024-11-10"), endDate: new Date("2024-11-20") },
-                        { price: 5600000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-08") },
+                        { price: 580000, startDate: new Date("2024-11-10"), endDate: new Date("2024-11-20") },
+                        { price: 560000, startDate: new Date("2024-12-01"), endDate: new Date("2024-12-08") },
                      ],
                   },
                },
@@ -881,7 +881,7 @@ async function inputData() {
                   id: uniqueIdRoom16,
                   type: "Garden Suite",
                   description: "Suite with a private garden and luxurious amenities.",
-                  defaultPrice: 4000000,
+                  defaultPrice: 400000,
                   roomCapacity: 2,
                   roomPictures: {
                      create: [
@@ -892,8 +892,8 @@ async function inputData() {
                   },
                   roomPrice: {
                      create: [
-                        { price: 4500000, startDate: new Date("2024-11-01"), endDate: new Date("2024-11-10") },
-                        { price: 4200000, startDate: new Date("2024-11-11"), endDate: new Date("2024-11-20") },
+                        { price: 450000, startDate: new Date("2024-11-01"), endDate: new Date("2024-11-10") },
+                        { price: 420000, startDate: new Date("2024-11-11"), endDate: new Date("2024-11-20") },
                      ],
                   },
                },
@@ -925,7 +925,7 @@ async function inputData() {
                   id: uniqueIdRoom17,
                   type: "Mountain Suite",
                   description: "Suite with panoramic views of the Bandung mountains.",
-                  defaultPrice: 3500000,
+                  defaultPrice: 350000,
                   roomCapacity: 2,
                   roomPictures: {
                      create: [
@@ -936,8 +936,8 @@ async function inputData() {
                   },
                   roomPrice: {
                      create: [
-                        { price: 3700000, startDate: new Date("2024-11-05"), endDate: new Date("2024-11-15") },
-                        { price: 3600000, startDate: new Date("2024-11-16"), endDate: new Date("2024-11-30") },
+                        { price: 370000, startDate: new Date("2024-11-05"), endDate: new Date("2024-11-15") },
+                        { price: 360000, startDate: new Date("2024-11-16"), endDate: new Date("2024-11-30") },
                      ],
                   },
                },
@@ -969,7 +969,7 @@ async function inputData() {
                   id: uniqueIdRoom18,
                   type: "Executive Room",
                   description: "Spacious room with modern amenities in central Jakarta.",
-                  defaultPrice: 3000000,
+                  defaultPrice: 300000,
                   roomCapacity: 2,
                   roomPictures: {
                      create: [
@@ -980,7 +980,7 @@ async function inputData() {
                   },
                   roomPrice: {
                      create: [
-                        { price: 3200000, startDate: new Date("2024-11-10"), endDate: new Date("2024-11-20") },
+                        { price: 320000, startDate: new Date("2024-11-10"), endDate: new Date("2024-11-20") },
                         { price: 3100000, startDate: new Date("2024-11-21"), endDate: new Date("2024-11-30") },
                      ],
                   },
@@ -1013,7 +1013,7 @@ async function inputData() {
                   id: uniqueIdRoom19,
                   type: "Sunrise Suite",
                   description: "Apartment suite with beautiful sunrise views and modern amenities.",
-                  defaultPrice: 5500000,
+                  defaultPrice: 550000,
                   roomCapacity: 3,
                   roomPictures: {
                      create: [
@@ -1025,12 +1025,12 @@ async function inputData() {
                   roomPrice: {
                      create: [
                         {
-                           price: 6000000,
+                           price: 600000,
                            startDate: new Date("2024-12-15"),
                            endDate: new Date("2024-12-31"),
                         },
                         {
-                           price: 5800000,
+                           price: 580000,
                            startDate: new Date("2024-11-25"),
                            endDate: new Date("2024-12-10"),
                         },
@@ -1065,7 +1065,7 @@ async function inputData() {
                   id: uniqueIdRoom20,
                   type: "Ocean View Suite",
                   description: "Suite with direct views of the beach and luxurious amenities.",
-                  defaultPrice: 5500000,
+                  defaultPrice: 550000,
                   roomCapacity: 2,
                   roomPictures: {
                      create: [
@@ -1077,12 +1077,12 @@ async function inputData() {
                   roomPrice: {
                      create: [
                         {
-                           price: 6500000,
+                           price: 650000,
                            startDate: new Date("2024-11-11"),
                            endDate: new Date("2024-11-31"),
                         },
                         {
-                           price: 6000000,
+                           price: 600000,
                            startDate: new Date("2024-12-01"),
                            endDate: new Date("2024-12-15"),
                         },
@@ -1117,7 +1117,7 @@ async function inputData() {
                   id: uniqueIdRoom21,
                   type: "Garden Villa",
                   description: "A private villa with garden views, perfect for relaxation.",
-                  defaultPrice: 4800000,
+                  defaultPrice: 480000,
                   roomCapacity: 2,
                   roomPictures: {
                      create: [
@@ -1129,7 +1129,7 @@ async function inputData() {
                   roomPrice: {
                      create: [
                         {
-                           price: 5800000,
+                           price: 580000,
                            startDate: new Date("2024-12-01"),
                            endDate: new Date("2024-12-15"),
                         },
@@ -1164,7 +1164,7 @@ async function inputData() {
                   id: uniqueIdRoom22,
                   type: "Standard Apartment",
                   description: "Modern one-bedroom apartment with city views.",
-                  defaultPrice: 2000000,
+                  defaultPrice: 200000,
                   roomCapacity: 2,
                   roomPictures: {
                      create: [
@@ -1176,12 +1176,12 @@ async function inputData() {
                   roomPrice: {
                      create: [
                         {
-                           price: 2200000,
+                           price: 220000,
                            startDate: new Date("2024-11-01"),
                            endDate: new Date("2024-11-15"),
                         },
                         {
-                           price: 2500000,
+                           price: 250000,
                            startDate: new Date("2024-12-01"),
                            endDate: new Date("2024-12-15"),
                         },
@@ -1216,7 +1216,7 @@ async function inputData() {
                   id: uniqueIdRoom23,
                   type: "Pool Villa",
                   description: "Private villa with a personal pool and sunset views.",
-                  defaultPrice: 6800000,
+                  defaultPrice: 680000,
                   roomCapacity: 4,
                   roomPictures: {
                      create: [
@@ -1228,7 +1228,7 @@ async function inputData() {
                   roomPrice: {
                      create: [
                         {
-                           price: 7200000,
+                           price: 720000,
                            startDate: new Date("2024-12-01"),
                            endDate: new Date("2024-12-20"),
                         },
@@ -1263,7 +1263,7 @@ async function inputData() {
                   id: uniqueIdRoom24,
                   type: "Seaside Apartment",
                   description: "Comfortable apartment with direct beach access.",
-                  defaultPrice: 3200000,
+                  defaultPrice: 320000,
                   roomCapacity: 2,
                   roomPictures: {
                      create: [
@@ -1275,7 +1275,7 @@ async function inputData() {
                   roomPrice: {
                      create: [
                         {
-                           price: 3800000,
+                           price: 380000,
                            startDate: new Date("2024-11-15"),
                            endDate: new Date("2024-11-30"),
                         },
@@ -1310,7 +1310,7 @@ async function inputData() {
                   id: uniqueIdRoom25,
                   type: "Bay View Suite",
                   description: "Spacious suite with breathtaking views of Jimbaran Bay.",
-                  defaultPrice: 7200000,
+                  defaultPrice: 720000,
                   roomCapacity: 3,
                   roomPictures: {
                      create: [
@@ -1322,12 +1322,12 @@ async function inputData() {
                   roomPrice: {
                      create: [
                         {
-                           price: 8000000,
+                           price: 800000,
                            startDate: new Date("2024-12-01"),
                            endDate: new Date("2024-12-20"),
                         },
                         {
-                           price: 7500000,
+                           price: 750000,
                            startDate: new Date("2024-11-15"),
                            endDate: new Date("2024-11-30"),
                         },
@@ -1362,7 +1362,7 @@ async function inputData() {
                   id: uniqueIdRoom26,
                   type: "Surf Villa",
                   description: "Stylish villa with private pool, perfect for surfers.",
-                  defaultPrice: 6000000,
+                  defaultPrice: 600000,
                   roomCapacity: 2,
                   roomPictures: {
                      create: [
@@ -1374,12 +1374,12 @@ async function inputData() {
                   roomPrice: {
                      create: [
                         {
-                           price: 6800000,
+                           price: 680000,
                            startDate: new Date("2024-12-05"),
                            endDate: new Date("2024-12-15"),
                         },
                         {
-                           price: 6500000,
+                           price: 650000,
                            startDate: new Date("2024-11-10"),
                            endDate: new Date("2024-11-25"),
                         },
@@ -1414,7 +1414,7 @@ async function inputData() {
                   id: uniqueIdRoom27,
                   type: "Luxury Apartment",
                   description: "Spacious apartment with luxurious amenities and sea views.",
-                  defaultPrice: 8500000,
+                  defaultPrice: 850000,
                   roomCapacity: 4,
                   roomPictures: {
                      create: [
@@ -1426,12 +1426,12 @@ async function inputData() {
                   roomPrice: {
                      create: [
                         {
-                           price: 9000000,
+                           price: 900000,
                            startDate: new Date("2024-12-10"),
                            endDate: new Date("2024-12-25"),
                         },
                         {
-                           price: 8800000,
+                           price: 880000,
                            startDate: new Date("2024-11-20"),
                            endDate: new Date("2024-11-30"),
                         },
@@ -1466,7 +1466,7 @@ async function inputData() {
                   id: uniqueIdRoom28,
                   type: "Beachfront Villa",
                   description: "Spacious villa with private pool and beach access.",
-                  defaultPrice: 9000000,
+                  defaultPrice: 900000,
                   roomCapacity: 4,
                   roomPictures: {
                      create: [
@@ -1478,12 +1478,12 @@ async function inputData() {
                   roomPrice: {
                      create: [
                         {
-                           price: 9500000,
+                           price: 950000,
                            startDate: new Date("2024-12-01"),
                            endDate: new Date("2024-12-15"),
                         },
                         {
-                           price: 9300000,
+                           price: 930000,
                            startDate: new Date("2024-11-20"),
                            endDate: new Date("2024-11-30"),
                         },
@@ -1518,7 +1518,7 @@ async function inputData() {
                   id: uniqueIdRoom29,
                   type: "Jungle Suite",
                   description: "A cozy suite surrounded by lush jungle.",
-                  defaultPrice: 6000000,
+                  defaultPrice: 600000,
                   roomCapacity: 2,
                   roomPictures: {
                      create: [
@@ -1530,12 +1530,12 @@ async function inputData() {
                   roomPrice: {
                      create: [
                         {
-                           price: 6500000,
+                           price: 650000,
                            startDate: new Date("2024-12-10"),
                            endDate: new Date("2024-12-25"),
                         },
                         {
-                           price: 6200000,
+                           price: 620000,
                            startDate: new Date("2024-11-15"),
                            endDate: new Date("2024-11-30"),
                         },

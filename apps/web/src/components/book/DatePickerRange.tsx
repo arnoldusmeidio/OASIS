@@ -1,6 +1,6 @@
 "use client";
 
-import { addDays, format } from "date-fns";
+import { addDays, differenceInCalendarDays, format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { useEffect, useState } from "react";
@@ -12,22 +12,28 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { useParams } from "next/navigation";
 import { useRouter } from "@/i18n/routing";
 import { RoomStatus } from "@/types/room-status";
 import { checkRoomBooking } from "@/helpers/check-room-booking";
 import { checkRoomPrice } from "@/helpers/check-room-price";
+import { useUserStore } from "@/stores/useUserStore";
+import { currency } from "@/lib/currency";
 
-export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLDivElement>) {
+interface DatePickerFormProps extends React.HTMLAttributes<HTMLDivElement> {
+   roomId: string;
+   currencyRate: number | null;
+}
+
+export default function DatePickerForm({ className, roomId, currencyRate }: DatePickerFormProps) {
+   const { user } = useUserStore();
+
    const [date, setDate] = useState<DateRange | undefined>({
       from: undefined,
       to: undefined,
    });
-
+   const [totalPrice, setTotalPrice] = useState<number>(0);
+   const [totalNights, setTotalNights] = useState<number>(0);
    const form = useForm();
-
-   const params = useParams<any>();
-   const roomId = params.slug; // get the room id from url
 
    const [roomStatus, setRoomStatus] = useState<RoomStatus>();
    const [numberOfMonths, setNumberOfMonths] = useState<number>(2);
@@ -60,7 +66,7 @@ export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLD
    //custom
    useEffect(() => {
       function handleResize() {
-         if (window.innerWidth < 650) {
+         if (window.innerWidth < 768) {
             setNumberOfMonths(1);
          } else {
             setNumberOfMonths(2);
@@ -94,15 +100,22 @@ export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLD
 
          if (from && to && from.getTime() === to.getTime()) {
             setDate(undefined);
+            setTotalPrice(0);
+            setTotalNights(0);
             return;
          }
 
          if (from && to) {
             const selectedDatesArray: Date[] = [];
             let currentDate = from;
+            let sum = 0;
+
+            const nights = differenceInCalendarDays(to, from);
+            setTotalNights(nights);
 
             while (currentDate <= to) {
                selectedDatesArray.push(currentDate);
+               sum += checkRoomPrice(currentDate, roomStatus) || 0;
                currentDate = addDays(currentDate, 1);
             }
 
@@ -110,24 +123,28 @@ export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLD
 
             if (isBooked) {
                setDate({ from: to, to: undefined });
+               setTotalPrice(0);
+               setTotalNights(0);
                return;
             }
+            setTotalPrice(sum);
          }
 
          setDate(selectedDate);
       } else {
          setDate(undefined);
+         setTotalPrice(0);
       }
    }
 
    return (
-      <div className={cn("grid gap-2", className)}>
+      <div className={cn("grid gap-6", className)}>
          <Popover>
             <PopoverTrigger asChild>
                <Button
                   id="date"
                   variant={"outline"}
-                  className={cn("w-[300px] justify-start text-left font-normal", !date && "text-muted-foreground")}
+                  className={cn("w-full justify-start text-left font-normal", !date && "text-muted-foreground")}
                >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {date?.from ? (
@@ -139,7 +156,7 @@ export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLD
                         format(date.from, "LLL dd, y")
                      )
                   ) : (
-                     <span>Pick a date</span>
+                     <span>Select your dates</span>
                   )}
                </Button>
             </PopoverTrigger>
@@ -156,7 +173,11 @@ export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLD
                         return (
                            <div className="flex flex-col items-center justify-center">
                               <span>{date.getDate()}</span>
-                              <span className="text-[10px] text-green-500">{checkRoomPrice(date, roomStatus)}</span>
+                              <span className="text-[10px] text-green-500">
+                                 {user?.currency != "IDR"
+                                    ? checkRoomPrice(date, roomStatus, currencyRate)
+                                    : checkRoomPrice(date, roomStatus)}
+                              </span>
                            </div>
                         );
                      },
@@ -165,7 +186,16 @@ export default function DatePickerForm({ className }: React.HTMLAttributes<HTMLD
                />
             </PopoverContent>
          </Popover>
-         <Button onClick={onSubmit}>Submit</Button>
+         <div className="flex flex-col gap-2">
+            <div>Total Nights: {totalNights}</div>
+            <div>
+               Total Price:{" "}
+               {!currencyRate
+                  ? currency(totalPrice * 1000, "IDR", 1)
+                  : currency(totalPrice * 1000, user?.currency, currencyRate)}
+            </div>
+         </div>
+         <Button onClick={onSubmit}>Create Booking</Button>
       </div>
    );
 }
