@@ -17,7 +17,7 @@ export default function PropertyPicturesCarousel({ property }: Props) {
                className="w-full rounded-lg shadow-md"
                plugins={[
                   Autoplay({
-                     delay: 2000,
+                     delay: 5000,
                   }),
                ]}
             >

@@ -16,7 +16,7 @@ export default function RoomPicturesCarousel({ room }: Props) {
                className="w-full rounded-lg pt-5 shadow-md"
                plugins={[
                   Autoplay({
-                     delay: 2000,
+                     delay: 5000,
                   }),
                ]}
             >

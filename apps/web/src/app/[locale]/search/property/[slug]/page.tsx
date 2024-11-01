@@ -1,7 +1,6 @@
 "use client";
 
 import FormError from "@/components/FormError";
-import SearchNavbar from "@/components/header/SearchNavbar";
 import PropertyPicturesCarousel from "@/components/property/PropertyPicturesCarousel";
 import CurrentLocButton from "@/components/tenant/maps-button";
 import { Property } from "@/types/property-types";
@@ -9,15 +8,15 @@ import { useEffect, useState } from "react";
 import { APIProvider, Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import RoomPicturesCarousel from "@/components/property/RoomPicturesCarousel";
 import { currency } from "@/lib/currency";
 import useCurrencyStore from "@/stores/useCurrencyStore";
 import { useUserStore } from "@/stores/useUserStore";
 import PropertySkeleton from "@/components/PropertySkeleton";
 import CheckAvailabilityButton from "@/components/property/CheckAvailabilityButton";
+import CommentsAccordion from "@/components/property/CommentsAccordion";
 
-export default function page({ params }: { params: { slug: string } }) {
+export default function SearchedPropertyPage({ params }: { params: { slug: string } }) {
    const [property, setProperty] = useState<Property>();
    const [isLoading, setIsLoading] = useState(true);
    const [currencyLoading, setCurrencyLoading] = useState(true);
@@ -76,7 +75,15 @@ export default function page({ params }: { params: { slug: string } }) {
                {/* Property Details */}
                <div className="my-5 flex flex-col lg:flex-row">
                   <div className="w-full lg:w-2/3 lg:pr-4">
-                     <h2 className="text-xl font-semibold">{property.name}</h2>
+                     <div className="mb-2 flex items-center justify-between">
+                        <h2 className="text-xl font-semibold">{property.name}</h2>
+                        <div className="flex items-center gap-2">
+                           <span className="text-lg">Rating:</span>
+                           <span className="text-background flex-shink-0 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 text-sm font-bold">
+                              {property.averageRating.star ? `${property.averageRating.star.toFixed(1)}` : "N/A"}
+                           </span>
+                        </div>
+                     </div>
                      <p className="mt-1 text-gray-600">{property.description}</p>
                      <p className="mt-1 text-gray-500">
                         📍 {property.address}, {property.city}
@@ -86,6 +93,17 @@ export default function page({ params }: { params: { slug: string } }) {
                      <Badge className="mt-2 w-fit bg-blue-100 text-blue-800 hover:bg-blue-100">
                         {property.category}
                      </Badge>
+
+                     {/* Amenities */}
+                     <div className="mt-4 flex justify-between">
+                        <div className="flex flex-col gap-2">
+                           <span className="block">Amenities:</span>
+                           <div className="flex flex-wrap space-x-2 text-sm text-gray-600">
+                              <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Wi-Fi</Badge>
+                              <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Breakfast</Badge>
+                           </div>
+                        </div>
+                     </div>
 
                      {/* Rooms */}
                      {property.room.map((room) => (
@@ -119,39 +137,34 @@ export default function page({ params }: { params: { slug: string } }) {
                      ))}
                   </div>
 
-                  {/* Google Maps */}
-                  <div className="mt-5 h-80 w-full lg:mt-0 lg:w-1/3">
-                     <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
-                        <Map
-                           defaultCenter={{ lat: property.lat, lng: property.lng }}
-                           defaultZoom={15}
-                           disableDefaultUI={true}
-                           mapId={process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID}
-                        >
-                           <AdvancedMarker position={{ lat: property.lat, lng: property.lng }}>
-                              <Pin />
-                           </AdvancedMarker>
-                           {userLoc && (
-                              <>
-                                 <AdvancedMarker position={userLoc}>
-                                    <Pin />
-                                 </AdvancedMarker>
-                                 {/* <CurrentLocButton userLoc={userLoc} /> */}
-                              </>
-                           )}
-                        </Map>
-                     </APIProvider>
-                  </div>
-               </div>
+                  <div className="mt-5w-full flex flex-col gap-2 lg:mt-0 lg:w-1/3">
+                     {/* Google Maps */}
+                     <div className="h-80 w-full">
+                        <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
+                           <Map
+                              defaultCenter={{ lat: property.lat, lng: property.lng }}
+                              defaultZoom={15}
+                              disableDefaultUI={true}
+                              mapId={process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID}
+                           >
+                              <AdvancedMarker position={{ lat: property.lat, lng: property.lng }}>
+                                 <Pin />
+                              </AdvancedMarker>
+                              {userLoc && (
+                                 <>
+                                    <AdvancedMarker position={userLoc}>
+                                       <Pin />
+                                    </AdvancedMarker>
+                                    {/* <CurrentLocButton userLoc={userLoc} /> */}
+                                 </>
+                              )}
+                           </Map>
+                        </APIProvider>
+                     </div>
 
-               {/* Amenities */}
-               <div className="mt-4 flex justify-between">
-                  <div className="flex flex-col gap-2">
-                     <span className="block">Amenities:</span>
-                     <div className="flex flex-wrap space-x-2 text-sm text-gray-600">
-                        <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Wi-Fi</Badge>
-                        <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Breakfast</Badge>
-                        {/* Add more amenities as needed */}
+                     {/* Comments */}
+                     <div>
+                        <CommentsAccordion reviews={property.reviews} />
                      </div>
                   </div>
                </div>

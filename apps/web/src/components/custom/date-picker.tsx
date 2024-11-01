@@ -54,7 +54,7 @@ export function DatePicker({ className }: React.HTMLAttributes<HTMLDivElement>) 
       }
 
       fetchPrices();
-   }, []);
+   }, [roomId]);
 
    function handleSelect(selectedDate: DateRange | undefined) {
       if (selectedDate) {
