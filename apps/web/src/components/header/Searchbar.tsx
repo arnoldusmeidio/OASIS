@@ -13,13 +13,37 @@ import { FormTypeSearch, useFormSearch } from "@/schemas/search-form-schemas";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { SubmitHandler } from "react-hook-form";
 import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 
 type FormFields = "location" | "dates" | "adults" | "children" | "rooms" | "dates.from" | "dates.to";
 
+type Props = {
+   searchParams: SearchParams;
+};
+
+type SearchParams = {
+   location: string;
+   group_adults: string;
+   group_children: string;
+   no_rooms: string;
+   checkin: string;
+   checkout: string;
+};
+
 export default function Searchbar() {
+   const searchParams = useSearchParams();
+   const searchedQuery = {
+      searchedLocation: searchParams.get("location"),
+      groupAdults: searchParams.get("group_adults"),
+      groupChildren: searchParams.get("group_children"),
+      noOfRooms: searchParams.get("no_rooms"),
+      checkin: searchParams.get("checkin"),
+      checkout: searchParams.get("checkout"),
+   };
+
    const router = useRouter();
    const t = useTranslations("Layout.SearchBar");
-   const form = useFormSearch();
+   const form = useFormSearch(searchedQuery);
 
    const {
       setValue,
