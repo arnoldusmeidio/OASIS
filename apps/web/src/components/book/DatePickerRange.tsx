@@ -109,7 +109,7 @@ export default function DatePickerForm({ className, roomId, currencyRate }: Date
             const nights = differenceInCalendarDays(to, from);
             setTotalNights(nights);
 
-            while (currentDate <= to) {
+            while (currentDate < to) {
                selectedDatesArray.push(currentDate);
                sum += checkRoomPrice(currentDate, roomStatus) || 0;
                currentDate = addDays(currentDate, 1);

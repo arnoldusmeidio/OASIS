@@ -1,8 +1,12 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
+import { useUserStore } from "@/stores/useUserStore";
 
 export default function NotFound() {
+   const { user } = useUserStore();
    return (
       <main className="bg-background flex h-screen text-center">
          {/* Not Found */}
@@ -19,7 +23,7 @@ export default function NotFound() {
             <h3 className="font-inter text-third mb-7 text-2xl font-semibold md:text-5xl">
                <span className="text-third">Sorry, but we don&apos;t have what you are looking for</span>
             </h3>
-            <Link href="/">
+            <Link href={user?.tenant ? "/tenant" : "/"}>
                <Button className="w-[300px] text-sm md:text-base">Back to Home Page</Button>
             </Link>
          </div>

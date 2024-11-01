@@ -3,8 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
+import { useUserStore } from "@/stores/useUserStore";
 
 export default function Error() {
+   const { user } = useUserStore();
    return (
       <html>
          <body>
@@ -23,7 +25,7 @@ export default function Error() {
                   <h3 className="font-inter text-third mb-7 text-2xl font-semibold md:text-5xl">
                      <span className="text-third"> Uh oh.. Something went wrong. We are very sorry.</span>
                   </h3>
-                  <Link href="/">
+                  <Link href={user?.tenant ? "/tenant" : "/"}>
                      <Button className="w-[300px] text-sm md:text-base">Back to Home Page</Button>
                   </Link>
                </div>
