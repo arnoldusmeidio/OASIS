@@ -17,11 +17,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Category } from "@/types/property-types";
 
-interface EditPropertyProps {
-   propertyId: string;
-}
-
-export default function CreateProperty({ propertyId }: EditPropertyProps) {
+export default function CreateProperty() {
    const [error, setError] = useState<string | undefined>(undefined);
    const [success, setSuccess] = useState<string | undefined>(undefined);
    const [images, setImages] = useState<File[]>([]);

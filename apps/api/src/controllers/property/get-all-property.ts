@@ -52,90 +52,6 @@ export async function getAllPropertiesPagination(req: Request, res: Response, ne
 }
 
 //get Search Pagination
-// export async function getSearchedPropertiesPagination(req: Request, res: Response, next: NextFunction) {
-//    try {
-//       const locale = req.cookies.NEXT_LOCALE;
-//       const { page = 1, limit = 10, location, totalperson } = req.query;
-//       const offset = (Number(page) - 1) * Number(limit);
-
-//       if (!location)
-//          return res
-//             .status(404)
-//             .json({ message: locale == "id" ? "Masukan lokasi" : "Please input the location", ok: false });
-
-//       const properties = await prisma.property.findMany({
-//          where: {
-//             OR: [
-//                {
-//                   name: {
-//                      contains: location as string,
-//                   },
-//                },
-//                {
-//                   address: {
-//                      contains: location as string,
-//                   },
-//                },
-//             ],
-//             room: {
-//                some: {
-//                   roomCapacity: { gte: Number(totalperson) },
-//                },
-//             },
-//          },
-//          include: {
-//             reviews: true,
-//             propertyPictures: true,
-//             room: {
-//                where: {
-//                   roomCapacity: { gte: Number(totalperson) },
-//                },
-//                include: {
-//                   roomPrice: {
-//                      orderBy: { price: "asc" },
-//                   },
-//                },
-//             },
-//          },
-//          skip: offset,
-//          take: Number(limit),
-//       });
-
-//       const totalProperties = await prisma.property.count({
-//          where: {
-//             OR: [
-//                {
-//                   name: {
-//                      contains: location as string,
-//                   },
-//                },
-//                {
-//                   address: {
-//                      contains: location as string,
-//                   },
-//                },
-//             ],
-//             room: {
-//                some: {
-//                   roomCapacity: { gte: Number(totalperson) },
-//                },
-//             },
-//          },
-//       });
-
-//       return res.status(200).json({
-//          data: properties,
-//          meta: {
-//             totalProperties,
-//             currentPage: Number(page),
-//             totalPages: Math.ceil(totalProperties / Number(limit)),
-//          },
-//          ok: true,
-//       });
-//    } catch (error) {
-//       next(error);
-//    }
-// }
 
 export async function getSearchedPropertiesPagination(req: Request, res: Response, next: NextFunction) {
    try {
@@ -203,6 +119,39 @@ export async function getSearchedPropertiesPagination(req: Request, res: Respons
          take: Number(limit),
       });
 
+      // Count the available properties
+      const totalProperties = await prisma.property.findMany({
+         where: {
+            OR: [
+               { address: { contains: location as string } },
+               { city: { contains: location as string } },
+               { name: { contains: location as string } },
+            ],
+            room: {
+               some: {
+                  roomCapacity: { gte: parseInt(totalperson as string, 10) },
+                  bookings: {
+                     none: {
+                        OR: [
+                           {
+                              startDate: { lte: checkinDate },
+                              endDate: { gte: checkinDate },
+                           },
+                           {
+                              startDate: { lte: checkoutDate },
+                              endDate: { gte: checkoutDate },
+                           },
+                           {
+                              startDate: { gte: checkinDate },
+                              endDate: { lte: checkoutDate },
+                           },
+                        ],
+                     },
+                  },
+               },
+            },
+         },
+      });
 
       // Filter properties by room availability for the requested number of rooms
       const availableProperties = properties.filter((property) => {
@@ -217,9 +166,9 @@ export async function getSearchedPropertiesPagination(req: Request, res: Respons
       return res.status(200).json({
          data: availableProperties,
          meta: {
-            totalProperties: availableProperties.length,
+            totalProperties: totalProperties.length,
             currentPage: Number(page),
-            totalPages: Math.ceil(availableProperties.length / Number(limit)),
+            totalPages: Math.ceil(totalProperties.length / Number(limit)),
          },
          ok: true,
       });

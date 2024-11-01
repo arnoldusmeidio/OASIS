@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "./Header";
 import BackButton from "./BackButton";
-import Social from "./Social";
+import Social from "@/components/auth/Social";
 
 interface CardWrapperProps {
    children: React.ReactNode;
