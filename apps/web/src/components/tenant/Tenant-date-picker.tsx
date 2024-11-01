@@ -56,7 +56,7 @@ export default function TenantDatePicker({ roomId, roomStatus, setTanggal }: Ten
          setSpecialDates(timeDate);
          setDate(undefined);
          setCustomPrice(undefined);
-         toast.success("Special date added");
+         toast("Special date added");
          setTanggal(timeDate);
       }
    };

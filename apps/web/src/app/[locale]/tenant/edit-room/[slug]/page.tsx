@@ -15,12 +15,7 @@ import { useRouter } from "@/i18n/routing";
 import { useSearchParams } from "next/navigation";
 import TenantDatePicker from "@/components/tenant/Tenant-date-picker";
 
-interface AddRoomProps {
-   index: number;
-   onRemove: () => void;
-}
-
-export default function Room({ index, onRemove }: AddRoomProps) {
+export default function Room() {
    const [error, setError] = useState<string | undefined>("");
    const [success, setSuccess] = useState<string | undefined>("");
    const [images, setImages] = useState<File[]>([]);

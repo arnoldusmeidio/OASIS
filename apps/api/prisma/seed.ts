@@ -263,7 +263,7 @@ async function inputData() {
                            endDate: new Date("2024-11-31"),
                         },
                         {
-                           price: 4500000,
+                           price: 450000,
                            startDate: new Date("2024-11-11"),
                            endDate: new Date("2024-11-18"),
                         },
@@ -356,7 +356,7 @@ async function inputData() {
                   roomPrice: {
                      create: [
                         {
-                           price: 7500000,
+                           price: 750000,
                            startDate: new Date("2024-11-13"),
                            endDate: new Date("2024-11-14"),
                         },
