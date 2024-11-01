@@ -158,36 +158,7 @@ export default function BookingCard() {
                         <CardFooter className="flex gap-4">
                            {e.paymentStatus == "PENDING" ? (
                               <Link href={`bookings/checkout/${e.bookingNumber}`}>
-                                 <Button
-                                    className="w-full"
-                                    // onClick={async (ev: React.MouseEvent<HTMLButtonElement>) => {
-                                    //    ev.preventDefault();
-                                    //    try {
-                                    //       const response = await fetch(
-                                    //          `http://localhost:8000/api/v1/payments/${e.bookingNumber}`,
-                                    //          {
-                                    //             method: "POST",
-                                    //             headers: {
-                                    //                "Content-Type": "application/json",
-                                    //             },
-                                    //             credentials: "include",
-                                    //             //body: JSON.stringify({ itemId, quantity }),
-                                    //          },
-                                    //       );
-                                    //       const data = await response.json();
-
-                                    //       // (window as SnapWindow).snap!.embed(data.data.transaction.token, {
-                                    //       //    embedId: "snap-container",
-                                    //       // });
-
-                                    //       router.push(data.data.transaction.redirect_url);
-                                    //    } catch (error) {
-                                    //       console.error(error);
-                                    //    }
-                                    // }}
-                                 >
-                                    Pay Now
-                                 </Button>
+                                 <Button className="w-full">Pay Now</Button>
                               </Link>
                            ) : (
                               ""

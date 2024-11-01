@@ -5,10 +5,12 @@ import prisma from "prisma/client";
 import { ZodError } from "zod";
 import fs from "fs/promises";
 
-export async function updateUserPicture(req: RequestWithUserId, res: Response, next: NextFunction) {
+export async function uploadPaymentProof(req: RequestWithUserId, res: Response, next: NextFunction) {
    try {
       let locale = req.cookies.NEXT_LOCALE;
       const id = (req as RequestWithUserId).user?.id;
+
+      const { bookingNumber } = req.params;
 
       const user = await prisma.user.findUnique({
          where: {
@@ -34,17 +36,18 @@ export async function updateUserPicture(req: RequestWithUserId, res: Response, n
 
       await prisma.booking.update({
          where: {
-            id,
+            bookingNumber,
          },
          data: {
             pictureUrl,
+            paymentType: "MANUAL",
          },
       });
 
       fs.unlink(req.file.path);
 
       return res.status(200).json({
-         message: locale == "id" ? "Foto profil berhasil diperbarui" : "Profile picture successfully updated",
+         message: locale == "id" ? "Berhasil upload bukti pembayaran" : "Uploaded payment proof",
          ok: true,
       });
    } catch (error) {
