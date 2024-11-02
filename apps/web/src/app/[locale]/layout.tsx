@@ -32,7 +32,7 @@ export default async function RootLayout({
 
    return (
       <html lang={locale}>
-         <body className={`${inter.className} min-w-full`}>
+         <body className={`${inter.className} m-0 min-w-full`}>
             <NextIntlClientProvider messages={messages}>
                {children}
                <Toaster richColors />

@@ -17,19 +17,6 @@ import { useSearchParams } from "next/navigation";
 
 type FormFields = "location" | "dates" | "adults" | "children" | "rooms" | "dates.from" | "dates.to";
 
-type Props = {
-   searchParams: SearchParams;
-};
-
-type SearchParams = {
-   location: string;
-   group_adults: string;
-   group_children: string;
-   no_rooms: string;
-   checkin: string;
-   checkout: string;
-};
-
 export default function Searchbar() {
    const searchParams = useSearchParams();
    const searchedQuery = {
@@ -40,6 +27,8 @@ export default function Searchbar() {
       checkin: searchParams.get("checkin"),
       checkout: searchParams.get("checkout"),
    };
+   const now = new Date(new Date().setHours(0, 0, 0, 0));
+   const ninetyDaysFromNow = new Date(now.valueOf() + 90 * 24 * 60 * 60 * 1000);
 
    const router = useRouter();
    const t = useTranslations("Layout.SearchBar");
@@ -143,7 +132,7 @@ export default function Searchbar() {
                                     selected={field.value}
                                     onSelect={field.onChange}
                                     numberOfMonths={2}
-                                    disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                                    disabled={(date) => date < now || date > ninetyDaysFromNow}
                                  />
                               </PopoverContent>
                               <FormMessage className="bg-destructive/80 text-background absolute -top-2 mx-1 text-nowrap rounded-lg px-2" />

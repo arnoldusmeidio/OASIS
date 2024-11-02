@@ -6,7 +6,7 @@ import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { useEffect, useState } from "react";
-import { currency } from "@/lib/currency";
+import { currency } from "@/helpers/currency";
 import { useUserStore } from "@/stores/useUserStore";
 import { Property } from "@/types/property-types";
 import { toast } from "sonner";
@@ -14,6 +14,12 @@ import FormError from "@/components/FormError";
 import useCurrencyStore from "@/stores/useCurrencyStore";
 import PaginationComponent from "@/components/tenant/Pagination-button";
 import Footer from "@/components/Footer";
+import SortSelect from "@/components/SortSelectProperties";
+import { Button } from "@/components/ui/button";
+import CategoryFilter from "@/components/FilterCategoryProperties";
+import { getRatingDescription } from "@/helpers/rating-description";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Badge } from "@/components/ui/badge";
 
 type Props = {
    searchParams: SearchParams;
@@ -37,6 +43,11 @@ interface Paginations {
 export default function SearchPage({ searchParams }: Props) {
    const [properties, setProperties] = useState<Property[]>([]);
    const [totalPropertiesFound, setTotalPropertiesFound] = useState(0);
+   const [sortField, setSortField] = useState<string>("price");
+   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+   const [tempSortField, setTempSortField] = useState<string>("price");
+   const [tempSortOrder, setTempSortOrder] = useState<"asc" | "desc">("asc");
+   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
    const [isLoading, setIsLoading] = useState(true);
    const [currencyLoading, setCurrencyLoading] = useState(true);
    const { user } = useUserStore();
@@ -46,30 +57,11 @@ export default function SearchPage({ searchParams }: Props) {
 
    const searchedQueries = `?location=${searchParams.location}&group_adults=${searchParams.group_adults}&group_children=${searchParams.group_children}&checkin=${searchParams.checkin}&checkout=${searchParams.checkout}`;
 
-   function getRatingDescription(rating: number) {
-      if (rating < 1 || rating > 10) {
-         return "Invalid rating";
-      }
-      if (rating >= 1 && rating <= 2) {
-         return "Very Bad";
-      } else if (rating >= 3 && rating <= 4) {
-         return "Poor";
-      } else if (rating > 4 && rating <= 6) {
-         return "Average";
-      } else if (rating > 6 && rating <= 8) {
-         return "Good";
-      } else if (rating > 8 && rating <= 9) {
-         return "Excellent";
-      } else if (rating > 9 && rating <= 10) {
-         return "Exceptional";
-      }
-   }
-
-   async function getProperties(pages = 1) {
+   async function getProperties(pages = 1, sortBy = sortField, order = sortOrder, categories: string[] = []) {
       try {
          setIsLoading(true);
          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/property/search?page=${pages}&location=${searchParams.location}&totalperson=${totalPerson}&checkin=${searchParams.checkin}&checkout=${searchParams.checkout}&roomsrequired=${searchParams.no_rooms}`,
+            `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/property/search?page=${pages}&location=${searchParams.location}&totalperson=${totalPerson}&checkin=${searchParams.checkin}&checkout=${searchParams.checkout}&roomsrequired=${searchParams.no_rooms}&sortBy=${sortBy}&order=${order}&categories=${categories.join(`,`)}`,
             {
                credentials: "include",
             },
@@ -84,8 +76,24 @@ export default function SearchPage({ searchParams }: Props) {
       } catch (error) {
          console.error(error);
          toast.error("Something went wrong!");
+         setIsLoading(false);
       }
    }
+
+   const handleSearchClick = () => {
+      setSortField(tempSortField);
+      setSortOrder(tempSortOrder);
+      getProperties(1, tempSortField, tempSortOrder, selectedCategories);
+   };
+
+   const handlePageChange = (newPage: number) => {
+      getProperties(newPage, sortField, sortOrder, selectedCategories);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+   };
+
+   const handleCategoryChange = (categories: string[]) => {
+      setSelectedCategories(categories);
+   };
 
    useEffect(() => {
       getProperties();
@@ -101,7 +109,7 @@ export default function SearchPage({ searchParams }: Props) {
    if (error)
       return (
          <>
-            <main className="bg-background flex h-full min-h-screen w-full flex-col items-center justify-center">
+            <main className="bg-background flex h-full min-h-screen w-full min-w-full flex-col items-center justify-center">
                <div className="max-w-[500px] justify-self-center">
                   <FormError message={error} />
                </div>
@@ -117,14 +125,44 @@ export default function SearchPage({ searchParams }: Props) {
          ) : (
             <main className="bg-background flex h-full min-h-screen w-full flex-col items-center">
                <div className="mx-auto w-full max-w-7xl p-6 lg:px-8">
-                  <h2 className="pb-3 text-3xl font-bold">Your Search Results</h2>
+                  <div className="flex flex-col justify-between min-[500px]:flex-row">
+                     <div>
+                        <h2 className="pb-3 text-3xl font-bold">Your Search Results</h2>
 
-                  <h3 className="pb-3">
-                     Dates of trips
-                     <span className="ml-2 italic">
-                        {searchParams.checkin} to {searchParams.checkout}
-                     </span>
-                  </h3>
+                        <h3 className="pb-3">
+                           Dates of trips
+                           <span className="ml-2 italic">
+                              {searchParams.checkin} to {searchParams.checkout}
+                           </span>
+                        </h3>
+                     </div>
+
+                     <Popover modal={false}>
+                        <PopoverTrigger asChild>
+                           <Button variant="outline" className="w-full self-center min-[500px]:w-[170px]">
+                              Sort and Filter
+                           </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="flex w-[325px] flex-col gap-6 min-[500px]:mr-6 lg:mr-8 xl:mr-4">
+                           {/* SortSelect Component */}
+                           <SortSelect
+                              sortField={tempSortField}
+                              sortOrder={tempSortOrder}
+                              onSortFieldChange={setTempSortField}
+                              onSortOrderChange={setTempSortOrder}
+                           />
+                           <CategoryFilter
+                              selectedCategories={selectedCategories}
+                              onCategoryChange={handleCategoryChange}
+                           />
+
+                           {/* Search Button */}
+                           <Button type="button" onClick={handleSearchClick}>
+                              Search
+                           </Button>
+                        </PopoverContent>
+                     </Popover>
+                  </div>
 
                   <hr className="mb-5" />
 
@@ -150,13 +188,16 @@ export default function SearchPage({ searchParams }: Props) {
                            </div>
 
                            <div className="flex flex-1 flex-col justify-around gap-2 max-sm:basis-1/2 sm:flex-row sm:justify-between sm:space-x-5">
-                              <div>
+                              <div className="flex flex-col gap-2">
                                  <Link
                                     href={`/search/property/${item.id}${searchedQueries}`}
                                     className="text-base font-bold text-[#1a61ef] hover:underline md:text-xl lg:text-2xl"
                                  >
                                     {item.name}
                                  </Link>
+                                 <Badge className="w-fit bg-blue-100 text-blue-800 hover:bg-blue-100">
+                                    {item.category}
+                                 </Badge>
                                  <p className="hidden text-xs sm:flex lg:text-base">{item.description}</p>
                               </div>
 
@@ -176,7 +217,7 @@ export default function SearchPage({ searchParams }: Props) {
                                           {item.reviews.length > 0 && `${item.reviews.length} reviews`}
                                        </p>
                                     </div>
-                                    <p className="text-background flex-shink-0 flex h-10 w-10 items-center justify-center rounded-lg bg-[#1a61ef] text-sm font-bold max-sm:order-1 lg:h-12 lg:w-12 lg:text-lg">
+                                    <p className="text-background flex-shink-0 flex h-8 w-8 items-center justify-center rounded-lg bg-[#1a61ef] text-sm font-bold max-sm:order-1 lg:h-12 lg:w-12 lg:text-lg">
                                        {item.reviews.length > 0
                                           ? (
                                                item.reviews.reduce((acc: number, review) => {
@@ -209,10 +250,7 @@ export default function SearchPage({ searchParams }: Props) {
                            <PaginationComponent
                               currentPage={page.currentPage}
                               totalPages={page.totalPages}
-                              onPageChange={(newPage) => {
-                                 getProperties(newPage);
-                                 window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to the top smoothly
-                              }}
+                              onPageChange={handlePageChange}
                            />
                         </div>
                      )}
