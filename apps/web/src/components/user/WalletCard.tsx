@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { useUserStore } from "@/stores/useUserStore";
 import { useState, useEffect } from "react";
-import { currency } from "@/lib/currency";
+import { currency } from "@/helpers/currency";
 import { useTranslations } from "next-intl";
 import useCurrencyStore from "@/stores/useCurrencyStore";
 

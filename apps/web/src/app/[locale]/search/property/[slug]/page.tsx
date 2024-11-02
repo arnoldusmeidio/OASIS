@@ -9,7 +9,7 @@ import { APIProvider, Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import RoomPicturesCarousel from "@/components/property/RoomPicturesCarousel";
-import { currency } from "@/lib/currency";
+import { currency } from "@/helpers/currency";
 import useCurrencyStore from "@/stores/useCurrencyStore";
 import { useUserStore } from "@/stores/useUserStore";
 import PropertySkeleton from "@/components/PropertySkeleton";
@@ -116,7 +116,8 @@ export default function SearchedPropertyPage({ params }: { params: { slug: strin
                               <div className="flex items-end justify-between">
                                  <div>
                                     <h3 className="mt-3 text-lg font-semibold">
-                                       {room.type} (Capacity: {room.roomCapacity} person(s))
+                                       {room.type} (Capacity: {room.roomCapacity} person
+                                       {room.roomCapacity > 1 ? "s" : ""})
                                     </h3>
                                     <p className="text-sm text-gray-600">
                                        Price per night starts from:
@@ -137,7 +138,7 @@ export default function SearchedPropertyPage({ params }: { params: { slug: strin
                      ))}
                   </div>
 
-                  <div className="mt-5w-full flex flex-col gap-2 lg:mt-0 lg:w-1/3">
+                  <div className="mt-5 flex w-full flex-col gap-2 lg:mt-0 lg:w-1/3">
                      {/* Google Maps */}
                      <div className="h-80 w-full">
                         <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>

@@ -16,7 +16,7 @@ import { RoomStatus } from "@/types/room-status";
 import { checkRoomBooking } from "@/helpers/check-room-booking";
 import { checkRoomPrice } from "@/helpers/check-room-price";
 import { useUserStore } from "@/stores/useUserStore";
-import { currency } from "@/lib/currency";
+import { currency } from "@/helpers/currency";
 
 interface DatePickerFormProps extends React.HTMLAttributes<HTMLDivElement> {
    roomId: string;
