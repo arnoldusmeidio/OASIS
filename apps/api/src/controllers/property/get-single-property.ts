@@ -12,11 +12,17 @@ export const getSingleProperty = async (req: Request, res: Response, next: NextF
          include: {
             propertyPictures: true,
             room: {
+               orderBy: {
+                  defaultPrice: "asc",
+               },
                include: {
                   roomPictures: true,
                },
             },
             reviews: {
+               orderBy: {
+                  createdAt: "desc",
+               },
                include: {
                   customer: {
                      select: {
