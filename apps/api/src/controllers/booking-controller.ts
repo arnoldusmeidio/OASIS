@@ -3,6 +3,14 @@ import prisma from "@/prisma";
 import { RequestWithUserId } from "@/types";
 import crypto from "crypto";
 
+async function getPriceForDate(date: Date, roomId: string, defaultPrice: number) {
+   const peakSeasons = await prisma.roomPrice.findMany({
+      where: { roomId },
+   });
+   const season = peakSeasons.find((season) => date >= season.startDate && date <= season.endDate);
+   return season ? season.price : defaultPrice;
+}
+
 export async function getBookings(req: RequestWithUserId, res: Response, next: NextFunction) {
    try {
       const id = (req as RequestWithUserId).user?.id;
@@ -15,7 +23,64 @@ export async function getBookings(req: RequestWithUserId, res: Response, next: N
       const bookings = await prisma.booking.findMany({
          where: { customerId: user.id },
          include: { room: true },
+         orderBy: { createdAt: "asc" },
       });
+
+      if (!bookings) {
+         return res.status(200).json({ data: bookings, message: "No bookings found", ok: true });
+      }
+
+      return res.status(200).json({ data: bookings, ok: true });
+   } catch (error) {
+      next(error);
+   }
+}
+
+export async function getBookingsSorted(req: RequestWithUserId, res: Response, next: NextFunction) {
+   try {
+      const id = (req as RequestWithUserId).user?.id;
+      const user = await prisma.user.findUnique({
+         where: { id, customer: { id } },
+      });
+
+      if (!user) return res.status(400).json({ message: "Failed to aunthenticate user", ok: false });
+
+      const { sort } = req.params || "1";
+      if (sort.length > 1 || sort.length < 1) {
+         return res.status(400).json({ message: "Bad Request", ok: false });
+      }
+
+      // const sort1 = sort.slice(0, 1);
+      // const sort2 = sort.slice(1, 2);
+      let bookings;
+
+      if (sort === "1") {
+         bookings = await prisma.booking.findMany({
+            where: { customerId: user.id },
+            include: { room: true },
+            orderBy: { createdAt: "asc" },
+         });
+      } else if (sort === "2") {
+         bookings = await prisma.booking.findMany({
+            where: { customerId: user.id },
+            include: { room: true },
+            orderBy: { createdAt: "desc" },
+         });
+      } else if (sort === "3") {
+         bookings = await prisma.booking.findMany({
+            where: { customerId: user.id },
+            include: { room: true },
+            orderBy: { startDate: "asc" },
+         });
+      } else if (sort === "4") {
+         bookings = await prisma.booking.findMany({
+            where: { customerId: user.id },
+            include: { room: true },
+            orderBy: { startDate: "desc" },
+         });
+      } else {
+         return res.status(400).json({ message: "Bad Request", ok: false });
+      }
 
       if (!bookings) {
          return res.status(200).json({ data: bookings, message: "No bookings found", ok: true });
@@ -156,6 +221,28 @@ export async function createBooking(req: Request, res: Response, next: NextFunct
          return true; // No overlap
       };
 
+      const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+      const firstDate = new Date(startDate).getTime();
+      //console.log(booking.startDate);
+      const secondDate = new Date(endDate).getTime();
+      //console.log(booking.endDate);
+      const diffDays = Math.ceil(Math.abs((firstDate - secondDate) / oneDay));
+      //console.log(diffDays);
+      //   const amount = booking.room.defaultPrice * diffDays;
+      //   console.log(amount);
+
+      let totalPrice = 0;
+
+      for (let i = 0; i < diffDays; i++) {
+         const currentDate = new Date(startDate);
+         currentDate.setDate(startDate.getDate() + i);
+
+         const priceForDate = getPriceForDate(currentDate, validRoom.id, validRoom.defaultPrice);
+         totalPrice += await priceForDate;
+      }
+
+      //   console.log(totalPrice);
+
       if (isDateRangeAvailable(existingBookings, newBooking)) {
          const createBooking = await prisma.booking.create({
             data: {
@@ -165,6 +252,7 @@ export async function createBooking(req: Request, res: Response, next: NextFunct
                roomId,
                customerId: user.id,
                paymentStatus: "PENDING",
+               amountToPay: totalPrice,
             },
          });
 
