@@ -44,12 +44,23 @@ export default function BookingList({ eventGetter, bookingData }: Props) {
                         <CardHeader>
                            <CardTitle>Booking Info</CardTitle>
                            <CardDescription>
-                              {!e.endDate
+                              {e.startDate === e.endDate
                                  ? `${format(e.startDate, "LLL dd, y")}`
                                  : `${format(e.startDate, "LLL dd, y")} - ${format(e.endDate, "LLL dd, y")}`}
                            </CardDescription>
                         </CardHeader>
                         <CardContent className="grid gap-4">
+                           <div>
+                              <div className="grid-cols mb-4 grid items-start pb-4 last:mb-0 last:pb-0">
+                                 <div className="space-y-1">
+                                    <p className="text-sm font-medium leading-none">〒 {e.room.property.name}</p>
+                                    <p className="text-muted-foreground text-sm">{e.room.property.description}</p>
+                                    <p className="text-muted-foreground text-sm">
+                                       {e.room.property.address}, {e.room.property.city}
+                                    </p>
+                                 </div>
+                              </div>
+                           </div>
                            <div>
                               <div className="grid-cols mb-4 grid items-start pb-4 last:mb-0 last:pb-0">
                                  <div className="space-y-1">
@@ -77,6 +88,14 @@ export default function BookingList({ eventGetter, bookingData }: Props) {
                            {e.paymentStatus == "PENDING" ? (
                               <Link href={`bookings/checkout/${e.bookingNumber}`}>
                                  <Button className="w-full">Pay Now</Button>
+                              </Link>
+                           ) : e.paymentStatus == "APPROVED" ? (
+                              <Link href="/">
+                                 <Button className="w-full">Confirm Booking</Button>
+                              </Link>
+                           ) : e.paymentStatus == "COMPLETED" ? (
+                              <Link href="/">
+                                 <Button className="w-full">Write Review</Button>
                               </Link>
                            ) : (
                               ""

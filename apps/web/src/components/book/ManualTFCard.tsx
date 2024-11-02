@@ -15,6 +15,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FormError from "../FormError";
 import FormSuccess from "../FormSuccess";
 import { toast } from "sonner";
+import { Booking } from "@/types/booking";
+import { format } from "date-fns";
 
 type CardProps = React.ComponentProps<typeof Card>;
 
@@ -39,6 +41,9 @@ export default function ManualTransferCard({ className, ...props }: CardProps) {
    const [success, setSuccess] = useState<string | undefined>("");
    const [picture, setPicture] = useState<string | undefined>(undefined);
 
+   const [isLoading, setIsLoading] = useState(true);
+   const [bookingData, setBookingData] = useState<Booking>();
+
    //schema
    const form = useForm<z.infer<typeof uploadImageSchema>>({
       resolver: zodResolver(uploadImageSchema),
@@ -50,6 +55,27 @@ export default function ManualTransferCard({ className, ...props }: CardProps) {
    const {
       formState: { isSubmitting },
    } = form;
+
+   const eventGetter = async () => {
+      try {
+         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings/${bookingNumber}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+         });
+
+         const resData = await res.json();
+         if (resData.ok) {
+            setBookingData(resData.data);
+         }
+         setIsLoading(false);
+      } catch (error) {
+         console.error(error);
+      }
+   };
+   useEffect(() => {
+      eventGetter();
+   }, []);
 
    //hardcode data
    const sampleBank = [
@@ -67,7 +93,7 @@ export default function ManualTransferCard({ className, ...props }: CardProps) {
       },
       {
          header: "Amount",
-         description: "-",
+         description: `${bookingData?.amountToPay}`,
       },
    ];
 
@@ -109,13 +135,22 @@ export default function ManualTransferCard({ className, ...props }: CardProps) {
       <Card className={cn("w-[380px]", className)} {...props}>
          <CardHeader>
             <CardTitle>Transfer Bank</CardTitle>
-            <CardDescription></CardDescription>
+            <CardDescription>Please upload your payment proof</CardDescription>
          </CardHeader>
          <CardContent className="grid gap-4">
             <div className="flex items-center space-x-4 rounded-md border p-4">
                <div className="flex-1 space-y-1">
-                  <p className="text-sm font-medium leading-none">Manual Transfer</p>
-                  <p className="text-muted-foreground text-sm">Please upload your payment proof</p>
+                  <p className="text-sm font-medium leading-none">Booking details</p>
+                  <p className="text-muted-foreground text-sm">
+                     {bookingData ? `${bookingData?.room?.property.name}, ${bookingData?.room.type}` : "-"}
+                  </p>
+                  <p className="text-muted-foreground text-sm">
+                     {bookingData
+                        ? bookingData?.startDate === bookingData?.endDate
+                           ? `${format(bookingData.startDate, "LLL dd, y")}`
+                           : `${format(bookingData.startDate, "LLL dd, y")} - ${format(bookingData.endDate, "LLL dd, y")}`
+                        : "-"}
+                  </p>
                </div>
             </div>
             <div>

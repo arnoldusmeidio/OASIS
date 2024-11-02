@@ -24,6 +24,20 @@ export async function uploadPaymentProof(req: RequestWithUserId, res: Response, 
             ok: false,
          });
 
+      const booking = await prisma.booking.findUnique({
+         where: {
+            bookingNumber,
+            customerId: user.id,
+            paymentStatus: "PENDING",
+         },
+      });
+
+      if (!user)
+         return res.status(404).json({
+            message: locale == "id" ? "Booking tidak ditemukan" : "Booking not found",
+            ok: false,
+         });
+
       if (!req.file) {
          return res.status(400).json({ message: "No file uploaded" });
       }
@@ -36,11 +50,12 @@ export async function uploadPaymentProof(req: RequestWithUserId, res: Response, 
 
       await prisma.booking.update({
          where: {
-            bookingNumber,
+            bookingNumber: booking?.bookingNumber,
          },
          data: {
             pictureUrl,
             paymentType: "MANUAL",
+            paymentStatus: "PROCESSING",
          },
       });
 

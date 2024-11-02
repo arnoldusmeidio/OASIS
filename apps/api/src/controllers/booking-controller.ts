@@ -23,7 +23,7 @@ export async function getBookings(req: RequestWithUserId, res: Response, next: N
 
       const bookings = await prisma.booking.findMany({
          where: { customerId: user.id },
-         include: { room: true },
+         include: { room: { include: { property: true } } },
          orderBy: { createdAt: "asc" },
       });
 
@@ -61,25 +61,25 @@ export async function getBookingsSorted(req: RequestWithUserId, res: Response, n
          if (sort === "1") {
             bookings = await prisma.booking.findMany({
                where: { customerId: user.id },
-               include: { room: true },
+               include: { room: { include: { property: true } } },
                orderBy: { createdAt: "asc" },
             });
          } else if (sort === "2") {
             bookings = await prisma.booking.findMany({
                where: { customerId: user.id },
-               include: { room: true },
+               include: { room: { include: { property: true } } },
                orderBy: { createdAt: "desc" },
             });
          } else if (sort === "3") {
             bookings = await prisma.booking.findMany({
                where: { customerId: user.id },
-               include: { room: true },
+               include: { room: { include: { property: true } } },
                orderBy: { startDate: "asc" },
             });
          } else if (sort === "4") {
             bookings = await prisma.booking.findMany({
                where: { customerId: user.id },
-               include: { room: true },
+               include: { room: { include: { property: true } } },
                orderBy: { startDate: "desc" },
             });
          } else {
@@ -108,25 +108,25 @@ export async function getBookingsSorted(req: RequestWithUserId, res: Response, n
       if (sort === "1") {
          bookings = await prisma.booking.findMany({
             where: { customerId: user.id, paymentStatus: filter },
-            include: { room: true },
+            include: { room: { include: { property: true } } },
             orderBy: { createdAt: "asc" },
          });
       } else if (sort === "2") {
          bookings = await prisma.booking.findMany({
             where: { customerId: user.id, paymentStatus: filter },
-            include: { room: true },
+            include: { room: { include: { property: true } } },
             orderBy: { createdAt: "desc" },
          });
       } else if (sort === "3") {
          bookings = await prisma.booking.findMany({
             where: { customerId: user.id, paymentStatus: filter },
-            include: { room: true },
+            include: { room: { include: { property: true } } },
             orderBy: { startDate: "asc" },
          });
       } else if (sort === "4") {
          bookings = await prisma.booking.findMany({
             where: { customerId: user.id, paymentStatus: filter },
-            include: { room: true },
+            include: { room: { include: { property: true } } },
             orderBy: { startDate: "desc" },
          });
       } else {
@@ -156,7 +156,7 @@ export async function getBookingsByBookingNumber(req: Request, res: Response, ne
 
       const booking = await prisma.booking.findUnique({
          where: { bookingNumber, customerId: user.id },
-         include: { room: true },
+         include: { room: { include: { property: true } } },
       });
 
       if (!booking) {
@@ -284,12 +284,18 @@ export async function createBooking(req: Request, res: Response, next: NextFunct
 
       let totalPrice = 0;
 
-      for (let i = 0; i < diffDays; i++) {
+      if (diffDays === 0) {
          const currentDate = new Date(startDate);
-         currentDate.setDate(startDate.getDate() + i);
-
          const priceForDate = getPriceForDate(currentDate, validRoom.id, validRoom.defaultPrice);
          totalPrice += await priceForDate;
+      } else {
+         for (let i = 0; i < diffDays; i++) {
+            const currentDate = new Date(startDate);
+            currentDate.setDate(startDate.getDate() + i);
+
+            const priceForDate = getPriceForDate(currentDate, validRoom.id, validRoom.defaultPrice);
+            totalPrice += await priceForDate;
+         }
       }
 
       //   console.log(totalPrice);

@@ -11,6 +11,13 @@ export interface Booking {
       price: number;
       type: string;
       description: string;
+      property: {
+         name: string;
+         address: string;
+         city: string;
+         description: string;
+         category: string;
+      };
    };
    customer: {};
 }

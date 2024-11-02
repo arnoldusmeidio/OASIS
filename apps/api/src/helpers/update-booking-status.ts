@@ -42,4 +42,5 @@ export default async function updateBookingStatus(data: any) {
          data: { paymentStatus: "PENDING" },
       });
    }
+   console.log("updated");
 }

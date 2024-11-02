@@ -1,33 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-   AlertDialog,
-   AlertDialogAction,
-   AlertDialogCancel,
-   AlertDialogContent,
-   AlertDialogDescription,
-   AlertDialogFooter,
-   AlertDialogHeader,
-   AlertDialogTitle,
-   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {
-   DropdownMenu,
-   DropdownMenuContent,
-   DropdownMenuLabel,
-   DropdownMenuRadioGroup,
-   DropdownMenuRadioItem,
-   DropdownMenuSeparator,
-   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { toast } from "sonner";
-import { format } from "date-fns";
-import { Booking } from "@/types/booking";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import { useRouter } from "@/i18n/routing";
 import { Skeleton } from "../ui/skeleton";
