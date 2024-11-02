@@ -1,20 +1,20 @@
 "use client";
 
 import FormError from "@/components/FormError";
-import PropertyPicturesCarousel from "@/components/property/PropertyPicturesCarousel";
+import PropertyPicturesCarousel from "@/components/tenant/property/PropertyPicturesCarousel";
 import CurrentLocButton from "@/components/tenant/maps-button";
 import { Property } from "@/types/property-types";
 import { useEffect, useState } from "react";
 import { APIProvider, Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import RoomPicturesCarousel from "@/components/property/RoomPicturesCarousel";
+import RoomPicturesCarousel from "@/components/tenant/property/RoomPicturesCarousel";
 import { currency } from "@/lib/currency";
 import useCurrencyStore from "@/stores/useCurrencyStore";
 import { useUserStore } from "@/stores/useUserStore";
 import PropertySkeleton from "@/components/PropertySkeleton";
-import CheckAvailabilityButton from "@/components/property/CheckAvailabilityButton";
-import CommentsAccordion from "@/components/property/CommentsAccordion";
+import CheckAvailabilityButton from "@/components/tenant/property/CheckAvailabilityButton";
+import CommentsAccordion from "@/components/tenant/property/CommentsAccordion";
 
 export default function SearchedPropertyPage({ params }: { params: { slug: string } }) {
    const [property, setProperty] = useState<Property>();

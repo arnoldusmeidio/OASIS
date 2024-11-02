@@ -12,6 +12,7 @@ import { exploreData } from "@/static-db";
 import MediumCard from "@/components/MediumCard";
 import Footer from "@/components/Footer";
 import { useTranslations } from "next-intl";
+import MainMap from "@/components/user/userGeolocation";
 
 import HomeSkeleton from "@/components/HomeSkeleton";
 import { Property } from "@/types/property-types";
@@ -122,6 +123,9 @@ export default function Home() {
                            ))}
                         </div>
                      </section>
+                     <div className="my-3 h-96 w-full rounded-lg">
+                        <MainMap />
+                     </div>
                   </div>
                </>
             )}

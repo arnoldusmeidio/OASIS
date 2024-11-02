@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export enum Category {
    Villa = "Villa",
    Hotel = "Hotel",
@@ -5,6 +7,10 @@ export enum Category {
 }
 
 export interface Property {
+   type: ReactNode;
+   defaultPrice: ReactNode;
+   roomCapacity: ReactNode;
+   roomPictures: any;
    address: string;
    category: Category;
    description: string;
