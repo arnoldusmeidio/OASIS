@@ -8,15 +8,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { emailVerificationSchema } from "@/schemas/auth-schemas";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useUserStore } from "@/stores/useUserStore";
 
-import CardWrapper from "@/components/auth/CardWrapper";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export default function ChangeEmailForm() {
+   const t = useTranslations("UserProfile.Email");
    const [error, setError] = useState<string | undefined>("");
    const [success, setSuccess] = useState<string | undefined>("");
 
@@ -27,13 +30,15 @@ export default function ChangeEmailForm() {
       if (errorMessage) setError(errorMessage);
    }, []);
 
+   const { user } = useUserStore();
+
    const router = useRouter();
 
    const form = useForm<z.infer<typeof emailVerificationSchema>>({
       resolver: zodResolver(emailVerificationSchema),
       mode: "onBlur",
       defaultValues: {
-         email: "",
+         email: user?.email,
       },
    });
 
@@ -69,31 +74,29 @@ export default function ChangeEmailForm() {
    };
 
    return (
-      <CardWrapper headerLabel="Change your email">
-         <Form {...form}>
-            <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-               <div className="space-y-4">
-                  <FormField
-                     control={form.control}
-                     name="email"
-                     render={({ field }) => (
-                        <FormItem>
-                           <FormLabel>Email</FormLabel>
-                           <FormControl>
-                              <Input {...field} disabled={isSubmitting} placeholder="john.doe@email.com" type="email" />
-                           </FormControl>
-                           <FormMessage />
-                        </FormItem>
-                     )}
-                  />
-               </div>
-               <FormError message={error} />
-               <FormSuccess message={success} />
-               <Button className="w-full" type="submit" disabled={isSubmitting}>
-                  Change email
-               </Button>
-            </form>
-         </Form>
-      </CardWrapper>
+      <Form {...form}>
+         <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="space-y-4">
+               <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                           <Input {...field} disabled={isSubmitting} placeholder="john.doe@email.com" type="email" />
+                        </FormControl>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+            </div>
+            <FormError message={error} />
+            <FormSuccess message={success} />
+            <Button className="w-full" type="submit" disabled={isSubmitting}>
+               {t("save")}
+            </Button>
+         </form>
+      </Form>
    );
 }

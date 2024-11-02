@@ -5,12 +5,29 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
 }
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+enum Language {
+  ENGLISH
+  INDONESIA
+}
+
+enum Currency {
+  IDR
+  USD
+}
+
+enum Category {
+  Villa
+  Hotel
+  Apartment
 }
 
 model User {
@@ -19,14 +36,18 @@ model User {
   updatedAt DateTime @updatedAt
 
   name       String
-  email      String  @unique
+  email      String   @unique
   password   String?
   pictureUrl String?
+  currency   Currency @default(IDR)
+  language   Language @default(ENGLISH)
 
   accountProvider AccountProvider
 
   tenant   Tenant?
   customer Customer?
+
+  wallet Wallet?
 }
 
 enum AccountProvider {
@@ -75,37 +96,31 @@ model Customer {
 
   bookings Booking[]
   reviews  Review[]
+
+  refCode            String  @unique
+  hasRedeemedRefCode Boolean @default(false)
 }
 
 model Property {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  name      String
+  address   String
+  lat       Float
+  lng       Float
+  city      String
 
-  name        String
-  address     String
-  description String   @db.VarChar(1000)
-  pictureUrl  String
-  room        Room[]
-  reviews     Review[]
-
-  location Location?
+  description      String             @db.VarChar(1000)
+  category         Category
+  propertyPictures PropertyPictures[]
+  room             Room[]
+  reviews          Review[]
 
   tenantId String
   tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@unique([name, address], name: "uniqueProperty")
-}
-
-model Location {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  lat       Float
-  lng       Float
-
-  propertyId String   @unique
-  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 }
 
 model Room {
@@ -115,16 +130,51 @@ model Room {
 
   type         String
   description  String @db.VarChar(1000)
-  pictureUrl   String
-  price        Int
+  defaultPrice Float
   roomCapacity Int
 
-  bookings Booking[]
+  bookings     Booking[]
+  roomPrice    RoomPrice[]
+  roomPictures RoomPictures[]
 
   propertyId String
   property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@unique([type, propertyId], name: "uniqueRoom")
+}
+
+model RoomPrice {
+  id        String   @id @default(uuid())
+  roomId    String
+  price     Float
+  startDate DateTime
+  endDate   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+}
+
+model PropertyPictures {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  url String
+
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+model RoomPictures {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  url String
+
+  roomId String
+  room   Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
 }
 
 model Booking {
@@ -135,6 +185,14 @@ model Booking {
   startDate DateTime
   endDate   DateTime
 
+  bookingNumber String        @unique
+  type          BookingType   @default(RESERVATION)
+  paymentType   PaymentType?
+  paymentStatus PaymentStatus @default(PENDING)
+  pictureUrl    String?
+  amountToPay   Float
+
+  token  TransferToken?
   review Review[]
 
   roomId String
@@ -143,7 +201,35 @@ model Booking {
   customerId String
   customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
 
-  @@unique([startDate, endDate, roomId], name: "uniqueBooking")
+  @@unique([startDate, endDate, roomId, bookingNumber], name: "uniqueBooking")
+}
+
+model TransferToken {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  token   String   @unique
+  expires DateTime
+
+  booking Booking @relation(fields: [id], references: [id], onDelete: Cascade)
+}
+
+enum BookingType {
+  RESERVATION //for user
+  MAINTENANCE //for tenant
+}
+
+enum PaymentType {
+  MANUAL //Manual Transfer
+  PAYGATE //Payment Gateway
+  WALLET //Digital Wallet
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  CANCELED
 }
 
 model Review {
@@ -164,4 +250,13 @@ model Review {
   star   Int
 
   @@unique([customerId, propertyId], name: "uniqueReview")
+}
+
+model Wallet {
+  id        String   @id
+  user      User     @relation(fields: [id], references: [id], onDelete: Cascade)
+  balance   Float    @default(1000000)
+  points    Float    @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

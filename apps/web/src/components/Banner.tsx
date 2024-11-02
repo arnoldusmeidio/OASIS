@@ -1,14 +1,17 @@
 import * as React from "react";
 import EmblaCarousel from "@/components/ui/carousel/EmblaCarousel";
 import { EmblaOptionsType } from "embla-carousel";
-import { bannerData } from "@/static-db";
-
+import { Property } from "@/types/property-types";
 const OPTIONS: EmblaOptionsType = { loop: true, duration: 30 };
 
-export default function Banner() {
+interface Props {
+   properties: Property[];
+}
+
+export default function Banner({ properties }: Props) {
    return (
       <div>
-         <EmblaCarousel slides={bannerData} options={OPTIONS} />
+         <EmblaCarousel properties={properties} options={OPTIONS} />
       </div>
    );
 }

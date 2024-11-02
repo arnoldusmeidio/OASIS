@@ -14,7 +14,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { toast } from "sonner";
 
 interface RoleProps {
@@ -69,7 +70,7 @@ export default function CredentialForm({ role }: RoleProps) {
          } else {
             setError("");
             setSuccess(data.message);
-            toast.success(data.message);
+            toast(data.message);
             form.reset();
             router.push("/login");
             router.refresh();

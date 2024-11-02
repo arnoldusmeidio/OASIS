@@ -1,11 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
+import { useUserStore } from "@/stores/useUserStore";
 
 export default function Logo() {
+   const { user } = useUserStore();
+
    return (
-      <Link href={"/"}>
+      <Link href={user?.tenant ? "/tenant" : "/"}>
          <div className="flex justify-center gap-2 align-middle">
             <Image
                alt="OASIS logo"
