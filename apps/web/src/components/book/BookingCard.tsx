@@ -38,7 +38,6 @@ export default function BookingCard() {
 
    const [isLoading, setIsLoading] = useState(true);
    const [bookingData, setBookingData] = useState<Booking[]>([]);
-   // const [dataReplica, setDataReplica] = useState({ data: [] });
    const [sort, setSort] = useState<string>("1");
    const [filter, setFilter] = useState<string>("X");
 
@@ -53,7 +52,6 @@ export default function BookingCard() {
          const resData = await res.json();
          if (resData.ok) {
             setBookingData(resData.data);
-            // setDataReplica(resData);
          }
          setIsLoading(false);
          return bookingData;

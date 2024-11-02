@@ -71,25 +71,24 @@ export async function createPayment(req: RequestWithUserId, res: Response) {
 
       //   console.log(totalPrice);
 
-      const orderId = uuid();
+      const orderId = booking.id;
       //return res.status(201).json({ ok: true });
       const parameter = {
          transaction_details: {
             order_id: orderId,
             gross_amount: totalPrice,
          },
-         //  item_details: [
-         //     {
-         //        id: "ITEM1",
-         //        price: 10000,
-         //        quantity: 1,
-         //        name: "Midtrans Bear",
-         //        brand: "Midtrans",
-         //        category: "Toys",
-         //        merchant_name: "Midtrans",
-         //        url: "https://tokobuah.com/apple-fuji",
-         //     },
-         //  ],
+         // item_details: [
+         //    {
+         //       id: "ITEM1",
+         //       price: 10000,
+         //       quantity: 1,
+         //       name: "Midtrans Bear",
+         //       brand: "Midtrans",
+         //       category: "Toys",
+         //       url: "https://tokobuah.com/apple-fuji",
+         //    },
+         // ],
          customer_details: {
             first_name: user.name,
             last_name: user.name,

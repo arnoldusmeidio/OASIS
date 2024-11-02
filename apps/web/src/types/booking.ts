@@ -6,6 +6,7 @@ export interface Booking {
    startDate: Date;
    endDate: Date;
    amountToPay: number;
+   type: string;
    room: {
       price: number;
       type: string;
