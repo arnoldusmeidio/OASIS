@@ -163,3 +163,47 @@ export async function approveManualTransferPayment(req: RequestWithUserId, res: 
       next(error);
    }
 }
+
+export async function deleteBookingByBookingNumberTenant(req: RequestWithUserId, res: Response, next: NextFunction) {
+   try {
+      let locale = req.cookies.NEXT_LOCALE;
+      const id = (req as RequestWithUserId).user?.id;
+      const user = await prisma.user.findUnique({
+         where: { id, tenant: { id } },
+      });
+
+      if (!user)
+         return res
+            .status(404)
+            .json({ message: locale == "id" ? "User tidak ditemukan" : "User not found", ok: false });
+
+      const { bookingNumber } = req.params;
+
+      const booking = await prisma.booking.findUnique({
+         where: { bookingNumber, paymentStatus: "PENDING" },
+         include: { room: { include: { property: true } } },
+      });
+
+      if (!booking) {
+         return res.status(404).json({
+            message: locale == "id" ? "Booking tidak ditemukan" : "Booking not found",
+            ok: false,
+         });
+      }
+
+      if (booking.room.property.tenantId !== user.id) {
+         return res.status(401).json({
+            message: locale == "id" ? "Tidak ada akses" : "Unauthorized",
+            ok: false,
+         });
+      }
+
+      await prisma.booking.delete({
+         where: { bookingNumber, paymentStatus: "PENDING" },
+      });
+
+      return res.status(200).json({ message: locale == "id" ? "Booking dibatalkan" : "Booking Rejected", ok: true });
+   } catch (error) {
+      next(error);
+   }
+}

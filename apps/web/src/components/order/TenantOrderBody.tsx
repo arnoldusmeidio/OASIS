@@ -57,8 +57,8 @@ export default function OrderBody() {
    }
 
    return (
-      <div className="flex justify-end gap-4 px-4 py-4">
+      <>
          <OrderList eventGetter={eventGetter} orderData={orderData} />
-      </div>
+      </>
    );
 }
