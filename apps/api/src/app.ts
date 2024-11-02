@@ -8,6 +8,7 @@ import userRouter from "./routers/user-router";
 import bookingRouter from "./routers/booking-router";
 import walletRouter from "./routers/wallet-router";
 import paymentRouter from "./routers/payment-router";
+import orderRouter from "./routers/order-router";
 import customer from "./routers/customer-router";
 import { customerGuard, verifyToken } from "./middlewares/auth-middleware";
 import { notFoundMiddleware } from "./middlewares/not-found-middleware";
@@ -56,6 +57,9 @@ const createApp = () => {
 
    // Booking Route
    app.use("/api/v1/bookings", verifyToken, customerGuard, bookingRouter);
+
+   // Order Route
+   app.use("/api/v1/orders", verifyToken, tenantGuard, orderRouter);
 
    // Wallet Route
    app.use("/api/v1/wallets", verifyToken, customerGuard, walletRouter);
