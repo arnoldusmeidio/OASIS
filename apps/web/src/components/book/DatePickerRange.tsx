@@ -5,7 +5,6 @@ import { Calendar as CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import React, { useEffect, useState } from "react";
 
-import { useForm } from "react-hook-form";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 import { cn } from "@/lib/utils";
@@ -33,16 +32,12 @@ export default function DatePickerForm({ className, roomId, currencyRate }: Date
    });
    const [totalPrice, setTotalPrice] = useState<number>(0);
    const [totalNights, setTotalNights] = useState<number>(0);
-   const form = useForm();
 
    const [roomStatus, setRoomStatus] = useState<RoomStatus>();
    const [numberOfMonths, setNumberOfMonths] = useState<number>(2);
 
    const router = useRouter();
 
-   // if (!roomId) {
-   //    return <h1>No Room Id provided</h1>;
-   // }
    async function onSubmit() {
       try {
          const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings/${roomId}`, {
@@ -158,7 +153,6 @@ export default function DatePickerForm({ className, roomId, currencyRate }: Date
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
                <Calendar
-                  // initialFocus
                   mode="range"
                   defaultMonth={date?.from}
                   selected={date}

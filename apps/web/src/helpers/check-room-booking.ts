@@ -3,7 +3,7 @@ import { RoomStatus } from "@/types/room-status";
 export function checkRoomBooking(date: Date, roomStatus: RoomStatus | undefined): boolean {
    const booking = roomStatus?.bookings;
    const targetTime = date.getTime();
-   const now = Date.now();
+   const now = new Date(new Date().setHours(0, 0, 0, 0)).valueOf();
    const ninetyDaysFromNow = now + 90 * 24 * 60 * 60 * 1000;
 
    if (targetTime < now || targetTime > ninetyDaysFromNow) {
