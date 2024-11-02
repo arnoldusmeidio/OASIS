@@ -32,10 +32,6 @@ import Image from "next/image";
 import { useRouter } from "@/i18n/routing";
 import { Skeleton } from "../ui/skeleton";
 
-interface SnapWindow extends Window {
-   snap?: { embed: (token: string, options: { embedId: string }) => void };
-}
-
 export default function BookingCard() {
    const router = useRouter();
 
@@ -43,6 +39,7 @@ export default function BookingCard() {
    const [bookingData, setBookingData] = useState({ data: [] });
    // const [dataReplica, setDataReplica] = useState({ data: [] });
    const [sort, setSort] = useState<string>("1");
+   const [filter, setFilter] = useState<string>("X");
 
    useEffect(() => {
       const myMidtransClientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY;
@@ -59,7 +56,7 @@ export default function BookingCard() {
 
    const eventGetter = async () => {
       try {
-         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings/sorted/${sort}`, {
+         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings/advanced/${sort}${filter}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -78,6 +75,10 @@ export default function BookingCard() {
    useEffect(() => {
       eventGetter();
    }, []);
+
+   useEffect(() => {
+      eventGetter();
+   }, [sort, filter]);
 
    if (isLoading) return <Skeleton className="flex flex-col gap-4 px-4 py-4" />;
 
@@ -105,10 +106,11 @@ export default function BookingCard() {
 
    return (
       <>
+         {/*sort button */}
          <div className="flex justify-end gap-4 px-4 py-4">
             <DropdownMenu>
                <DropdownMenuTrigger asChild>
-                  <Button variant="outline">Sort</Button>
+                  <Button variant="outline">Sort/Filter</Button>
                </DropdownMenuTrigger>
                <DropdownMenuContent className="w-56">
                   <DropdownMenuLabel>Sort by:</DropdownMenuLabel>
@@ -116,8 +118,9 @@ export default function BookingCard() {
                   <DropdownMenuRadioGroup>
                      <DropdownMenuRadioItem
                         value="recent_asc"
-                        onClick={() => {
+                        onClick={async () => {
                            setSort("1");
+                           setIsLoading(true);
                            eventGetter();
                         }}
                      >
@@ -125,8 +128,9 @@ export default function BookingCard() {
                      </DropdownMenuRadioItem>
                      <DropdownMenuRadioItem
                         value="recent_desc"
-                        onClick={() => {
+                        onClick={async () => {
                            setSort("2");
+                           setIsLoading(true);
                            eventGetter();
                         }}
                      >
@@ -134,8 +138,9 @@ export default function BookingCard() {
                      </DropdownMenuRadioItem>
                      <DropdownMenuRadioItem
                         value="date_asc"
-                        onClick={() => {
+                        onClick={async () => {
                            setSort("3");
+                           setIsLoading(true);
                            eventGetter();
                         }}
                      >
@@ -143,17 +148,65 @@ export default function BookingCard() {
                      </DropdownMenuRadioItem>
                      <DropdownMenuRadioItem
                         value="date_desc"
-                        onClick={() => {
+                        onClick={async () => {
                            setSort("4");
+                           setIsLoading(true);
                            eventGetter();
                         }}
                      >
                         Date (Desc)
                      </DropdownMenuRadioItem>
                   </DropdownMenuRadioGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuLabel>Filter by Payment Status:</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuRadioGroup>
+                     <DropdownMenuRadioItem
+                        value="all"
+                        onClick={async () => {
+                           setFilter("X");
+                           setIsLoading(true);
+                           eventGetter();
+                        }}
+                     >
+                        ALL
+                     </DropdownMenuRadioItem>
+                     <DropdownMenuRadioItem
+                        value="pending"
+                        onClick={async () => {
+                           setFilter("A");
+                           setIsLoading(true);
+                           eventGetter();
+                        }}
+                     >
+                        PENDING
+                     </DropdownMenuRadioItem>
+                     <DropdownMenuRadioItem
+                        value="paid"
+                        onClick={() => {
+                           setFilter("B");
+                           setIsLoading(true);
+                           eventGetter();
+                        }}
+                     >
+                        PAID
+                     </DropdownMenuRadioItem>
+                     <DropdownMenuRadioItem
+                        value="canceled"
+                        onClick={() => {
+                           setFilter("C");
+                           setIsLoading(true);
+                           eventGetter();
+                        }}
+                     >
+                        CANCELED
+                     </DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
                </DropdownMenuContent>
             </DropdownMenu>
          </div>
+
+         {/*booking data*/}
          <Accordion type="single" collapsible>
             {(bookingData as any)?.data?.map((e: Booking, index: number) => (
                <AccordionItem value={e.id} key={e.id}>
@@ -170,16 +223,20 @@ export default function BookingCard() {
                         <CardHeader>
                            <CardTitle>Booking Info</CardTitle>
                            <CardDescription>
-                              <p>
-                                 {!e.endDate
-                                    ? `${format(e.startDate, "LLL dd, y")}`
-                                    : `${format(e.startDate, "LLL dd, y")} - ${format(e.endDate, "LLL dd, y")}`}
-                              </p>
-                              <p>{e.room.type}</p>
-                              <p>{e.room.description}</p>
+                              {!e.endDate
+                                 ? `${format(e.startDate, "LLL dd, y")}`
+                                 : `${format(e.startDate, "LLL dd, y")} - ${format(e.endDate, "LLL dd, y")}`}
                            </CardDescription>
                         </CardHeader>
                         <CardContent className="grid gap-4">
+                           <div>
+                              <div className="grid-cols mb-4 grid items-start pb-4 last:mb-0 last:pb-0">
+                                 <div className="space-y-1">
+                                    <p className="text-sm font-medium leading-none">✓ {e.room.type}</p>
+                                    <p className="text-muted-foreground text-sm">{e.room.description}</p>
+                                 </div>
+                              </div>
+                           </div>
                            <div className="flex items-center space-x-4 rounded-md border p-4">
                               <div className="flex-1 space-y-1">
                                  <p className="text-sm font-medium leading-none">Payment Status:</p>
