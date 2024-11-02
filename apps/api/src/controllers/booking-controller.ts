@@ -23,7 +23,64 @@ export async function getBookings(req: RequestWithUserId, res: Response, next: N
       const bookings = await prisma.booking.findMany({
          where: { customerId: user.id },
          include: { room: true },
+         orderBy: { createdAt: "asc" },
       });
+
+      if (!bookings) {
+         return res.status(200).json({ data: bookings, message: "No bookings found", ok: true });
+      }
+
+      return res.status(200).json({ data: bookings, ok: true });
+   } catch (error) {
+      next(error);
+   }
+}
+
+export async function getBookingsSorted(req: RequestWithUserId, res: Response, next: NextFunction) {
+   try {
+      const id = (req as RequestWithUserId).user?.id;
+      const user = await prisma.user.findUnique({
+         where: { id, customer: { id } },
+      });
+
+      if (!user) return res.status(400).json({ message: "Failed to aunthenticate user", ok: false });
+
+      const { sort } = req.params || "1";
+      if (sort.length > 1 || sort.length < 1) {
+         return res.status(400).json({ message: "Bad Request", ok: false });
+      }
+
+      // const sort1 = sort.slice(0, 1);
+      // const sort2 = sort.slice(1, 2);
+      let bookings;
+
+      if (sort === "1") {
+         bookings = await prisma.booking.findMany({
+            where: { customerId: user.id },
+            include: { room: true },
+            orderBy: { createdAt: "asc" },
+         });
+      } else if (sort === "2") {
+         bookings = await prisma.booking.findMany({
+            where: { customerId: user.id },
+            include: { room: true },
+            orderBy: { createdAt: "desc" },
+         });
+      } else if (sort === "3") {
+         bookings = await prisma.booking.findMany({
+            where: { customerId: user.id },
+            include: { room: true },
+            orderBy: { startDate: "asc" },
+         });
+      } else if (sort === "4") {
+         bookings = await prisma.booking.findMany({
+            where: { customerId: user.id },
+            include: { room: true },
+            orderBy: { startDate: "desc" },
+         });
+      } else {
+         return res.status(400).json({ message: "Bad Request", ok: false });
+      }
 
       if (!bookings) {
          return res.status(200).json({ data: bookings, message: "No bookings found", ok: true });
