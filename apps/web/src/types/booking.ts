@@ -8,7 +8,8 @@ export interface Booking {
    amountToPay: number;
    room: {
       price: number;
-      pictureUrl: string;
+      type: string;
+      description: string;
    };
    customer: {};
 }

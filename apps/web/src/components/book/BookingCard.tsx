@@ -42,6 +42,7 @@ export default function BookingCard() {
    const [isLoading, setIsLoading] = useState(true);
    const [bookingData, setBookingData] = useState({ data: [] });
    // const [dataReplica, setDataReplica] = useState({ data: [] });
+   const [sort, setSort] = useState<string>("1");
 
    useEffect(() => {
       const myMidtransClientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY;
@@ -58,7 +59,7 @@ export default function BookingCard() {
 
    const eventGetter = async () => {
       try {
-         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings`, {
+         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings/sorted/${sort}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -113,10 +114,42 @@ export default function BookingCard() {
                   <DropdownMenuLabel>Sort by:</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuRadioGroup>
-                     <DropdownMenuRadioItem value="date_asc">Date (Asc)</DropdownMenuRadioItem>
-                     <DropdownMenuRadioItem value="date_desc">Date (Desc)</DropdownMenuRadioItem>
-                     <DropdownMenuRadioItem value="booking_asc">Booking Number (Asc)</DropdownMenuRadioItem>
-                     <DropdownMenuRadioItem value="booking_desc">Booking Number (Desc)</DropdownMenuRadioItem>
+                     <DropdownMenuRadioItem
+                        value="recent_asc"
+                        onClick={() => {
+                           setSort("1");
+                           eventGetter();
+                        }}
+                     >
+                        Recent (Asc)
+                     </DropdownMenuRadioItem>
+                     <DropdownMenuRadioItem
+                        value="recent_desc"
+                        onClick={() => {
+                           setSort("2");
+                           eventGetter();
+                        }}
+                     >
+                        Recent (Desc)
+                     </DropdownMenuRadioItem>
+                     <DropdownMenuRadioItem
+                        value="date_asc"
+                        onClick={() => {
+                           setSort("3");
+                           eventGetter();
+                        }}
+                     >
+                        Date (Asc)
+                     </DropdownMenuRadioItem>
+                     <DropdownMenuRadioItem
+                        value="date_desc"
+                        onClick={() => {
+                           setSort("4");
+                           eventGetter();
+                        }}
+                     >
+                        Date (Desc)
+                     </DropdownMenuRadioItem>
                   </DropdownMenuRadioGroup>
                </DropdownMenuContent>
             </DropdownMenu>
@@ -137,16 +170,13 @@ export default function BookingCard() {
                         <CardHeader>
                            <CardTitle>Booking Info</CardTitle>
                            <CardDescription>
-                              {!e.endDate
-                                 ? `${format(e.startDate, "LLL dd, y")}`
-                                 : `${format(e.startDate, "LLL dd, y")} - ${format(e.endDate, "LLL dd, y")}`}
-                              <Image
-                                 src={e.room.pictureUrl}
-                                 alt=""
-                                 width={200}
-                                 height={200}
-                                 className="flex rounded-lg"
-                              ></Image>
+                              <p>
+                                 {!e.endDate
+                                    ? `${format(e.startDate, "LLL dd, y")}`
+                                    : `${format(e.startDate, "LLL dd, y")} - ${format(e.endDate, "LLL dd, y")}`}
+                              </p>
+                              <p>{e.room.type}</p>
+                              <p>{e.room.description}</p>
                            </CardDescription>
                         </CardHeader>
                         <CardContent className="grid gap-4">
@@ -155,10 +185,14 @@ export default function BookingCard() {
                                  <p className="text-sm font-medium leading-none">Payment Status:</p>
                                  <p className="text-muted-foreground text-sm">{e.paymentStatus}</p>
                               </div>
-                              <div className="flex-1 space-y-1">
-                                 <p className="text-sm font-medium leading-none">Amount to Pay:</p>
-                                 <p className="text-muted-foreground text-sm">{e.amountToPay}</p>
-                              </div>
+                              {e.paymentStatus == "PENDING" ? (
+                                 <div className="flex-1 space-y-1">
+                                    <p className="text-sm font-medium leading-none">Amount to Pay:</p>
+                                    <p className="text-muted-foreground text-sm">{e.amountToPay}</p>
+                                 </div>
+                              ) : (
+                                 ""
+                              )}
                            </div>
                         </CardContent>
                         <CardFooter className="flex gap-4">
