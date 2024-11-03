@@ -1,6 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import prisma from "@/prisma";
 import { RequestWithUserId } from "@/types";
+import { z } from "zod";
+
+export const digitalPaymentSchema = z.object({
+   usePoints: z.boolean(),
+});
 
 export async function createDigitalPayment(req: RequestWithUserId, res: Response) {
    try {
@@ -25,7 +30,10 @@ export async function createDigitalPayment(req: RequestWithUserId, res: Response
             ok: false,
          });
 
-      const { bookingNumber, code } = req.params;
+      const { bookingNumber } = req.params;
+      const parsedData = digitalPaymentSchema.parse(req.body);
+      const { usePoints } = parsedData;
+      //   console.log(typeof usePoints);
 
       const booking = await prisma.booking.findUnique({
          where: { bookingNumber, customerId: user.id, paymentStatus: "PENDING" },
@@ -42,7 +50,7 @@ export async function createDigitalPayment(req: RequestWithUserId, res: Response
          return res.status(401).json({ message: locale == "id" ? "Tidak ada akses" : "Unauthorized", ok: false });
       }
 
-      if (code === "0") {
+      if (usePoints === false) {
          if (wallet.balance < booking.amountToPay) {
             return res
                .status(400)
@@ -50,6 +58,16 @@ export async function createDigitalPayment(req: RequestWithUserId, res: Response
          }
 
          await prisma.$transaction(async (tx) => {
+            await tx.booking.update({
+               where: {
+                  bookingNumber,
+               },
+               data: {
+                  paymentType: "WALLET",
+                  paymentStatus: "PAID",
+               },
+            });
+
             await tx.wallet.update({
                where: {
                   id: user.id,
@@ -69,9 +87,19 @@ export async function createDigitalPayment(req: RequestWithUserId, res: Response
                },
             });
          });
-      } else if (code === "1") {
+      } else if (usePoints === true) {
          if (wallet.points >= booking.amountToPay) {
             await prisma.$transaction(async (tx) => {
+               await tx.booking.update({
+                  where: {
+                     bookingNumber,
+                  },
+                  data: {
+                     paymentType: "WALLET",
+                     paymentStatus: "PAID",
+                  },
+               });
+
                await tx.wallet.update({
                   where: {
                      id: user.id,
@@ -99,6 +127,16 @@ export async function createDigitalPayment(req: RequestWithUserId, res: Response
                   .json({ message: locale == "id" ? "Gagal pembayaran" : "Failed to create payment", ok: false });
             } else {
                await prisma.$transaction(async (tx) => {
+                  await tx.booking.update({
+                     where: {
+                        bookingNumber,
+                     },
+                     data: {
+                        paymentType: "WALLET",
+                        paymentStatus: "PAID",
+                     },
+                  });
+
                   await tx.wallet.update({
                      where: {
                         id: user.id,

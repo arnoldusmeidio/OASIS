@@ -9,6 +9,36 @@ const snap = new MidtransClient.Snap({
    serverKey: process.env.MIDTRANS_SERVER_KEY,
 });
 
+export async function getWallet(req: RequestWithUserId, res: Response, next: NextFunction) {
+   try {
+      let locale = req.cookies.NEXT_LOCALE;
+      const id = (req as RequestWithUserId).user?.id;
+      const user = await prisma.user.findUnique({
+         where: { id, customer: { id } },
+      });
+
+      if (!user)
+         return res
+            .status(404)
+            .json({ message: locale == "id" ? "User tidak ditemukan" : "User not found", ok: false });
+
+      const wallet = await prisma.wallet.findUnique({
+         where: { id: user.id },
+         include: { WalletHistory: true },
+      });
+
+      if (!wallet)
+         return res.status(404).json({
+            message: locale == "id" ? "Belum Registrasi Oasis Wallet" : "Oasis Wallet is not registered",
+            ok: false,
+         });
+      return res.status(201).json({ ok: true, data: { wallet } });
+   } catch (error) {
+      console.error(error);
+      return res.status(500);
+   }
+}
+
 export async function redeemRefCode(req: RequestWithUserId, res: Response, next: NextFunction) {
    try {
       const id = (req as RequestWithUserId).user?.id;

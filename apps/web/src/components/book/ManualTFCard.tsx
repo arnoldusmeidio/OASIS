@@ -201,7 +201,17 @@ export default function ManualTransferCard({ className, ...props }: CardProps) {
                </form>
             </Form>
          </CardContent>
-         <CardFooter></CardFooter>
+         <CardFooter>
+            <Button
+               className="w-full"
+               variant={"link"}
+               onClick={() => {
+                  router.back();
+               }}
+            >
+               Back
+            </Button>
+         </CardFooter>
       </Card>
    );
 }
