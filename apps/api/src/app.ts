@@ -8,6 +8,7 @@ import userRouter from "./routers/user-router";
 import bookingRouter from "./routers/booking-router";
 import walletRouter from "./routers/wallet-router";
 import paymentRouter from "./routers/payment-router";
+import orderRouter from "./routers/order-router";
 import customer from "./routers/customer-router";
 import { customerGuard, verifyToken } from "./middlewares/auth-middleware";
 import { notFoundMiddleware } from "./middlewares/not-found-middleware";
@@ -17,6 +18,7 @@ import { error } from "./middlewares/error-middleware";
 import cookieParser from "cookie-parser";
 import { getAllPropertyBeta } from "./controllers/sample-controller";
 import { paymentNotification } from "./controllers/payment/midtrans-payment-controller";
+import updateBookingStatus from "./helpers/update-booking-status";
 
 const createApp = () => {
    const app = express();
@@ -57,6 +59,9 @@ const createApp = () => {
    // Booking Route
    app.use("/api/v1/bookings", verifyToken, customerGuard, bookingRouter);
 
+   // Order Route
+   app.use("/api/v1/orders", verifyToken, tenantGuard, orderRouter);
+
    // Wallet Route
    app.use("/api/v1/wallets", verifyToken, customerGuard, walletRouter);
 
@@ -64,10 +69,17 @@ const createApp = () => {
    app.use("/api/v1/payments", verifyToken, customerGuard, paymentRouter);
 
    // Notifications Route
-   app.use("/api/v1/notifications", paymentNotification);
-
-   // Playground Route for testing
-   app.use("/api/v1/playgrounds", getAllPropertyBeta);
+   app.post("/api/v1/notifications", async function paymentNotification(req: Request, res: Response) {
+      const data = req.body;
+      console.log("hit");
+      try {
+         updateBookingStatus(data);
+         res.status(200);
+      } catch (error) {
+         console.error(error);
+         return res.status(500);
+      }
+   });
 
    // Not found handler
    app.use(notFoundMiddleware);

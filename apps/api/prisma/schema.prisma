@@ -230,6 +230,9 @@ enum PaymentStatus {
   PENDING
   PAID
   CANCELED
+  PROCESSING //khusus manual transfer
+  APPROVED //khusus manual transfer
+  COMPLETED //setelah check in
 }
 
 model Review {

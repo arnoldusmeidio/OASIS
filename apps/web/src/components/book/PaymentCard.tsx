@@ -43,7 +43,6 @@ export default function BookingCheckout({ className, ...props }: CardProps) {
          const resData = await res.json();
          if (resData.ok) {
             setBookingData(resData.data);
-            // setDataReplica(resData);
          }
          setIsLoading(false);
       } catch (error) {
@@ -108,7 +107,7 @@ export default function BookingCheckout({ className, ...props }: CardProps) {
                         <Button
                            className="w-full"
                            onClick={method.function}
-                           disabled={bookingData?.paymentType ? true : false}
+                           disabled={bookingData?.paymentStatus !== "PENDING" ? true : false}
                         >
                            Pay with {method.title}
                         </Button>
