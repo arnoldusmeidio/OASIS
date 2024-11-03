@@ -101,6 +101,12 @@ export async function getBookingsSorted(req: RequestWithUserId, res: Response, n
          filter = "PAID";
       } else if (filterCode === "C") {
          filter = "CANCELED";
+      } else if (filterCode === "D") {
+         filter = "PROCESSING";
+      } else if (filterCode === "E") {
+         filter = "APPROVED";
+      } else if (filterCode === "F") {
+         filter = "COMPLETED";
       } else {
          return res.status(400).json({ message: "Bad Request", ok: false });
       }

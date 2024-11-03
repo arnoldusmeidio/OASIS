@@ -188,6 +188,36 @@ export default function BookingCard() {
                      >
                         CANCELED
                      </DropdownMenuRadioItem>
+                     <DropdownMenuRadioItem
+                        value="processing"
+                        onClick={() => {
+                           setFilter("D");
+                           setIsLoading(true);
+                           eventGetter();
+                        }}
+                     >
+                        PROCESSING
+                     </DropdownMenuRadioItem>
+                     <DropdownMenuRadioItem
+                        value="approved"
+                        onClick={() => {
+                           setFilter("E");
+                           setIsLoading(true);
+                           eventGetter();
+                        }}
+                     >
+                        APPROVED
+                     </DropdownMenuRadioItem>
+                     <DropdownMenuRadioItem
+                        value="completed"
+                        onClick={() => {
+                           setFilter("F");
+                           setIsLoading(true);
+                           eventGetter();
+                        }}
+                     >
+                        COMPLETED
+                     </DropdownMenuRadioItem>
                   </DropdownMenuRadioGroup>
                </DropdownMenuContent>
             </DropdownMenu>

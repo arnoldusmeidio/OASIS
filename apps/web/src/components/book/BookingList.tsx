@@ -90,9 +90,28 @@ export default function BookingList({ eventGetter, bookingData }: Props) {
                                  <Button className="w-full">Pay Now</Button>
                               </Link>
                            ) : e.paymentStatus == "APPROVED" ? (
-                              <Link href="/">
-                                 <Button className="w-full">Confirm Booking</Button>
-                              </Link>
+                              <Button
+                                 className="w-full"
+                                 onClick={async () => {
+                                    try {
+                                       const res = await fetch(
+                                          `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/payments/confirm/${e.bookingNumber}`,
+                                          {
+                                             method: "POST",
+                                             headers: { "Content-Type": "application/json" },
+                                             credentials: "include",
+                                          },
+                                       );
+                                       toast("Booking Successfully Confirmed", { duration: 1500 });
+                                       eventGetter();
+                                    } catch (error) {
+                                       toast.error("Something went wrong.", { duration: 1500 });
+                                       console.error(error);
+                                    }
+                                 }}
+                              >
+                                 Confirm Booking
+                              </Button>
                            ) : e.paymentStatus == "COMPLETED" ? (
                               <Link href="/">
                                  <Button className="w-full">Write Review</Button>

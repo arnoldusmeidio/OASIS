@@ -19,7 +19,6 @@ export default function ReviewPaymentProof({ className, ...props }: CardProps) {
 
    const [isLoading, setIsLoading] = useState(true);
    const [orderData, setOrderData] = useState<Booking>();
-   const [code, setCode] = useState<string>("0");
 
    //midtrans
    useEffect(() => {
@@ -90,10 +89,9 @@ export default function ReviewPaymentProof({ className, ...props }: CardProps) {
                      <Button
                         className="w-full"
                         onClick={async () => {
-                           setCode("1");
                            try {
                               const res = await fetch(
-                                 `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/orders/${bookingNumber}/${code}`,
+                                 `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/orders/${bookingNumber}/1`,
                                  {
                                     method: "POST",
                                     headers: { "Content-Type": "application/json" },
@@ -103,7 +101,7 @@ export default function ReviewPaymentProof({ className, ...props }: CardProps) {
                               toast("Booking Successfully Approved", {
                                  duration: 1500,
                               });
-                              eventGetter();
+                              router.push("../orders");
                            } catch (error) {
                               console.error(error);
                            }
@@ -116,10 +114,9 @@ export default function ReviewPaymentProof({ className, ...props }: CardProps) {
                      <Button
                         className="w-full"
                         onClick={async () => {
-                           setCode("0");
                            try {
                               const res = await fetch(
-                                 `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/orders/${bookingNumber}/${code}`,
+                                 `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/orders/${bookingNumber}/0`,
                                  {
                                     method: "DELETE",
                                     headers: { "Content-Type": "application/json" },
@@ -129,7 +126,7 @@ export default function ReviewPaymentProof({ className, ...props }: CardProps) {
                               toast("Booking Successfully Rejected", {
                                  duration: 1500,
                               });
-                              eventGetter();
+                              router.push("../orders");
                            } catch (error) {
                               console.error(error);
                            }
@@ -143,7 +140,17 @@ export default function ReviewPaymentProof({ className, ...props }: CardProps) {
                </div>
             </div>
          </CardContent>
-         <CardFooter></CardFooter>
+         <CardFooter>
+            <Button
+               className="w-full"
+               variant={"link"}
+               onClick={() => {
+                  router.back();
+               }}
+            >
+               Back
+            </Button>
+         </CardFooter>
       </Card>
    );
 }
