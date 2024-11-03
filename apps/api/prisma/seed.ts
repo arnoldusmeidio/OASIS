@@ -952,8 +952,8 @@ async function inputData() {
          description: "Modern hotel in the heart of Jakarta's bustling city center.",
          address: "Jl. Thamrin No.5, Jakarta",
          city: "Jakarta",
-         lat: -6.9,
-         lng: 107,
+         lat: -6.174452,
+         lng: 106.809886,
          category: "Hotel",
          propertyPictures: {
             create: [
