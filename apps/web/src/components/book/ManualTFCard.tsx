@@ -108,7 +108,7 @@ export default function ManualTransferCard({ className, ...props }: CardProps) {
          const response = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/payments/transfer/${bookingNumber}`,
             {
-               method: "POST",
+               method: "PUT",
                body: formData,
                credentials: "include",
             },

@@ -54,7 +54,7 @@ export async function getBookingPictureUrlByBookingNumber(req: RequestWithUserId
 
       const booking = await prisma.booking.findUnique({
          where: { bookingNumber, paymentType: "MANUAL" },
-         include: { room: { include: { property: true } } },
+         include: { room: { include: { property: true } }, customer: { include: { user: true } } },
       });
 
       if (!booking) {
@@ -78,7 +78,7 @@ export async function getBookingPictureUrlByBookingNumber(req: RequestWithUserId
          });
       }
 
-      return res.status(200).json({ data: booking.pictureUrl, ok: true });
+      return res.status(200).json({ data: booking, ok: true });
    } catch (error) {
       next(error);
    }
@@ -97,8 +97,7 @@ export async function approveManualTransferPayment(req: RequestWithUserId, res: 
             .status(404)
             .json({ message: locale == "id" ? "User tidak ditemukan" : "User not found", ok: false });
 
-      const { bookingNumber } = req.params;
-      const { ok } = req.body;
+      const { bookingNumber, code } = req.params;
 
       const booking = await prisma.booking.findUnique({
          where: { bookingNumber, paymentType: "MANUAL", paymentStatus: "PROCESSING" },
@@ -126,7 +125,7 @@ export async function approveManualTransferPayment(req: RequestWithUserId, res: 
          });
       }
 
-      if (ok) {
+      if (code === "1") {
          await prisma.$transaction(async (tx) => {
             await prisma.booking.update({
                where: { bookingNumber: booking.bookingNumber },
@@ -149,7 +148,7 @@ export async function approveManualTransferPayment(req: RequestWithUserId, res: 
          return res
             .status(200)
             .json({ message: locale == "id" ? "Booking berhasil dikonfirmasi." : "Booking confirmed.", ok: true });
-      } else {
+      } else if (code === "0") {
          await prisma.booking.update({
             where: { bookingNumber: booking.bookingNumber },
             data: { paymentStatus: "PENDING" },
@@ -157,6 +156,11 @@ export async function approveManualTransferPayment(req: RequestWithUserId, res: 
          return res.status(200).json({
             message: locale == "id" ? "Booking berhasil dibatalkan." : "Booking successfully canceled.",
             ok: true,
+         });
+      } else {
+         return res.status(400).json({
+            message: locale == "id" ? "Request tidak diterima" : "Bad Request",
+            ok: false,
          });
       }
    } catch (error) {

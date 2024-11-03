@@ -8,6 +8,6 @@ const upload = uploader();
 
 // router.route("/notifications").post(paymentNotification);
 router.route("/midtrans/:bookingNumber").post(createPayment);
-router.route("/transfer/:bookingNumber").post(upload.single("pictureUrl"), uploadPaymentProof);
+router.route("/transfer/:bookingNumber").put(upload.single("pictureUrl"), uploadPaymentProof);
 
 export default router;

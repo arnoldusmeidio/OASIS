@@ -85,8 +85,9 @@ export default function OrderList({ eventGetter, orderData }: Props) {
                                     </CardContent>
                                     <CardFooter className="flex gap-4">
                                        <CardFooter className="flex gap-4">
-                                          {booking.paymentStatus == "PROCESSING" ? (
-                                             <Link href={`/`}>
+                                          {booking.paymentStatus == "PROCESSING" ||
+                                          booking.paymentStatus == "APPROVED" ? (
+                                             <Link href={`/tenant/orders/${booking.bookingNumber}`}>
                                                 <Button className="w-full">Review Payment Proof</Button>
                                              </Link>
                                           ) : (
