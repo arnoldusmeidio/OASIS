@@ -123,7 +123,7 @@ export default function Home() {
                            ))}
                         </div>
                      </section>
-                     <div className="my-3 h-96 w-full rounded-lg">
+                     <div className="relative my-3 h-96 w-full rounded-lg">
                         <MainMap />
                      </div>
                   </div>

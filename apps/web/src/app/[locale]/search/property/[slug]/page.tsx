@@ -8,13 +8,13 @@ import { useEffect, useState } from "react";
 import { APIProvider, Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import RoomPicturesCarousel from "@/components/property/RoomPicturesCarousel";
 import { currency } from "@/helpers/currency";
 import useCurrencyStore from "@/stores/useCurrencyStore";
 import { useUserStore } from "@/stores/useUserStore";
 import PropertySkeleton from "@/components/PropertySkeleton";
 import CheckAvailabilityButton from "@/components/tenant/property/CheckAvailabilityButton";
 import CommentsAccordion from "@/components/tenant/property/CommentsAccordion";
+import RoomPicturesCarousel from "@/components/tenant/property/RoomPicturesCarousel";
 
 export default function SearchedPropertyPage({ params }: { params: { slug: string } }) {
    const [property, setProperty] = useState<Property>();

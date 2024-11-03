@@ -7,9 +7,17 @@ import type { Marker } from "@googlemaps/markerclusterer";
 import Image from "next/image";
 import Link from "next/link";
 
-interface Place {
+interface PropertyPicture {
    id: string;
-   imageUrl: string;
+   url: string;
+   createdAt: string;
+   updatedAt: string;
+   propertyId: string;
+}
+
+interface Place {
+   propertyPictures: PropertyPicture[]; // <-- should be an array of PropertyPicture objects
+   id: string;
    type: string;
    name: string;
    lat: number;
@@ -17,17 +25,26 @@ interface Place {
 }
 
 function SelectedPlaceInfo({ place }: { place: Place | undefined }) {
-   if (!place) return;
+   if (!place) return null;
+
+   const propertyPicture = place.propertyPictures?.[0]?.url; // Access the first picture's URL
 
    return (
       <AdvancedMarker position={{ lat: place.lat, lng: place.lng }} zIndex={9999999} onClick={() => {}}>
          <div className="-mt-12 rounded-md bg-white shadow-md">
             <div className="relative h-32 w-64 overflow-hidden rounded-t-md">
-               <Image src={place.imageUrl} alt="" fill className="object-cover" />
+               {propertyPicture ? (
+                  <Image src={propertyPicture} alt={place.name || "Place image"} fill className="object-cover" />
+               ) : (
+                  <div className="h-full w-full bg-gray-300" />
+               )}
             </div>
             <div className="p-4">
                <h2 className="text-base font-semibold">{place.name}</h2>
-               <Link href={`/place/${place.id}`} className="mt-1 block w-fit rounded-md bg-gray-400 p-2 text-white">
+               <Link
+                  href={`/search/property/${place.id}`}
+                  className="mt-1 block w-fit rounded-md bg-gray-400 p-2 text-white"
+               >
                   See detail
                </Link>
             </div>
@@ -60,9 +77,14 @@ export default function Places() {
       getPlaces();
    }, []);
 
+   console.log(places);
+
    useEffect(() => {
       if (map && !clusterer.current) {
          clusterer.current = new MarkerClusterer({ map });
+         if (Location) {
+            map.setCenter(Location as any);
+         }
       }
    }, [map]);
 
