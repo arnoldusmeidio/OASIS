@@ -58,6 +58,9 @@ export default function Navbar() {
                                  <Button variant={"ghost"} className="w-full justify-start" asChild>
                                     <Link href={"/tenant/create-property"}>Create Property</Link>
                                  </Button>
+                                 <Button variant={"ghost"} className="w-full justify-start" asChild>
+                                    <Link href={"/tenant/orders"}>Check Orders</Link>
+                                 </Button>
                               </div>
                               <div>
                                  <LogoutButton>
