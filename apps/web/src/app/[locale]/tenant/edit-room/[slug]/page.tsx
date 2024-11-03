@@ -237,22 +237,6 @@ export default function Room() {
                            )}
                         />
 
-                        {/* {specialDates.map((item, index) => (
-                           <div key={index} className="flex space-x-2">
-                              <input
-                                 type="date"
-                                 value={item.date ? item.date.toISOString().substring(0, 10) : ""}
-                                 onChange={(e) => updateSpecialDate(index, "date", new Date(e.target.value))}
-                              />
-
-                              <input
-                                 type="number"
-                                 value={item.price ?? 0} // Use 0 as a fallback if item.price is undefined or null
-                                 onChange={(e) => updateSpecialDate(index, "price", parseFloat(e.target.value) || 0)}
-                              />
-                           </div>
-                        ))} */}
-
                         <TenantDatePicker roomId={roomId || ""} roomStatus={roomStatus} setTanggal={setSpecialDates} />
                         <Button className="w-full" type="submit">
                            Edit Room
