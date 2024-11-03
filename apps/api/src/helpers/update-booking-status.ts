@@ -17,13 +17,13 @@ export default async function updateBookingStatus(data: any) {
    if (transactionStatus === "capture") {
       if (fraudStatus === "accept") {
          await prisma.booking.update({
-            where: { id: data.booking_id },
+            where: { id: data.order_id },
             data: { paymentStatus: "PAID" },
          });
       }
    } else if (transactionStatus === "settlement") {
       await prisma.booking.update({
-         where: { id: data.booking_id },
+         where: { id: data.order_id },
          data: { paymentStatus: "PAID" },
       });
    } else if (
@@ -33,13 +33,19 @@ export default async function updateBookingStatus(data: any) {
       transactionStatus === "failure"
    ) {
       await prisma.booking.update({
-         where: { id: data.booking_id },
+         where: { id: data.order_id },
          data: { paymentStatus: "PENDING" },
       });
    } else if (transactionStatus === "pending") {
       await prisma.booking.update({
-         where: { id: data.booking_id },
+         where: { id: data.order_id },
          data: { paymentStatus: "PENDING" },
       });
    }
+
+   await prisma.booking.update({
+      where: { id: data.order_id },
+      data: { paymentType: "PAYGATE" },
+   });
+   console.log("updated");
 }

@@ -6,10 +6,24 @@ export interface Booking {
    startDate: Date;
    endDate: Date;
    amountToPay: number;
+   pictureUrl: string;
+   type: string;
    room: {
       price: number;
       type: string;
       description: string;
+      property: {
+         name: string;
+         address: string;
+         city: string;
+         description: string;
+         category: string;
+      };
    };
-   customer: {};
+   customer: {
+      user: {
+         name: string;
+         email: string;
+      };
+   };
 }

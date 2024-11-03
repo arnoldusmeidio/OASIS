@@ -11,7 +11,7 @@ import express from "express";
 const router = express.Router();
 
 router.route("/").get(getBookings);
-router.route("/sorted/:sort").get(getBookingsSorted);
+router.route("/advanced/:code").get(getBookingsSorted);
 router.route("/:bookingNumber").get(getBookingsByBookingNumber).delete(deleteBookingByBookingNumber);
 router.route("/:roomId").post(createBooking);
 router.route("/:id/status").get(getRoomStatus);
