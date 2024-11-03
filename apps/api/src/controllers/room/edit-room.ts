@@ -37,8 +37,6 @@ export async function editRoom(req: Request, res: Response, next: NextFunction) 
 
       const day = JSON.parse(specialDates);
 
-      console.log(day);
-
       await prisma.room.update({
          where: {
             id: roomId,
