@@ -81,9 +81,6 @@ const createApp = () => {
       }
    });
 
-   // Playground Route for testing
-   app.use("/api/v1/playgrounds", getAllPropertyBeta);
-
    // Not found handler
    app.use(notFoundMiddleware);
 

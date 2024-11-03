@@ -68,7 +68,7 @@ export default function ReviewPaymentProof({ className, ...props }: CardProps) {
                      <p className="text-sm font-medium leading-none">From:</p>
                      <p className="text-muted-foreground text-sm">{orderData?.customer.user.name}</p>
                      <p className="text-muted-foreground text-sm">{orderData?.customer.user.email}</p>
-                     <p className="text-sm font-medium leading-none">For</p>
+                     <p className="text-sm font-medium leading-none">For:</p>
                      <p className="text-muted-foreground text-sm">Booking Number: {orderData?.bookingNumber}</p>
                      <p className="text-muted-foreground text-sm">{orderData?.room.property.name}</p>
                      <p className="text-muted-foreground text-sm">{orderData?.room.type}</p>
@@ -118,7 +118,7 @@ export default function ReviewPaymentProof({ className, ...props }: CardProps) {
                               const res = await fetch(
                                  `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/orders/${bookingNumber}/0`,
                                  {
-                                    method: "DELETE",
+                                    method: "POST",
                                     headers: { "Content-Type": "application/json" },
                                     credentials: "include",
                                  },

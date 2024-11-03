@@ -42,5 +42,10 @@ export default async function updateBookingStatus(data: any) {
          data: { paymentStatus: "PENDING" },
       });
    }
+
+   await prisma.booking.update({
+      where: { id: data.order_id },
+      data: { paymentType: "PAYGATE" },
+   });
    console.log("updated");
 }

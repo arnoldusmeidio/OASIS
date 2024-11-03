@@ -74,14 +74,11 @@ export default function BookingList({ eventGetter, bookingData }: Props) {
                                  <p className="text-sm font-medium leading-none">Payment Status:</p>
                                  <p className="text-muted-foreground text-sm">{e.paymentStatus}</p>
                               </div>
-                              {e.paymentStatus == "PENDING" ? (
-                                 <div className="flex-1 space-y-1">
-                                    <p className="text-sm font-medium leading-none">Amount to Pay:</p>
-                                    <p className="text-muted-foreground text-sm">{e.amountToPay}</p>
-                                 </div>
-                              ) : (
-                                 ""
-                              )}
+
+                              <div className="flex-1 space-y-1">
+                                 <p className="text-sm font-medium leading-none">Total Price:</p>
+                                 <p className="text-muted-foreground text-sm">{e.amountToPay}</p>
+                              </div>
                            </div>
                         </CardContent>
                         <CardFooter className="flex gap-4">
