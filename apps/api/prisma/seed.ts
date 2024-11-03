@@ -650,7 +650,7 @@ async function inputData() {
          propertyPictures: {
             create: [
                {
-                  url: "https://res.cloudinary.com/dbu0u9bln/image/upload/v1730207480/roya-ann-miller-_w-TB-ZTBg8-unsplash_kamuvz.jpg",
+                  url: "https://res.cloudinary.com/dbu0u9bln/image/upload/v1730207474/james-qualtrough-r9ct0HpZNs4-unsplash_xgdbcm.jpg",
                },
             ],
          },
@@ -952,8 +952,8 @@ async function inputData() {
          description: "Modern hotel in the heart of Jakarta's bustling city center.",
          address: "Jl. Thamrin No.5, Jakarta",
          city: "Jakarta",
-         lat: -6.214,
-         lng: 106.845,
+         lat: -6.9,
+         lng: 107,
          category: "Hotel",
          propertyPictures: {
             create: [

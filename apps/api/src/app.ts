@@ -1,5 +1,6 @@
 import express, { json, urlencoded, Request, Response } from "express";
 import cors from "cors";
+import rateLimit from "express-rate-limit";
 
 import authRouter from "./routers/auth-router";
 import sampleRouter from "./routers/sample-router";
@@ -22,6 +23,10 @@ import updateBookingStatus from "./helpers/update-booking-status";
 
 const createApp = () => {
    const app = express();
+   const limiter = rateLimit({
+      windowMs: 1000 * 60,
+      max: 30,
+   });
 
    // Middleware configuration
    app.use(
@@ -30,6 +35,7 @@ const createApp = () => {
          credentials: true,
       }),
    );
+   app.use(limiter);
    app.use(json());
    app.use(cookieParser());
    app.use(urlencoded({ extended: true }));
