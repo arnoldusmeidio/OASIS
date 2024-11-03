@@ -59,11 +59,7 @@ export default function Places() {
       if (!e.latLng) return;
       map.panTo(e.latLng);
       map.setZoom(25);
-      console.log(e);
-      console.log(e.latLng.toString());
    }
-
-   console.log(places);
 
    return (
       <>

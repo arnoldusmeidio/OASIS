@@ -109,9 +109,6 @@ export default function Room() {
             credentials: "include",
          });
 
-         const formDataEntries = Array.from(formData.entries());
-         console.log("FormData entries:", formDataEntries);
-
          const data = await response.json();
          if (data.ok) {
             toast(data.message, { duration: 1000 });

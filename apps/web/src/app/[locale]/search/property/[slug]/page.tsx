@@ -2,7 +2,7 @@
 
 import FormError from "@/components/FormError";
 import PropertyPicturesCarousel from "@/components/tenant/property/PropertyPicturesCarousel";
-import CurrentLocButton from "@/components/tenant/maps-button";
+import CurrentLocButton from "@/components/user/userGeolocationButton";
 import { Property } from "@/types/property-types";
 import { useEffect, useState } from "react";
 import { APIProvider, Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
@@ -140,7 +140,7 @@ export default function SearchedPropertyPage({ params }: { params: { slug: strin
 
                   <div className="mt-5 flex w-full flex-col gap-2 lg:mt-0 lg:w-1/3">
                      {/* Google Maps */}
-                     <div className="h-80 w-full">
+                     <div className="relative h-80 w-full">
                         <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
                            <Map
                               defaultCenter={{ lat: property.lat, lng: property.lng }}
@@ -156,7 +156,7 @@ export default function SearchedPropertyPage({ params }: { params: { slug: strin
                                     <AdvancedMarker position={userLoc}>
                                        <Pin />
                                     </AdvancedMarker>
-                                    {/* <CurrentLocButton userLoc={userLoc} /> */}
+                                    <CurrentLocButton userLoc={userLoc} />
                                  </>
                               )}
                            </Map>

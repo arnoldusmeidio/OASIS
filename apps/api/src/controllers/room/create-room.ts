@@ -8,7 +8,6 @@ export const createRoom = async (req: Request, res: Response, next: NextFunction
       const propertyId = req.params.propertyId;
       const { roomName, roomDescription, roomCapacity, defaultPrice } = req.body;
 
-      console.log(req.body);
       // Validate input
       if (!roomName || !roomDescription || !roomCapacity) {
          return res.status(400).json({ message: "All fields are required" });
@@ -50,15 +49,6 @@ export const createRoom = async (req: Request, res: Response, next: NextFunction
             type: roomName,
             description: roomDescription,
             defaultPrice: parseFloat(defaultPrice),
-            // roomPrice: {
-            //    create: [
-            //       {
-            //          price: 1000.0,
-            //          startDate: "",
-            //          endDate: "",
-            //       },
-            //    ],
-            // },
             roomCapacity: Number(roomCapacity),
             roomPictures: {
                create: pictureUrls,
@@ -66,7 +56,6 @@ export const createRoom = async (req: Request, res: Response, next: NextFunction
          },
       });
 
-      console.log(pictureUrls);
       res.status(201).json({ message: "Room Created", ok: true, data: kamar });
    } catch (error) {
       next(error);

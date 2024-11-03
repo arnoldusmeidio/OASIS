@@ -49,28 +49,7 @@ export async function createPayment(req: RequestWithUserId, res: Response) {
          return res.status(401).json({ message: "Unauthorized", ok: false });
       }
 
-      // const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-      // const firstDate = new Date(booking.startDate).getTime();
-      // //console.log(booking.startDate);
-      // const secondDate = new Date(booking.endDate).getTime();
-      // //console.log(booking.endDate);
-      // const diffDays = Math.ceil(Math.abs((firstDate - secondDate) / oneDay));
-      // //console.log(diffDays);
-      // //   const amount = booking.room.defaultPrice * diffDays;
-      // //   console.log(amount);
-
-      // let totalPrice = 0;
-
-      // for (let i = 0; i < diffDays; i++) {
-      //    const currentDate = new Date(booking.startDate);
-      //    currentDate.setDate(booking.startDate.getDate() + i);
-
-      //    const priceForDate = getPriceForDate(currentDate, booking.roomId, booking.room.defaultPrice);
-      //    totalPrice += await priceForDate;
-      // }
-
       const totalPrice = booking.amountToPay;
-      // console.log(totalPrice);
       const orderId = booking.id;
 
       const parameter = {
@@ -78,17 +57,7 @@ export async function createPayment(req: RequestWithUserId, res: Response) {
             order_id: orderId,
             gross_amount: totalPrice,
          },
-         // item_details: [
-         //    {
-         //       id: "ITEM1",
-         //       price: 10000,
-         //       quantity: 1,
-         //       name: "Midtrans Bear",
-         //       brand: "Midtrans",
-         //       category: "Toys",
-         //       url: "https://tokobuah.com/apple-fuji",
-         //    },
-         // ],
+
          customer_details: {
             first_name: user.name,
             last_name: user.name,

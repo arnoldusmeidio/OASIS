@@ -211,8 +211,6 @@ export async function createBooking(req: Request, res: Response, next: NextFunct
          where: { id, customer: { id } },
       });
 
-      //console.log(user!.id);
-
       if (!user) return res.status(400).json({ message: "Failed to get user", ok: false });
 
       const { roomId } = req.params;
@@ -280,13 +278,8 @@ export async function createBooking(req: Request, res: Response, next: NextFunct
 
       const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
       const firstDate = new Date(startDate).getTime();
-      //console.log(booking.startDate);
       const secondDate = new Date(endDate).getTime();
-      //console.log(booking.endDate);
       const diffDays = Math.ceil(Math.abs((firstDate - secondDate) / oneDay));
-      //console.log(diffDays);
-      //   const amount = booking.room.defaultPrice * diffDays;
-      //   console.log(amount);
 
       let totalPrice = 0;
 
@@ -303,8 +296,6 @@ export async function createBooking(req: Request, res: Response, next: NextFunct
             totalPrice += await priceForDate;
          }
       }
-
-      //   console.log(totalPrice);
 
       if (isDateRangeAvailable(existingBookings, newBooking)) {
          const createBooking = await prisma.booking.create({
