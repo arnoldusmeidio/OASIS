@@ -77,7 +77,6 @@ export default function Tenant() {
          const resData = await res.json();
          setProperties(resData.data); // Assuming response has data in `data` field
          setPage(resData.meta);
-         console.log(resData);
       } catch (error) {
          console.error(error);
       }
