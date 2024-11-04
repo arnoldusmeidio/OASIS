@@ -47,5 +47,4 @@ export default async function updateBookingStatus(data: any) {
       where: { id: data.order_id },
       data: { paymentType: "PAYGATE" },
    });
-   console.log("updated");
 }

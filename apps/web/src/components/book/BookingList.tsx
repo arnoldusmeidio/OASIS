@@ -110,7 +110,7 @@ export default function BookingList({ eventGetter, bookingData }: Props) {
                                  Confirm Booking
                               </Button>
                            ) : e.paymentStatus == "COMPLETED" ? (
-                              <Link href="/">
+                              <Link href={`/user/review/${e.id}-${e.room.property.id}`}>
                                  <Button className="w-full">Write Review</Button>
                               </Link>
                            ) : (

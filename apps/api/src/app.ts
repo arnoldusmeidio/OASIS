@@ -78,7 +78,6 @@ const createApp = () => {
    // Notifications Route
    app.post("/api/v1/notifications", async function paymentNotification(req: Request, res: Response) {
       const data = req.body;
-      console.log("hit");
       try {
          updateBookingStatus(data);
          res.status(200);

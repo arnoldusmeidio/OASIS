@@ -184,7 +184,7 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
                                  <AdvancedMarker position={userLoc}>
                                     <Pin />
                                  </AdvancedMarker>
-                                 {/* <CurrentLocButton userLoc={userLoc} /> */}
+                                 <CurrentLocButton userLoc={userLoc} />
                               </>
                            )}
                         </Map>
