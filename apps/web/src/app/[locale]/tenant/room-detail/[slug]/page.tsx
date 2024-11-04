@@ -4,10 +4,16 @@ import { Property } from "@/types/property-types";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import Image from "next/image";
 import Autoplay from "embla-carousel-autoplay";
+import useCurrencyStore from "@/stores/useCurrencyStore";
+import { useUserStore } from "@/stores/useUserStore";
+import { currency } from "@/helpers/currency";
 
 export default function RoomDetail({ params }: { params: { slug: string } }) {
    const [roomGet, setRoomGet] = useState<Property | undefined>(undefined);
    const [isLoading, setIsLoading] = useState(true);
+   const { user } = useUserStore();
+   const [currencyLoading, setCurrencyLoading] = useState(true);
+   const { currencyRate, getCurrencyRate } = useCurrencyStore();
 
    useEffect(() => {
       const roomGetter = async () => {
@@ -28,8 +34,17 @@ export default function RoomDetail({ params }: { params: { slug: string } }) {
             setIsLoading(false);
          }
       };
+
       roomGetter();
-   }, [params.slug]);
+
+      if (user?.currency && user.currency != "IDR") {
+         setCurrencyLoading(true);
+         getCurrencyRate();
+         setCurrencyLoading(false);
+      } else {
+         setCurrencyLoading(false);
+      }
+   }, [params.slug, user?.currency, getCurrencyRate]);
 
    return (
       <div className="mx-auto w-full max-w-6xl p-4">
@@ -72,7 +87,12 @@ export default function RoomDetail({ params }: { params: { slug: string } }) {
                   <div className="mb-4 flex items-center justify-between border-b pb-4">
                      <h1 className="text-2xl font-bold text-gray-800">{roomGet.type}</h1>
                      <span className="text-xl font-semibold text-blue-600">
-                        ${roomGet.defaultPrice} <span className="font-normal text-gray-600">/ night</span>
+                        {currencyLoading || !user
+                           ? "Loading..."
+                           : !currencyRate
+                             ? currency(roomGet.defaultPrice as any, "IDR", 1)
+                             : currency(roomGet.defaultPrice as any, user?.currency, currencyRate)}
+                        <span className="font-normal text-gray-600">/ night</span>
                      </span>
                   </div>
 
