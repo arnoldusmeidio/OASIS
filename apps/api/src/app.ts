@@ -1,5 +1,6 @@
 import express, { json, urlencoded, Request, Response } from "express";
 import cors from "cors";
+import rateLimit from "express-rate-limit";
 
 import authRouter from "./routers/auth-router";
 import sampleRouter from "./routers/sample-router";
@@ -19,9 +20,14 @@ import cookieParser from "cookie-parser";
 import { getAllPropertyBeta } from "./controllers/sample-controller";
 import { paymentNotification } from "./controllers/payment/midtrans-payment-controller";
 import updateBookingStatus from "./helpers/update-booking-status";
+import updateWalletBalance from "./helpers/update-wallet-balance";
 
 const createApp = () => {
    const app = express();
+   const limiter = rateLimit({
+      windowMs: 1000 * 60,
+      max: 30,
+   });
 
    // Middleware configuration
    app.use(
@@ -30,6 +36,7 @@ const createApp = () => {
          credentials: true,
       }),
    );
+   app.use(limiter);
    app.use(json());
    app.use(cookieParser());
    app.use(urlencoded({ extended: true }));
@@ -73,6 +80,18 @@ const createApp = () => {
       const data = req.body;
       try {
          updateBookingStatus(data);
+         res.status(200);
+      } catch (error) {
+         console.error(error);
+         return res.status(500);
+      }
+   });
+
+   app.post("/api/v1/topup", async function topupNotification(req: Request, res: Response) {
+      const data = req.body;
+      console.log("hit");
+      try {
+         updateWalletBalance(data);
          res.status(200);
       } catch (error) {
          console.error(error);

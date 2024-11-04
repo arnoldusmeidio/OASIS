@@ -127,23 +127,23 @@ export async function approveManualTransferPayment(req: RequestWithUserId, res: 
 
       if (code === "1") {
          await prisma.$transaction(async (tx) => {
-            await prisma.booking.update({
+            await tx.booking.update({
                where: { bookingNumber: booking.bookingNumber },
                data: { paymentStatus: "APPROVED" },
             });
 
-            // const { error } = await resend.emails.send({
-            //    from: "Oasis <oasis.app@resend.dev>",
-            //    to: [booking.customer.user.email],
-            //    subject: "Your Booking (OASIS)",
-            //    html: `<h1>Booking Details</h1><p>Here is your booking details:${booking?.bookingNumber}, please confirm.</p>`,
-            // });
+            const { error } = await resend.emails.send({
+               from: "Oasis <booking@oasis-resort.xyz>",
+               to: [booking.customer.user.email],
+               subject: "(OASIS) Booking Details",
+               html: `<h1>Booking Details</h1><p>Here is your booking details:${booking?.bookingNumber}, please confirm.</p>`,
+            });
 
-            // if (error) {
-            //    return res
-            //       .status(400)
-            //       .json({ message: locale == "id" ? "Terjadi kesalahan" : "Something went wrong", ok: false });
-            // }
+            if (error) {
+               return res
+                  .status(400)
+                  .json({ message: locale == "id" ? "Terjadi kesalahan" : "Something went wrong", ok: false });
+            }
          });
          return res
             .status(200)

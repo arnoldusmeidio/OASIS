@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "@/prisma";
 import { MidtransClient } from "midtrans-node-client";
-import { v4 as uuid } from "uuid";
 import { RequestWithUserId } from "@/types";
 import updateBookingStatus from "@/helpers/update-booking-status";
 
@@ -9,13 +8,6 @@ const snap = new MidtransClient.Snap({
    isProduction: false,
    serverKey: process.env.MIDTRANS_SERVER_KEY,
 });
-
-// interface RoomPrice {
-//    roomId: string;
-//    price: number;
-//    startDate: Date;
-//    endDate: Date;
-// }
 
 async function getPriceForDate(date: Date, roomId: string, defaultPrice: number) {
    const peakSeasons = await prisma.roomPrice.findMany({
@@ -50,6 +42,7 @@ export async function createPayment(req: RequestWithUserId, res: Response) {
       }
 
       const totalPrice = booking.amountToPay;
+
       const orderId = booking.id;
 
       const parameter = {
@@ -57,14 +50,13 @@ export async function createPayment(req: RequestWithUserId, res: Response) {
             order_id: orderId,
             gross_amount: totalPrice,
          },
-
          customer_details: {
             first_name: user.name,
             last_name: user.name,
             email: user.email,
          },
          callbacks: {
-            finish: "http://localhost:3000",
+            finish: process.env.CLIENT_PORT,
          },
       };
       const transaction = await snap.createTransaction(parameter);

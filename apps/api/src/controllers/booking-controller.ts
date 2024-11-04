@@ -162,7 +162,7 @@ export async function getBookingsByBookingNumber(req: Request, res: Response, ne
 
       const booking = await prisma.booking.findUnique({
          where: { bookingNumber, customerId: user.id },
-         include: { room: { include: { property: true } } },
+         include: { room: { include: { property: true } }, customer: { include: { user: true } } },
       });
 
       if (!booking) {

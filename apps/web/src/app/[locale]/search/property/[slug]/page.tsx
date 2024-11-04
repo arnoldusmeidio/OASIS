@@ -2,7 +2,7 @@
 
 import FormError from "@/components/FormError";
 import PropertyPicturesCarousel from "@/components/tenant/property/PropertyPicturesCarousel";
-import CurrentLocButton from "@/components/user/userGeolocationButton";
+import CurrentLocButton from "@/components/tenant/maps-button";
 import { Property } from "@/types/property-types";
 import { useEffect, useState } from "react";
 import { APIProvider, Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
