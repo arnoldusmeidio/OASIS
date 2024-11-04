@@ -10,11 +10,11 @@ import { useForm } from "react-hook-form";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Image from "next/image";
 import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
-import { useRouter } from "@/i18n/routing"; // Your custom routing
+import { useRouter } from "@/i18n/routing";
+import { Star } from "lucide-react";
 
 export default function CreateReview({ params }: { params: { bookingNumber: string } }) {
    const router = useRouter();
@@ -66,7 +66,6 @@ export default function CreateReview({ params }: { params: { bookingNumber: stri
 
    return (
       <Card className="mx-auto w-full max-w-md rounded-lg border p-6 shadow-md">
-         {/* Header */}
          <CardHeader className="flex w-full items-center justify-between border-b pb-2">
             <div className="flex items-center">
                <Image
@@ -94,17 +93,22 @@ export default function CreateReview({ params }: { params: { bookingNumber: stri
                      render={({ field }) => (
                         <FormItem>
                            <FormLabel>Rating</FormLabel>
-                           <RadioGroup
-                              className="flex space-x-2"
-                              value={field.value.toString()}
-                              onValueChange={(value) => field.onChange(Number(value))}
-                           >
+                           <div className="flex space-x-2">
                               {[1, 2, 3, 4, 5].map((star) => (
-                                 <RadioGroupItem key={star} value={star.toString()}>
-                                    {star} Star{star > 1 ? "s" : ""}
-                                 </RadioGroupItem>
+                                 <button
+                                    key={star}
+                                    type="button"
+                                    onClick={() => field.onChange(star)}
+                                    className="focus:outline-none"
+                                 >
+                                    <Star
+                                       className={`h-6 w-6 ${
+                                          star <= field.value ? "text-yellow-500" : "text-gray-300"
+                                       }`}
+                                    />
+                                 </button>
                               ))}
-                           </RadioGroup>
+                           </div>
                            <FormMessage />
                         </FormItem>
                      )}
@@ -134,7 +138,6 @@ export default function CreateReview({ params }: { params: { bookingNumber: stri
                <FormError message={error} />
                <FormSuccess message={success} />
 
-               {/* Footer */}
                <CardFooter className="mt-4 flex justify-end">
                   <Button className="w-full" type="submit" disabled={isSubmitting}>
                      Submit Review

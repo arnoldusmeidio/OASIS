@@ -9,7 +9,11 @@ export function error(error: ErrorWithStatusCode, req: Request, res: Response, n
 
    const defaultError = {
       statusCode: error.statusCode || 500,
-      message: error.message || locale == "id" ? "Terjadi kesalahan" : "General error. Sorry, and good luck",
+      message: error.message
+         ? error.message
+         : locale == "id"
+           ? "Terjadi kesalahan"
+           : "General error. Sorry, and good luck",
    };
 
    console.error(error);
