@@ -43,7 +43,7 @@ export async function emailVerification(req: Request, res: Response, next: NextF
       const token = await generateVerificationToken(email);
       const confirmationLink = `${process.env.CLIENT_PORT}/register/select-role?token=${token.token}&email=${email}`;
 
-      const templatePath = path.join(__dirname, "../../templates", "auth-email-templates.hbs");
+      const templatePath = path.join(__dirname, "../templates", "auth-email-templates.hbs");
       const templateSource = await fs.readFile(templatePath, "utf-8");
       const compiledTemplate = handlebars.compile(templateSource);
       const html = compiledTemplate({
@@ -122,7 +122,7 @@ export async function emailUpdateVerification(req: Request, res: Response, next:
       const token = await generateVerificationToken(email);
       const confirmationLink = `${process.env.CLIENT_PORT}/new-verification?token=${token.token}`;
 
-      const templatePath = path.join(__dirname, "../../templates", "update-email-templates.hbs");
+      const templatePath = path.join(__dirname, "../templates", "update-email-templates.hbs");
       const templateSource = await fs.readFile(templatePath, "utf-8");
       const compiledTemplate = handlebars.compile(templateSource);
       const html = compiledTemplate({
@@ -179,7 +179,7 @@ export async function passwordResetEmail(req: Request, res: Response, next: Next
       const token = await generatePasswordResetToken(email);
       const resetLink = `${process.env.CLIENT_PORT}/new-password?token=${token.token}`;
 
-      const templatePath = path.join(__dirname, "../../templates", "reset-password-templates.hbs");
+      const templatePath = path.join(__dirname, "../templates", "reset-password-templates.hbs");
       const templateSource = await fs.readFile(templatePath, "utf-8");
       const compiledTemplate = handlebars.compile(templateSource);
       const html = compiledTemplate({
