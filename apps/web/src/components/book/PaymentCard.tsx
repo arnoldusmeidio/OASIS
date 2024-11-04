@@ -64,6 +64,9 @@ export default function BookingCheckout({ className, ...props }: CardProps) {
       {
          title: "Oasis Wallet",
          description: "Pay using your digital wallet in OASIS website.",
+         function: () => {
+            router.push(`../digital/${bookingNumber}`);
+         },
       },
       {
          title: "Payment Gateway",
@@ -116,7 +119,17 @@ export default function BookingCheckout({ className, ...props }: CardProps) {
                ))}
             </div>
          </CardContent>
-         <CardFooter></CardFooter>
+         <CardFooter>
+            <Button
+               className="w-full"
+               variant={"link"}
+               onClick={() => {
+                  router.back();
+               }}
+            >
+               Back
+            </Button>
+         </CardFooter>
       </Card>
    );
 }
