@@ -89,7 +89,6 @@ const createApp = () => {
 
    app.post("/api/v1/topup", async function topupNotification(req: Request, res: Response) {
       const data = req.body;
-      console.log("hit");
       try {
          updateWalletBalance(data);
          res.status(200);

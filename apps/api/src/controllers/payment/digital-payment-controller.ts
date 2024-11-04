@@ -33,7 +33,6 @@ export async function createDigitalPayment(req: RequestWithUserId, res: Response
       const { bookingNumber } = req.params;
       const parsedData = digitalPaymentSchema.parse(req.body);
       const { usePoints } = parsedData;
-      //   console.log(typeof usePoints);
 
       const booking = await prisma.booking.findUnique({
          where: { bookingNumber, customerId: user.id, paymentStatus: "PENDING" },

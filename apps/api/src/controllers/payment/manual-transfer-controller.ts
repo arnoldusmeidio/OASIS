@@ -4,6 +4,12 @@ import { Request, Response, NextFunction } from "express";
 import prisma from "prisma/client";
 import { ZodError } from "zod";
 import fs from "fs/promises";
+import { Resend } from "resend";
+import handlebars from "handlebars";
+import path from "path";
+import { format } from "date-fns";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function uploadPaymentProof(req: RequestWithUserId, res: Response, next: NextFunction) {
    try {
@@ -99,13 +105,40 @@ export async function confirmBookingTf(req: RequestWithUserId, res: Response, ne
             customerId: user.id,
             paymentStatus: "APPROVED",
          },
+         include: { customer: { include: { user: true } }, room: { include: { property: true } } },
       });
 
-      if (!user)
+      if (!booking)
          return res.status(404).json({
             message: locale == "id" ? "Booking tidak ditemukan" : "Booking not found",
             ok: false,
          });
+
+      const templatePath = path.join(__dirname, "../../templates", "booking-templates.hbs");
+      const templateSource = await fs.readFile(templatePath, "utf-8");
+      const compiledTemplate = handlebars.compile(templateSource);
+      const html = compiledTemplate({
+         name: user.name,
+         propertyName: booking.room.property.name,
+         address: booking.room.property.address,
+         roomType: booking.room.type,
+         bookingNumber: booking.bookingNumber,
+         amountToPay: booking.amountToPay,
+         startDate: format(booking.startDate, "LLL dd, y"),
+         endDate: format(booking.endDate, "LLL dd, y"),
+      });
+
+      const { error } = await resend.emails.send({
+         from: "Oasis <booking@oasis-resort.xyz>",
+         to: [booking.customer.user.email],
+         subject: "(OASIS) Booking Details",
+         html: html,
+      });
+      if (error) {
+         return res
+            .status(400)
+            .json({ message: locale == "id" ? "Terjadi kesalahan" : "Something went wrong", ok: false });
+      }
 
       await prisma.booking.update({
          where: {
@@ -117,7 +150,7 @@ export async function confirmBookingTf(req: RequestWithUserId, res: Response, ne
       });
 
       return res.status(200).json({
-         message: locale == "id" ? "Berhasil upload bukti pembayaran" : "Uploaded payment proof",
+         message: locale == "id" ? "Berhasil confirmasi" : "Confirmation success",
          ok: true,
       });
    } catch (error) {
