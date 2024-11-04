@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Property } from "@/types/property-types";
 import { Card, CardContent } from "@/components/ui/card";
-import CurrentLocButton from "@/components/tenant/maps-button";
 import { APIProvider, Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Badge } from "@/components/ui/badge";
@@ -184,7 +183,6 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
                                  <AdvancedMarker position={userLoc}>
                                     <Pin />
                                  </AdvancedMarker>
-                                 <CurrentLocButton userLoc={userLoc} />
                               </>
                            )}
                         </Map>

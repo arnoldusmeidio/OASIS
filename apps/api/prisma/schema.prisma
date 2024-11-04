@@ -252,7 +252,7 @@ model Review {
   review String
   star   Int
 
-  @@unique([customerId, propertyId], name: "uniqueReview")
+  @@unique([customerId, bookingId], name: "uniqueReview")
 }
 
 model Wallet {
@@ -277,7 +277,7 @@ model WalletHistory {
   description String
   value       Float
   types       TransactionTypes
-  bp          BalanceOrPoints //yg mana
+  bp          BalanceOrPoints
 }
 
 enum TransactionTypes {

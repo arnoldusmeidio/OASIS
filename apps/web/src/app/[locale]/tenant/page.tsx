@@ -89,7 +89,7 @@ export default function Tenant() {
             headers: { "Content-Type": "application/json" },
             credentials: "include",
          });
-         if (!response.ok) throw new Error("Failed to delete property");
+         if (!response.ok) toast.error("Failed to delete property");
 
          const data = await response.json();
          setIsDelete(data.data);

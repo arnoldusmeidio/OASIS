@@ -128,120 +128,121 @@ export default function Room() {
    };
 
    return (
-      <main>
-         <div className="h-full w-[375px] content-center self-center">
-            <div className="h-fit w-full py-4">
-               <Card className="w-full shadow-md">
-                  <Form {...form}>
-                     <form onSubmit={form.handleSubmit(onSubmit)}>
-                        <FormField
-                           control={form.control}
-                           name={"roomName"}
-                           render={({ field }) => (
-                              <FormItem>
-                                 <FormLabel>Room Name</FormLabel>
-                                 <FormControl>
-                                    <Input {...field} placeholder="Room Name" />
-                                 </FormControl>
-                                 <FormMessage />
-                              </FormItem>
-                           )}
-                        />
-                        <FormField
-                           control={form.control}
-                           name={"roomDescription"}
-                           render={({ field }) => (
-                              <FormItem>
-                                 <FormLabel>Room Description</FormLabel>
-                                 <FormControl>
-                                    <Input {...field} placeholder="Room Description" />
-                                 </FormControl>
-                                 <FormMessage />
-                              </FormItem>
-                           )}
-                        />
-                        <FormField
-                           control={form.control}
-                           name={"roomPrice"}
-                           render={({ field }) => (
-                              <FormItem>
-                                 <FormLabel>Default Room Price</FormLabel>
-                                 <FormControl>
-                                    <Input
-                                       type="number"
-                                       {...field}
-                                       placeholder="Room Price"
-                                       onChange={(e) => {
-                                          const value = e.target.value;
-                                          field.onChange(value ? value : "0"); // Convert string to number
-                                       }}
-                                    />
-                                 </FormControl>
-                                 <FormMessage />
-                              </FormItem>
-                           )}
-                        />
-                        <FormField
-                           control={form.control}
-                           name={"roomCapacity"}
-                           render={({ field }) => (
-                              <FormItem>
-                                 <FormLabel>Room Capacity</FormLabel>
-                                 <FormControl>
-                                    <Input
-                                       type="number"
-                                       {...field}
-                                       placeholder="capacity"
-                                       onChange={(e) => {
-                                          const value = e.target.value;
-                                          field.onChange(value ? value : "0"); // Convert string to number
-                                       }}
-                                    />
-                                 </FormControl>
-                                 <FormMessage />
-                              </FormItem>
-                           )}
-                        />
-                        <FormField
-                           control={form.control}
-                           name="roomPictures"
-                           render={({ field }) => (
-                              <FormItem>
-                                 <FormLabel>Room Images</FormLabel>
-                                 <div>
-                                    <Input
-                                       type="file"
-                                       accept="image/*"
-                                       multiple
-                                       onChange={onChange}
-                                       disabled={images.length >= 5}
-                                    />
-                                    <div className="mt-2 flex space-x-2">
-                                       {imagesPreview?.map((img, index) => (
-                                          <Image
-                                             src={img}
-                                             key={index}
-                                             alt={`preview-${index}`}
-                                             className="border-gray h-24 w-24 rounded border-2 object-contain p-2 shadow"
-                                             width={50}
-                                             height={50}
-                                          />
-                                       ))}
-                                    </div>
+      <main className="flex h-screen items-center justify-center">
+         <div className="w-full max-w-md px-2">
+            <Card className="w-full rounded-lg bg-white p-4 shadow-md">
+               <h2 className="mb-4 text-center text-2xl font-semibold">Edit Room</h2>
+               <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+                     <FormField
+                        control={form.control}
+                        name="roomName"
+                        render={({ field }) => (
+                           <FormItem>
+                              <FormLabel>Room Name</FormLabel>
+                              <FormControl>
+                                 <Input {...field} placeholder="Room Name" className="w-full" />
+                              </FormControl>
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
+                     <FormField
+                        control={form.control}
+                        name="roomDescription"
+                        render={({ field }) => (
+                           <FormItem>
+                              <FormLabel>Room Description</FormLabel>
+                              <FormControl>
+                                 <Input {...field} placeholder="Room Description" className="w-full" />
+                              </FormControl>
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
+                     <FormField
+                        control={form.control}
+                        name="roomPrice"
+                        render={({ field }) => (
+                           <FormItem>
+                              <FormLabel>Default Room Price</FormLabel>
+                              <FormControl>
+                                 <Input
+                                    type="number"
+                                    {...field}
+                                    placeholder="Room Price"
+                                    className="w-full"
+                                    onChange={(e) => {
+                                       const value = e.target.value;
+                                       field.onChange(value ? value : "0");
+                                    }}
+                                 />
+                              </FormControl>
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
+                     <FormField
+                        control={form.control}
+                        name="roomCapacity"
+                        render={({ field }) => (
+                           <FormItem>
+                              <FormLabel>Room Capacity</FormLabel>
+                              <FormControl>
+                                 <Input
+                                    type="number"
+                                    {...field}
+                                    placeholder="Capacity"
+                                    className="w-full"
+                                    onChange={(e) => {
+                                       const value = e.target.value;
+                                       field.onChange(value ? value : "0");
+                                    }}
+                                 />
+                              </FormControl>
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
+                     <FormField
+                        control={form.control}
+                        name="roomPictures"
+                        render={({ field }) => (
+                           <FormItem>
+                              <FormLabel>Room Images</FormLabel>
+                              <div>
+                                 <Input
+                                    type="file"
+                                    accept="image/*"
+                                    multiple
+                                    onChange={onChange}
+                                    disabled={images.length >= 5}
+                                    className="w-full"
+                                 />
+                                 <div className="mt-2 flex flex-wrap gap-2">
+                                    {imagesPreview?.map((img, index) => (
+                                       <Image
+                                          src={img}
+                                          key={index}
+                                          alt={`preview-${index}`}
+                                          className="h-20 w-20 rounded border border-gray-300 object-cover"
+                                          width={80}
+                                          height={80}
+                                       />
+                                    ))}
                                  </div>
-                                 <FormMessage />
-                              </FormItem>
-                           )}
-                        />
-
-                        <TenantDatePicker roomId={roomId || ""} roomStatus={roomStatus} setTanggal={setSpecialDates} />
-                        <Button className="w-full" type="submit">
-                           Edit Room
-                        </Button>
-                     </form>
-                  </Form>
-               </Card>
-            </div>
+                              </div>
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
+                     <TenantDatePicker roomId={roomId || ""} roomStatus={roomStatus} setTanggal={setSpecialDates} />
+                     <Button className="w-full rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-600" type="submit">
+                        Edit Room
+                     </Button>
+                  </form>
+               </Form>
+            </Card>
          </div>
       </main>
    );

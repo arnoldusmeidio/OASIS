@@ -4,30 +4,46 @@ import { RequestWithUserId } from "@/types";
 
 export const createReview = async (req: Request, res: Response, next: NextFunction) => {
    try {
-      const userId = (req as RequestWithUserId).user?.id;
-      const { review, star, bookingId, propertyId } = req.body;
+      const id = (req as RequestWithUserId).user?.id;
 
-      if (!userId || !review || !star || !bookingId || !propertyId) {
+      const { bookingNumber } = req.params;
+      const { review, star } = req.body;
+
+      console.log(req.params);
+
+      if (!review || star === undefined || !bookingNumber) {
          return res.status(400).json({ message: "Missing required fields", ok: false });
       }
 
-      // Verify user exists and is a customer
-      const user = await prisma.customer.findUnique({
-         where: { id: userId },
+      // Verify user exists
+      const user = await prisma.user.findUnique({
+         where: { id },
+         include: { customer: true },
       });
 
-      if (!user) {
-         return res.status(404).json({ message: "User not found", ok: false });
+      const bookingId = await prisma.booking.findUnique({
+         where: { bookingNumber, customerId: user?.id, paymentStatus: "COMPLETED" },
+         include: { room: { include: { property: true } }, customer: { include: { user: true } } },
+      });
+
+      const customerId = user?.customer?.id;
+      console.log("Customer ID:", customerId);
+
+      if (!customerId) {
+         return res.status(400).json({ message: "Customer Id not found" });
       }
 
-      // Create review
+      if (!bookingId) {
+         return res.status(400).json({ message: "booking Id not found" });
+      }
+
       const newReview = await prisma.review.create({
          data: {
             review,
-            star,
-            bookingId,
-            propertyId,
-            customerId: userId,
+            star: +star,
+            bookingId: bookingId.id,
+            propertyId: bookingId.room.property.id,
+            customerId: user.id,
          },
       });
 
