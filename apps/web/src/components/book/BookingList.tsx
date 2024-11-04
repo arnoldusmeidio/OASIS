@@ -134,7 +134,7 @@ export default function BookingList({ eventGetter, bookingData }: Props) {
                               </Button>
                            ) : e.paymentStatus === "COMPLETED" ||
                              (e.paymentStatus === "PAID" && new Date(e.endDate) < new Date(Date.now())) ? (
-                              <Link href={`/user/review/${e.id}-${e.room.property.id}`}>
+                              <Link href={`/user/review/${e.bookingNumber}`}>
                                  <Button className="w-full">Write Review</Button>
                               </Link>
                            ) : (

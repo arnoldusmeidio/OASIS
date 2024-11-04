@@ -91,129 +91,136 @@ export default function CreateProperty() {
    };
 
    return (
-      <Form {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)}>
-            {/* Property Name */}
-            <FormField
-               control={form.control}
-               name="propertyName"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Property Name</FormLabel>
-                     <FormControl>
-                        <Input disabled={isSubmitting} placeholder="Property Name" {...field} type="text" />
-                     </FormControl>
-                  </FormItem>
-               )}
-            />
+      <div className="flex min-h-screen items-center justify-center">
+         <Form {...form}>
+            <form
+               onSubmit={form.handleSubmit(onSubmit)}
+               className="w-full max-w-md rounded-lg border-2 bg-white p-8 shadow-md"
+            >
+               <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">Create Property</h2>
 
-            {/* Property Address */}
-            <FormField
-               control={form.control}
-               name="propertyAddress"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Property Address</FormLabel>
-                     <FormControl>
-                        <Input disabled={isSubmitting} placeholder="Property Address" {...field} type="text" />
-                     </FormControl>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
+               {/* Property Name */}
+               <FormField
+                  control={form.control}
+                  name="propertyName"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Property Name</FormLabel>
+                        <FormControl>
+                           <Input disabled={isSubmitting} placeholder="Property Name" {...field} type="text" />
+                        </FormControl>
+                     </FormItem>
+                  )}
+               />
 
-            <FormField
-               control={form.control}
-               name="propertyCity"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Property City</FormLabel>
-                     <FormControl>
-                        <Input disabled={isSubmitting} placeholder="Property City" {...field} type="text" />
-                     </FormControl>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
+               {/* Property Address */}
+               <FormField
+                  control={form.control}
+                  name="propertyAddress"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Property Address</FormLabel>
+                        <FormControl>
+                           <Input disabled={isSubmitting} placeholder="Property Address" {...field} type="text" />
+                        </FormControl>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
 
-            {/* Property Description */}
-            <FormField
-               control={form.control}
-               name="propertyDescription"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Property Description</FormLabel>
-                     <FormControl>
-                        <Input disabled={isSubmitting} placeholder="Property Description" {...field} type="text" />
-                     </FormControl>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
+               <FormField
+                  control={form.control}
+                  name="propertyCity"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Property City</FormLabel>
+                        <FormControl>
+                           <Input disabled={isSubmitting} placeholder="Property City" {...field} type="text" />
+                        </FormControl>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
 
-            {/* Property Categories */}
-            <div>
-               <h3>Property Categories</h3>
-               {Object.values(Category).map((cat) => (
-                  <div key={cat} className="gap-5">
-                     <FormField
-                        control={form.control}
-                        name="category"
-                        render={({ field }) => (
-                           <FormItem>
-                              <RadioGroup
-                                 className="my-1 flex items-center space-x-2"
-                                 value={field.value}
-                                 onValueChange={field.onChange}
-                              >
-                                 <RadioGroupItem id={cat} value={cat} />
-                                 <Label htmlFor={cat}>{cat}</Label>
-                              </RadioGroup>
-                           </FormItem>
-                        )}
-                     />
-                  </div>
-               ))}
-            </div>
+               {/* Property Description */}
+               <FormField
+                  control={form.control}
+                  name="propertyDescription"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Property Description</FormLabel>
+                        <FormControl>
+                           <Input disabled={isSubmitting} placeholder="Property Description" {...field} type="text" />
+                        </FormControl>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
 
-            {/* Property Images */}
-            <FormField
-               control={form.control}
-               name="propertyPictures"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Property Images</FormLabel>
-                     <div>
-                        <Input
-                           type="file"
-                           accept="image/*"
-                           multiple
-                           onChange={onChange}
-                           disabled={images.length >= 5}
+               {/* Property Categories */}
+               <div className="mt-4">
+                  <h3 className="text-lg font-semibold">Property Categories</h3>
+                  {Object.values(Category).map((cat) => (
+                     <div key={cat} className="gap-5">
+                        <FormField
+                           control={form.control}
+                           name="category"
+                           render={({ field }) => (
+                              <FormItem>
+                                 <RadioGroup
+                                    className="my-1 flex items-center space-x-2"
+                                    value={field.value}
+                                    onValueChange={field.onChange}
+                                 >
+                                    <RadioGroupItem id={cat} value={cat} />
+                                    <Label htmlFor={cat}>{cat}</Label>
+                                 </RadioGroup>
+                              </FormItem>
+                           )}
                         />
-                        <div className="mt-2 flex space-x-2">
-                           {imagesPreview?.map((img, index) => (
-                              <Image
-                                 src={img}
-                                 key={index}
-                                 alt={`preview-${index}`}
-                                 className="border-gray h-24 w-24 rounded border-2 object-contain p-2 shadow"
-                                 width={50}
-                                 height={50}
-                              />
-                           ))}
-                        </div>
                      </div>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <FormError message={error} />
-            <FormSuccess message={success} />
-            <Button className="w-full" type="submit" disabled={isSubmitting}>
-               Create Property
-            </Button>
-         </form>
-      </Form>
+                  ))}
+               </div>
+
+               {/* Property Images */}
+               <FormField
+                  control={form.control}
+                  name="propertyPictures"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Property Images</FormLabel>
+                        <div>
+                           <Input
+                              type="file"
+                              accept="image/*"
+                              multiple
+                              onChange={onChange}
+                              disabled={images.length >= 5}
+                           />
+                           <div className="mt-2 flex space-x-2">
+                              {imagesPreview?.map((img, index) => (
+                                 <Image
+                                    src={img}
+                                    key={index}
+                                    alt={`preview-${index}`}
+                                    className="border-gray h-24 w-24 rounded border-2 object-contain p-2 shadow"
+                                    width={50}
+                                    height={50}
+                                 />
+                              ))}
+                           </div>
+                        </div>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+               <FormError message={error} />
+               <FormSuccess message={success} />
+               <Button className="mt-4 w-full" type="submit" disabled={isSubmitting}>
+                  Create Property
+               </Button>
+            </form>
+         </Form>
+      </div>
    );
 }

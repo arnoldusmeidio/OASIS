@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Property } from "@/types/property-types";
 import { Card, CardContent } from "@/components/ui/card";
-import CurrentLocButton from "@/components/tenant/maps-button";
 import { APIProvider, Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Badge } from "@/components/ui/badge";
@@ -60,7 +59,7 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
    return (
       <div className="mx-auto w-full max-w-6xl p-4">
          {isLoading ? (
-            <h1>sabar ya compilingnya Lama...</h1>
+            <h1>Loading....</h1>
          ) : getProperty ? (
             <>
                <h1 className="my-5 text-2xl font-bold text-gray-800">{getProperty.name}</h1>
@@ -166,7 +165,7 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
                                        {room.type} (Capacity: {room.roomCapacity})
                                     </h3>
                                     <p className="text-sm text-gray-600">
-                                       Default Price:{" "}
+                                       Default Price IN IDR:{" "}
                                        {currencyLoading || !user || isLoading
                                           ? "Loading..."
                                           : !currencyRate
@@ -206,7 +205,6 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
                                  <AdvancedMarker position={userLoc}>
                                     <Pin />
                                  </AdvancedMarker>
-                                 <CurrentLocButton userLoc={userLoc} />
                               </>
                            )}
                         </Map>
