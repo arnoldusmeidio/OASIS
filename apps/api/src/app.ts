@@ -11,6 +11,7 @@ import walletRouter from "./routers/wallet-router";
 import paymentRouter from "./routers/payment-router";
 import orderRouter from "./routers/order-router";
 import customer from "./routers/customer-router";
+import reportRouter from "./routers/report-router";
 import { customerGuard, verifyToken } from "./middlewares/auth-middleware";
 import { notFoundMiddleware } from "./middlewares/not-found-middleware";
 import room from "./routers/room-route";
@@ -74,6 +75,9 @@ const createApp = () => {
 
    // Payment Route
    app.use("/api/v1/payments", verifyToken, customerGuard, paymentRouter);
+
+   // Report Route
+   app.use("/api/v1/reports", verifyToken, tenantGuard, reportRouter);
 
    // Notifications Route
    app.post("/api/v1/notifications", async function paymentNotification(req: Request, res: Response) {
