@@ -30,7 +30,8 @@
    },
    "HomePage": {
       "explore": "Explore Indonesia",
-      "popular": "Popular Properties"
+      "popular": "Popular Properties",
+      "map": "Search Properties by Maps"
    },
    "UserProfile": {
       "title": "User Profile",

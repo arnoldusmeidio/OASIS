@@ -11,11 +11,17 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import Autoplay from "embla-carousel-autoplay";
+import useCurrencyStore from "@/stores/useCurrencyStore";
+import { useUserStore } from "@/stores/useUserStore";
+import { currency } from "@/helpers/currency";
 
 export default function PropertyDetails({ params }: { params: { slug: string } }) {
    const [getProperty, setGetProperty] = useState<Property>();
    const [isLoading, setIsLoading] = useState(true);
    const [userLoc, setUserLoc] = useState<{ lat: number; lng: number }>();
+   const { currencyRate, getCurrencyRate } = useCurrencyStore();
+   const { user } = useUserStore();
+   const [currencyLoading, setCurrencyLoading] = useState(true);
 
    useEffect(() => {
       const propertyGetter = async () => {
@@ -39,8 +45,17 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
             setIsLoading(false);
          }
       };
+
+      if (user?.currency && user.currency != "IDR") {
+         setCurrencyLoading(true);
+         getCurrencyRate();
+         setCurrencyLoading(false);
+      } else {
+         setCurrencyLoading(false);
+      }
+
       propertyGetter();
-   }, [params.slug]);
+   }, [params.slug, user?.currency, getCurrencyRate]);
 
    return (
       <div className="mx-auto w-full max-w-6xl p-4">
@@ -150,7 +165,14 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
                                     <h3 className="mt-3 text-lg font-semibold">
                                        {room.type} (Capacity: {room.roomCapacity})
                                     </h3>
-                                    <p className="text-sm text-gray-600">Default Price: ${room.defaultPrice}</p>
+                                    <p className="text-sm text-gray-600">
+                                       Default Price:{" "}
+                                       {currencyLoading || !user || isLoading
+                                          ? "Loading..."
+                                          : !currencyRate
+                                            ? currency(room.defaultPrice, "IDR", 1)
+                                            : currency(room.defaultPrice, user?.currency, currencyRate)}
+                                    </p>
                                  </div>
                                  <div>
                                     <Button className="my-3 bg-blue-600 px-4 py-2 text-white hover:bg-blue-600">

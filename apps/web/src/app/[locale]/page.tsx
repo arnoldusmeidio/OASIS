@@ -123,7 +123,8 @@ export default function Home() {
                            ))}
                         </div>
                      </section>
-                     <div className="relative my-3 h-96 w-full rounded-lg">
+                     <h2 className="py-8 pb-5 text-3xl font-semibold sm:text-4xl">{t("map")}</h2>
+                     <div className="relative mb-4 h-96 w-full rounded-lg">
                         <MainMap />
                      </div>
                   </div>
