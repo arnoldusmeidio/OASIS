@@ -165,7 +165,7 @@ export default function Room() {
                         name="roomPrice"
                         render={({ field }) => (
                            <FormItem>
-                              <FormLabel>Default Room Price IN IDR</FormLabel>
+                              <FormLabel>Default Room Price in IDR</FormLabel>
                               <FormControl>
                                  <Input
                                     type="number"

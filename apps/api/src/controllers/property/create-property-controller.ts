@@ -3,9 +3,6 @@ import prisma from "@/prisma";
 import cloudinary from "@/config/cloudinary";
 import { RequestWithUserId } from "@/types";
 import fs from "fs/promises";
-import { string } from "zod";
-import { apikeys } from "googleapis/build/src/apis/apikeys";
-import { addressvalidation } from "googleapis/build/src/apis/addressvalidation";
 
 // Create property
 export const createProperty = async (req: Request, res: Response, next: NextFunction) => {
@@ -38,7 +35,9 @@ export const createProperty = async (req: Request, res: Response, next: NextFunc
                   folder: "images",
                });
                // Remove file after upload
-               await fs.unlink(file.path);
+               await fs
+                  .unlink(file.path)
+                  .catch((unlinkError) => console.warn("File not found during unlink:", unlinkError));
                return { url: cloudinaryData.secure_url }; // Return the URL
             } catch (uploadError) {
                console.error("Error uploading file:", uploadError);
@@ -47,6 +46,7 @@ export const createProperty = async (req: Request, res: Response, next: NextFunc
          }),
       );
 
+      // Geocode property address using Google Maps API
       const geo = await fetch(
          `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(propertyAddress)}&key=${process.env.GOOGLE_MAPS_API_KEY}`,
       );
@@ -55,6 +55,7 @@ export const createProperty = async (req: Request, res: Response, next: NextFunc
       const { lat, lng } = data?.results?.[0]?.geometry.location;
       const { formatted_address } = data?.results[0];
 
+      // Create property record in database
       await prisma.property.create({
          data: {
             tenantId,
@@ -73,6 +74,7 @@ export const createProperty = async (req: Request, res: Response, next: NextFunc
 
       return res.status(201).json({ message: "Property created", ok: true });
    } catch (error) {
+      console.error("Error creating property:", error);
       next(error);
    }
 };
