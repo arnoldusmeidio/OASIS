@@ -13,6 +13,7 @@ export interface Booking {
       type: string;
       description: string;
       property: {
+         id: any;
          name: string;
          address: string;
          city: string;

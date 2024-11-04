@@ -1,7 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import prisma from "@/prisma";
 import { RequestWithUserId } from "@/types";
+import fs from "fs/promises";
 import { Resend } from "resend";
+import handlebars from "handlebars";
+import path from "path";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -132,12 +135,25 @@ export async function approveManualTransferPayment(req: RequestWithUserId, res: 
                data: { paymentStatus: "APPROVED" },
             });
 
+            const templatePath = path.join(__dirname, "../templates", "tenant-confirm-template.hbs");
+            const templateSource = await fs.readFile(templatePath, "utf-8");
+            const compiledTemplate = handlebars.compile(templateSource);
+            const html = compiledTemplate({
+               name: booking.customer.user.name,
+               bookingNumber: booking.bookingNumber,
+            });
+
             const { error } = await resend.emails.send({
                from: "Oasis <booking@oasis-resort.xyz>",
                to: [booking.customer.user.email],
-               subject: "(OASIS) Booking Details",
-               html: `<h1>Booking Details</h1><p>Here is your booking details:${booking?.bookingNumber}, please confirm.</p>`,
+               subject: "(OASIS) Payment Approval",
+               html: html,
             });
+            if (error) {
+               return res
+                  .status(400)
+                  .json({ message: locale == "id" ? "Terjadi kesalahan" : "Something went wrong", ok: false });
+            }
 
             if (error) {
                return res

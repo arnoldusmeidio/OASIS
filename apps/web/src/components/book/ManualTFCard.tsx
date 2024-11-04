@@ -17,6 +17,9 @@ import FormSuccess from "../FormSuccess";
 import { toast } from "sonner";
 import { Booking } from "@/types/booking";
 import { format } from "date-fns";
+import useCurrencyStore from "@/stores/useCurrencyStore";
+import { useUserStore } from "@/stores/useUserStore";
+import { currency } from "@/helpers/currency";
 
 type CardProps = React.ComponentProps<typeof Card>;
 
@@ -33,11 +36,15 @@ const uploadImageSchema = z.object({
 export default function ManualTransferCard({ className, ...props }: CardProps) {
    const router = useRouter();
 
+   const { currencyRate, getCurrencyRate } = useCurrencyStore();
+   const { user } = useUserStore();
+   const [currencyLoading, setCurrencyLoading] = useState(true);
+
    //params
    const params = useParams();
    const bookingNumber = params.slug;
 
-   const [error, setError] = useState<string | undefined>("");
+   const [errorMessage, setErrorMessage] = useState<string | undefined>("");
    const [success, setSuccess] = useState<string | undefined>("");
    const [picture, setPicture] = useState<string | undefined>(undefined);
 
@@ -73,9 +80,17 @@ export default function ManualTransferCard({ className, ...props }: CardProps) {
          console.error(error);
       }
    };
+
    useEffect(() => {
       eventGetter();
-   }, []);
+      if (user?.currency && user.currency != "IDR") {
+         setCurrencyLoading(true);
+         getCurrencyRate();
+         setCurrencyLoading(false);
+      } else {
+         setCurrencyLoading(false);
+      }
+   }, [user?.currency, getCurrencyRate]);
 
    //hardcode data
    const sampleBank = [
@@ -93,7 +108,12 @@ export default function ManualTransferCard({ className, ...props }: CardProps) {
       },
       {
          header: "Amount",
-         description: `${bookingData?.amountToPay}`,
+         description:
+            currencyLoading || !bookingData || isLoading
+               ? "Loading..."
+               : !currencyRate
+                 ? currency(bookingData?.amountToPay, "IDR", 1)
+                 : currency(bookingData?.amountToPay, user?.currency, currencyRate),
       },
    ];
 
@@ -116,9 +136,9 @@ export default function ManualTransferCard({ className, ...props }: CardProps) {
          const data = await response.json();
          if (!data.ok) {
             setSuccess("");
-            setError(data.message);
+            setErrorMessage(data.message);
          } else {
-            setError("");
+            setErrorMessage("");
             setSuccess(data.message);
 
             form.reset();
@@ -127,7 +147,7 @@ export default function ManualTransferCard({ className, ...props }: CardProps) {
          }
       } catch (error) {
          console.error(error);
-         setError("error");
+         setErrorMessage("error");
       }
    };
 
@@ -193,7 +213,7 @@ export default function ManualTransferCard({ className, ...props }: CardProps) {
                         )}
                      />
                   </div>
-                  <FormError message={error} />
+                  <FormError message={errorMessage} />
                   <FormSuccess message={success} />
                   <Button className="w-full" type="submit" disabled={isSubmitting}>
                      Upload Payment Proof

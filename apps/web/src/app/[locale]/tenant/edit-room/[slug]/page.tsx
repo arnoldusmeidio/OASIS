@@ -109,9 +109,6 @@ export default function Room() {
             credentials: "include",
          });
 
-         const formDataEntries = Array.from(formData.entries());
-         console.log("FormData entries:", formDataEntries);
-
          const data = await response.json();
          if (data.ok) {
             toast(data.message, { duration: 1000 });
@@ -168,7 +165,7 @@ export default function Room() {
                            name={"roomPrice"}
                            render={({ field }) => (
                               <FormItem>
-                                 <FormLabel>Default Room Price</FormLabel>
+                                 <FormLabel>Default Room Price in IDR</FormLabel>
                                  <FormControl>
                                     <Input
                                        type="number"

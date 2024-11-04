@@ -26,7 +26,7 @@ const createApp = () => {
    const app = express();
    const limiter = rateLimit({
       windowMs: 1000 * 60,
-      max: 30,
+      max: 50,
    });
 
    // Middleware configuration
@@ -78,7 +78,6 @@ const createApp = () => {
    // Notifications Route
    app.post("/api/v1/notifications", async function paymentNotification(req: Request, res: Response) {
       const data = req.body;
-      console.log("hit");
       try {
          updateBookingStatus(data);
          res.status(200);
@@ -90,7 +89,6 @@ const createApp = () => {
 
    app.post("/api/v1/topup", async function topupNotification(req: Request, res: Response) {
       const data = req.body;
-      console.log("hit");
       try {
          updateWalletBalance(data);
          res.status(200);

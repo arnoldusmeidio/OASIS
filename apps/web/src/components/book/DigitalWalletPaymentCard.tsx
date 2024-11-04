@@ -15,7 +15,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
-import { values } from "cypress/types/lodash";
+import useCurrencyStore from "@/stores/useCurrencyStore";
+import { useUserStore } from "@/stores/useUserStore";
+import { currency } from "@/helpers/currency";
 
 type CardProps = React.ComponentProps<typeof Card>;
 
@@ -28,7 +30,13 @@ export default function DigitalPaymentCard({ className, ...props }: CardProps) {
    const params = useParams();
    const bookingNumber = params.slug;
 
+   const { currencyRate, getCurrencyRate } = useCurrencyStore();
+   const { user } = useUserStore();
+   const [currencyLoading, setCurrencyLoading] = useState(true);
+
    const [isLoading, setIsLoading] = useState(true);
+   const [error, setError] = useState<string | undefined>("");
+   const [success, setSuccess] = useState<string | undefined>("");
    const [bookingData, setBookingData] = useState<Booking>();
    const [userData, setUserData] = useState<User>();
 
@@ -77,18 +85,39 @@ export default function DigitalPaymentCard({ className, ...props }: CardProps) {
          console.error(error);
       }
    };
+
    useEffect(() => {
       userGetter();
-   }, []);
+      if (user?.currency && user.currency != "IDR") {
+         setCurrencyLoading(true);
+         getCurrencyRate();
+         setCurrencyLoading(false);
+      } else {
+         setCurrencyLoading(false);
+      }
+   }, [user?.currency, getCurrencyRate]);
 
-   async function onSubmit(data: z.infer<typeof FormSchema>) {
+   async function onSubmit(value: z.infer<typeof FormSchema>) {
       try {
          const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/payments/digital/${bookingNumber}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
-            body: JSON.stringify(data),
+            body: JSON.stringify(value),
          });
+
+         const data = await res.json();
+         if (!data.ok) {
+            setSuccess("");
+            setError(data.message);
+         } else {
+            setError("");
+            setSuccess(data.message);
+
+            form.reset();
+            toast(data.message, { duration: 1500 });
+            router.push("../");
+         }
       } catch (error) {
          console.error(error);
       }
@@ -105,11 +134,29 @@ export default function DigitalPaymentCard({ className, ...props }: CardProps) {
                <div className="grid-cols mb-4 grid items-start pb-4 last:mb-0 last:pb-0">
                   <div className="space-y-1">
                      <p className="text-sm font-medium leading-none">• Balance:</p>
-                     <p className="text-muted-foreground text-sm">{userData?.wallet.balance}</p>
+                     <p className="text-muted-foreground text-sm">
+                        {currencyLoading || !userData || !bookingData || isLoading
+                           ? "Loading..."
+                           : !currencyRate
+                             ? currency(userData?.wallet.balance, "IDR", 1)
+                             : currency(userData?.wallet.balance, user?.currency, currencyRate)}
+                     </p>
                      <p className="text-sm font-medium leading-none">• Points:</p>
-                     <p className="text-muted-foreground text-sm">{userData?.wallet.points}</p>
+                     <p className="text-muted-foreground text-sm">
+                        {currencyLoading || !userData || !bookingData || isLoading
+                           ? "Loading..."
+                           : !currencyRate
+                             ? currency(userData?.wallet.points, "IDR", 1)
+                             : currency(userData?.wallet.points, user?.currency, currencyRate)}
+                     </p>
                      <p className="text-sm font-medium leading-none">• Total Price</p>
-                     <p className="text-muted-foreground text-sm">{bookingData?.amountToPay}</p>
+                     <p className="text-muted-foreground text-sm">
+                        {currencyLoading || !bookingData || isLoading
+                           ? "Loading..."
+                           : !currencyRate
+                             ? currency(bookingData?.amountToPay, "IDR", 1)
+                             : currency(bookingData?.amountToPay, user?.currency, currencyRate)}
+                     </p>
                      <p className="text-sm font-medium leading-none">• Booking Details</p>
                      <p className="text-muted-foreground text-sm">Booking Number: {bookingData?.bookingNumber}</p>
                      <p className="text-muted-foreground text-sm">{bookingData?.room.property.name}</p>
@@ -140,7 +187,17 @@ export default function DigitalPaymentCard({ className, ...props }: CardProps) {
                                     <FormDescription>NOTE: Remaining points will be stored.</FormDescription>
                                  </div>
                                  <FormControl>
-                                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                                    <Switch
+                                       checked={field.value}
+                                       onCheckedChange={field.onChange}
+                                       disabled={
+                                          userData && bookingData
+                                             ? userData?.wallet.points === 0
+                                                ? true
+                                                : false
+                                             : false
+                                       }
+                                    />
                                  </FormControl>
                               </FormItem>
                            )}

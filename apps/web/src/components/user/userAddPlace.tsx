@@ -77,8 +77,6 @@ export default function Places() {
       getPlaces();
    }, []);
 
-   console.log(places);
-
    useEffect(() => {
       if (map && !clusterer.current) {
          clusterer.current = new MarkerClusterer({ map });

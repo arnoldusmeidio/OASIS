@@ -34,8 +34,6 @@ export default function OrderBody() {
       eventGetter();
    }, []);
 
-   //console.log(orderData);
-
    if (isLoading) return <Skeleton className="flex flex-col gap-4 px-4 py-4" />;
 
    if (orderData.length == 0) {
