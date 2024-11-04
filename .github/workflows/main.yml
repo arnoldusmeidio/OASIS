@@ -3,8 +3,6 @@ name: Deploy to EC2
 on:
    push:
       branches: [main]
-   pull_request:
-      branches: [main]
 
 jobs:
    deploy:
@@ -46,6 +44,6 @@ jobs:
                  export NVM_DIR=~/.nvm
                  source ~/.nvm/nvm.sh
                  cd ~/jcwd290402/apps/api/src
-                 cp -r templates/**/* ~/jcwd290402/apps/api/dist/src/templates
+                 cp -r templates ~/jcwd290402/apps/api/dist/src/templates
                  cd ~/jcwd290402
                  pm2 start ecosystem.config.cjs

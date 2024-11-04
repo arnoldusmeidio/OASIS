@@ -14,5 +14,12 @@ module.exports = {
          cwd: "./apps/api",
          watch: ".",
       },
+      {
+         namespace: "Oasis Project",
+         name: "database",
+         script: "npx prisma studio",
+         cwd: "./apps/api",
+         watch: ".",
+      },
    ],
 };
