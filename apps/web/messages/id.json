@@ -30,7 +30,8 @@
    },
    "HomePage": {
       "explore": "Jelajahi Indonesia",
-      "popular": "Properti Terpopuler"
+      "popular": "Properti Terpopuler",
+      "map": "Cari Properti Dengan Peta"
    },
    "UserProfile": {
       "title": "Profil User",

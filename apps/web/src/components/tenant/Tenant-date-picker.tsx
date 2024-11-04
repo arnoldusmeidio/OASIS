@@ -121,7 +121,7 @@ export default function TenantDatePicker({ roomId, roomStatus, setTanggal }: Ten
 
          <Input
             type="number"
-            placeholder="Custom price"
+            placeholder="Custom price in IDR"
             value={customPrice !== undefined ? customPrice : ""}
             onChange={(e) => setCustomPrice(parseInt(e.target.value))}
          />

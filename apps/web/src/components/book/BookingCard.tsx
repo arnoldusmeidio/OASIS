@@ -1,19 +1,5 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-   AlertDialog,
-   AlertDialogAction,
-   AlertDialogCancel,
-   AlertDialogContent,
-   AlertDialogDescription,
-   AlertDialogFooter,
-   AlertDialogHeader,
-   AlertDialogTitle,
-   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import {
    DropdownMenu,
    DropdownMenuContent,
@@ -23,19 +9,14 @@ import {
    DropdownMenuSeparator,
    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { toast } from "sonner";
-import { format } from "date-fns";
 import { Booking } from "@/types/booking";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
-import { useRouter } from "@/i18n/routing";
 import { Skeleton } from "../ui/skeleton";
 import BookingList from "./BookingList";
 
 export default function BookingCard() {
-   const router = useRouter();
-
    const [isLoading, setIsLoading] = useState(true);
    const [bookingData, setBookingData] = useState<Booking[]>([]);
    const [sort, setSort] = useState<string>("1");
@@ -93,7 +74,6 @@ export default function BookingCard() {
 
    return (
       <>
-         {/*sort button */}
          <div className="flex justify-end gap-4 px-4 py-4">
             <DropdownMenu>
                <DropdownMenuTrigger asChild>

@@ -63,7 +63,6 @@ export default async function updateWalletBalance(data: any) {
                where: { id: data.order_id },
             });
          }
-         console.log("updated");
       }
    } else {
       console.error("error");

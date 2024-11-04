@@ -2,7 +2,7 @@
    <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Reservation Confirmation</title>
+      <title>Order Reminder</title>
       <style>
          body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f9f9f9; color: #333; }
          .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow:
@@ -17,14 +17,17 @@
             alt="oasis logo"
             width="75%"
          />
-         <h1>Your Reservation Confirmation</h1>
+         <h1>Order Reminder</h1>
 
          <p>Dear {{name}},</p>
 
          <p>
-            Thank you for choosing Oasis Resort for your upcoming stay! We are excited to welcome you. Here are your
-            reservation details:
+            Thank you for choosing Oasis Resort for your upcoming stay! We are reminding you that you have made a
+            booking for the
+            <b>following day</b>.
          </p>
+
+         <p>Reservation details as follow:</p>
 
          <div class="reservation-details">
             <strong>Reservation Summary:</strong><br />
