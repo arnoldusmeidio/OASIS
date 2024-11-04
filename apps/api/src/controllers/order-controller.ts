@@ -5,7 +5,6 @@ import fs from "fs/promises";
 import { Resend } from "resend";
 import handlebars from "handlebars";
 import path from "path";
-import { format } from "date-fns";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 

@@ -15,7 +15,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
-import { values } from "cypress/types/lodash";
 
 type CardProps = React.ComponentProps<typeof Card>;
 
@@ -29,6 +28,8 @@ export default function DigitalPaymentCard({ className, ...props }: CardProps) {
    const bookingNumber = params.slug;
 
    const [isLoading, setIsLoading] = useState(true);
+   const [error, setError] = useState<string | undefined>("");
+   const [success, setSuccess] = useState<string | undefined>("");
    const [bookingData, setBookingData] = useState<Booking>();
    const [userData, setUserData] = useState<User>();
 
@@ -81,14 +82,27 @@ export default function DigitalPaymentCard({ className, ...props }: CardProps) {
       userGetter();
    }, []);
 
-   async function onSubmit(data: z.infer<typeof FormSchema>) {
+   async function onSubmit(value: z.infer<typeof FormSchema>) {
       try {
          const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/payments/digital/${bookingNumber}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
-            body: JSON.stringify(data),
+            body: JSON.stringify(value),
          });
+
+         const data = await res.json();
+         if (!data.ok) {
+            setSuccess("");
+            setError(data.message);
+         } else {
+            setError("");
+            setSuccess(data.message);
+
+            form.reset();
+            toast(data.message, { duration: 1500 });
+            router.push("../");
+         }
       } catch (error) {
          console.error(error);
       }
@@ -140,7 +154,17 @@ export default function DigitalPaymentCard({ className, ...props }: CardProps) {
                                     <FormDescription>NOTE: Remaining points will be stored.</FormDescription>
                                  </div>
                                  <FormControl>
-                                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                                    <Switch
+                                       checked={field.value}
+                                       onCheckedChange={field.onChange}
+                                       disabled={
+                                          userData && bookingData
+                                             ? userData?.wallet.points === 0
+                                                ? true
+                                                : false
+                                             : false
+                                       }
+                                    />
                                  </FormControl>
                               </FormItem>
                            )}

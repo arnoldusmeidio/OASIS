@@ -2,7 +2,7 @@
    <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Payment Aprroval</title>
+      <title>Order Reminder</title>
       <style>
          body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f9f9f9; color: #333; }
          .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow:
@@ -17,22 +17,38 @@
             alt="oasis logo"
             width="75%"
          />
-         <h1>Payment Approval</h1>
+         <h1>Order Reminder</h1>
 
          <p>Dear {{name}},</p>
 
          <p>
-            Thank you for choosing Oasis Resort for your upcoming stay. We are pleased to confirm your reservation and
-            look forward to welcoming you.
+            Thank you for choosing Oasis Resort for your upcoming stay! We are reminding you that you have made a
+            booking for the
+            <b>following day</b>.
          </p>
+
+         <p>Reservation details as follow:</p>
+
+         <div class="reservation-details">
+            <strong>Reservation Summary:</strong><br />
+            <ul>
+               <li><strong>Guest Name:</strong> {{name}}</li>
+
+               <li><strong>Property Name:</strong> {{propertyName}}</li>
+               <li><strong>Property Address:</strong> {{address}}</li>
+               <li><strong>Room Type:</strong> {{roomType}}</li>
+               <li><strong>Booking Reference Number:</strong> {{bookingNumber}}</li>
+               <li><strong>Total Cost:</strong> {{amountToPay}}</li>
+            </ul>
+         </div>
 
          <p>
-            <strong>Payment Approved</strong><br />Your payment for booking with reference number:
-            {{bookingNumber}}
-            has been approved.
+            <strong>Check-in Instructions:</strong><br />
+            Check-in Day:
+            {{startDate}}<br />
+            Check-out Day:
+            {{endDate}}<br />
          </p>
-
-         <p>Please <b>CONFIRM</b> from our website.</p>
 
          <p>
             If you have any questions or need to make changes to your reservation, please do not hesitate to contact us.
