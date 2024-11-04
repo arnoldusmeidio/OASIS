@@ -864,8 +864,8 @@ async function inputData() {
          description: "A serene resort nestled in Bali's lush landscapes.",
          address: "Jl. Pantai Kuta No.3, Bali",
          city: "Bali",
-         lat: -8.723,
-         lng: 115.171,
+         lat: -8.724469,
+         lng: 115.171381,
          category: "Hotel",
          propertyPictures: {
             create: [

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -19,6 +19,9 @@ import { format } from "date-fns";
 import { Booking } from "@/types/booking";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/routing";
+import { currency } from "@/helpers/currency";
+import { useUserStore } from "@/stores/useUserStore";
+import useCurrencyStore from "@/stores/useCurrencyStore";
 
 interface Props {
    eventGetter: () => void;
@@ -26,6 +29,20 @@ interface Props {
 }
 
 export default function BookingList({ eventGetter, bookingData }: Props) {
+   const { currencyRate, error, getCurrencyRate } = useCurrencyStore();
+   const { user } = useUserStore();
+   const [currencyLoading, setCurrencyLoading] = useState(true);
+
+   useEffect(() => {
+      if (user?.currency && user.currency != "IDR") {
+         setCurrencyLoading(true);
+         getCurrencyRate();
+         setCurrencyLoading(false);
+      } else {
+         setCurrencyLoading(false);
+      }
+   }, [user?.currency, getCurrencyRate]);
+
    return (
       <>
          <Accordion type="single" collapsible>
@@ -77,7 +94,13 @@ export default function BookingList({ eventGetter, bookingData }: Props) {
 
                               <div className="flex-1 space-y-1">
                                  <p className="text-sm font-medium leading-none">Total Price:</p>
-                                 <p className="text-muted-foreground text-sm">{e.amountToPay}</p>
+                                 <p className="text-muted-foreground text-sm">
+                                    {currencyLoading
+                                       ? "Loading..."
+                                       : !currencyRate
+                                         ? currency(e.amountToPay, "IDR", 1)
+                                         : currency(e.amountToPay, user?.currency, currencyRate)}
+                                 </p>
                               </div>
                            </div>
                         </CardContent>
@@ -110,7 +133,7 @@ export default function BookingList({ eventGetter, bookingData }: Props) {
                                  Confirm Booking
                               </Button>
                            ) : e.paymentStatus == "COMPLETED" ? (
-                              <Link href="/">
+                              <Link href={`/user/review/${e.id}-${e.room.property.id}`}>
                                  <Button className="w-full">Write Review</Button>
                               </Link>
                            ) : (

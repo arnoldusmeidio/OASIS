@@ -20,12 +20,13 @@ import cookieParser from "cookie-parser";
 import { getAllPropertyBeta } from "./controllers/sample-controller";
 import { paymentNotification } from "./controllers/payment/midtrans-payment-controller";
 import updateBookingStatus from "./helpers/update-booking-status";
+import updateWalletBalance from "./helpers/update-wallet-balance";
 
 const createApp = () => {
    const app = express();
    const limiter = rateLimit({
       windowMs: 1000 * 60,
-      max: 30,
+      max: 50,
    });
 
    // Middleware configuration
@@ -77,9 +78,19 @@ const createApp = () => {
    // Notifications Route
    app.post("/api/v1/notifications", async function paymentNotification(req: Request, res: Response) {
       const data = req.body;
-      console.log("hit");
       try {
          updateBookingStatus(data);
+         res.status(200);
+      } catch (error) {
+         console.error(error);
+         return res.status(500);
+      }
+   });
+
+   app.post("/api/v1/topup", async function topupNotification(req: Request, res: Response) {
+      const data = req.body;
+      try {
+         updateWalletBalance(data);
          res.status(200);
       } catch (error) {
          console.error(error);

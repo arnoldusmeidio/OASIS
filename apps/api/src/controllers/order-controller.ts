@@ -1,7 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import prisma from "@/prisma";
 import { RequestWithUserId } from "@/types";
+import fs from "fs/promises";
 import { Resend } from "resend";
+import handlebars from "handlebars";
+import path from "path";
+import { format } from "date-fns";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -127,23 +131,36 @@ export async function approveManualTransferPayment(req: RequestWithUserId, res: 
 
       if (code === "1") {
          await prisma.$transaction(async (tx) => {
-            await prisma.booking.update({
+            await tx.booking.update({
                where: { bookingNumber: booking.bookingNumber },
                data: { paymentStatus: "APPROVED" },
             });
 
-            // const { error } = await resend.emails.send({
-            //    from: "Oasis <oasis.app@resend.dev>",
-            //    to: [booking.customer.user.email],
-            //    subject: "Your Booking (OASIS)",
-            //    html: `<h1>Booking Details</h1><p>Here is your booking details:${booking?.bookingNumber}, please confirm.</p>`,
-            // });
+            const templatePath = path.join(__dirname, "../templates", "tenant-confirm-template.hbs");
+            const templateSource = await fs.readFile(templatePath, "utf-8");
+            const compiledTemplate = handlebars.compile(templateSource);
+            const html = compiledTemplate({
+               name: booking.customer.user.name,
+               bookingNumber: booking.bookingNumber,
+            });
 
-            // if (error) {
-            //    return res
-            //       .status(400)
-            //       .json({ message: locale == "id" ? "Terjadi kesalahan" : "Something went wrong", ok: false });
-            // }
+            const { error } = await resend.emails.send({
+               from: "Oasis <booking@oasis-resort.xyz>",
+               to: [booking.customer.user.email],
+               subject: "(OASIS) Payment Approval",
+               html: html,
+            });
+            if (error) {
+               return res
+                  .status(400)
+                  .json({ message: locale == "id" ? "Terjadi kesalahan" : "Something went wrong", ok: false });
+            }
+
+            if (error) {
+               return res
+                  .status(400)
+                  .json({ message: locale == "id" ? "Terjadi kesalahan" : "Something went wrong", ok: false });
+            }
          });
          return res
             .status(200)

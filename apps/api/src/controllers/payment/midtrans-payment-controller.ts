@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "@/prisma";
 import { MidtransClient } from "midtrans-node-client";
-import { v4 as uuid } from "uuid";
 import { RequestWithUserId } from "@/types";
 import updateBookingStatus from "@/helpers/update-booking-status";
 
@@ -9,13 +8,6 @@ const snap = new MidtransClient.Snap({
    isProduction: false,
    serverKey: process.env.MIDTRANS_SERVER_KEY,
 });
-
-// interface RoomPrice {
-//    roomId: string;
-//    price: number;
-//    startDate: Date;
-//    endDate: Date;
-// }
 
 async function getPriceForDate(date: Date, roomId: string, defaultPrice: number) {
    const peakSeasons = await prisma.roomPrice.findMany({
@@ -49,28 +41,8 @@ export async function createPayment(req: RequestWithUserId, res: Response) {
          return res.status(401).json({ message: "Unauthorized", ok: false });
       }
 
-      // const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-      // const firstDate = new Date(booking.startDate).getTime();
-      // //console.log(booking.startDate);
-      // const secondDate = new Date(booking.endDate).getTime();
-      // //console.log(booking.endDate);
-      // const diffDays = Math.ceil(Math.abs((firstDate - secondDate) / oneDay));
-      // //console.log(diffDays);
-      // //   const amount = booking.room.defaultPrice * diffDays;
-      // //   console.log(amount);
-
-      // let totalPrice = 0;
-
-      // for (let i = 0; i < diffDays; i++) {
-      //    const currentDate = new Date(booking.startDate);
-      //    currentDate.setDate(booking.startDate.getDate() + i);
-
-      //    const priceForDate = getPriceForDate(currentDate, booking.roomId, booking.room.defaultPrice);
-      //    totalPrice += await priceForDate;
-      // }
-
       const totalPrice = booking.amountToPay;
-      // console.log(totalPrice);
+
       const orderId = booking.id;
 
       const parameter = {
@@ -78,24 +50,13 @@ export async function createPayment(req: RequestWithUserId, res: Response) {
             order_id: orderId,
             gross_amount: totalPrice,
          },
-         // item_details: [
-         //    {
-         //       id: "ITEM1",
-         //       price: 10000,
-         //       quantity: 1,
-         //       name: "Midtrans Bear",
-         //       brand: "Midtrans",
-         //       category: "Toys",
-         //       url: "https://tokobuah.com/apple-fuji",
-         //    },
-         // ],
          customer_details: {
             first_name: user.name,
             last_name: user.name,
             email: user.email,
          },
          callbacks: {
-            finish: "http://localhost:3000",
+            finish: process.env.CLIENT_PORT,
          },
       };
       const transaction = await snap.createTransaction(parameter);

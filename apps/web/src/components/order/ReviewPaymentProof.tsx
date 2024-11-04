@@ -20,20 +20,6 @@ export default function ReviewPaymentProof({ className, ...props }: CardProps) {
    const [isLoading, setIsLoading] = useState(true);
    const [orderData, setOrderData] = useState<Booking>();
 
-   //midtrans
-   useEffect(() => {
-      const myMidtransClientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY;
-      const script = document.createElement("script");
-      script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
-      script.setAttribute("data-client-key", myMidtransClientKey as string);
-
-      document.body.appendChild(script);
-
-      return () => {
-         document.body.removeChild(script);
-      };
-   }, []);
-
    const eventGetter = async () => {
       try {
          const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/orders/${bookingNumber}`, {
