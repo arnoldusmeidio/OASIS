@@ -165,7 +165,7 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
                                        {room.type} (Capacity: {room.roomCapacity})
                                     </h3>
                                     <p className="text-sm text-gray-600">
-                                       Default Price IN IDR:{" "}
+                                       Default Price In IDR:{" "}
                                        {currencyLoading || !user || isLoading
                                           ? "Loading..."
                                           : !currencyRate
