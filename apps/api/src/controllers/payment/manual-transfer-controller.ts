@@ -154,7 +154,7 @@ export async function confirmBookingTf(req: RequestWithUserId, res: Response, ne
       let scheduleDate =
          now > new Date(booking.startDate)
             ? new Date().getTime() + 1000 * 10
-            : new Date(booking.startDate.getDate() - 1);
+            : new Date(booking.startDate.setDate(booking.startDate.getDate() - 1));
 
       const job = schedule.scheduleJob(scheduleDate, async () => {
          try {
@@ -190,7 +190,7 @@ export async function confirmBookingTf(req: RequestWithUserId, res: Response, ne
          }
       });
 
-      const updateDate = new Date(new Date(booking.endDate).getDate() + 1);
+      const updateDate = new Date(booking.endDate.setDate(booking.endDate.getDate() + 1));
       const updateJob = schedule.scheduleJob(updateDate, async () => {
          try {
             await prisma.booking.update({

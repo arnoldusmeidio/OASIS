@@ -14,8 +14,10 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Image from "next/image";
 import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
+import { useRouter } from "@/i18n/routing"; // Your custom routing
 
-export default function CreateReview() {
+export default function CreateReview({ params }: { params: { bookingNumber: string } }) {
+   const router = useRouter();
    const [error, setError] = useState<string | undefined>(undefined);
    const [success, setSuccess] = useState<string | undefined>(undefined);
 
@@ -34,27 +36,31 @@ export default function CreateReview() {
 
    const onSubmit = async (values: z.infer<typeof reviewSchema>) => {
       try {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/reviews`, {
-            method: "POST",
-            headers: {
-               "Content-Type": "application/json",
+         const response = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users/review/${params.bookingNumber}/`,
+            {
+               method: "POST",
+               headers: {
+                  "Content-Type": "application/json",
+               },
+               body: JSON.stringify(values),
+               credentials: "include",
             },
-            body: JSON.stringify(values),
-            credentials: "include",
-         });
+         );
 
          const data = await response.json();
          if (data.ok) {
             toast(data.message, { duration: 1000 });
             setSuccess(data.message);
             form.reset();
+            router.push("/");
          } else {
             toast.error(data.message, { duration: 1000 });
             setError(data.message);
          }
       } catch (error) {
          console.error(error);
-         setError("Something went wrong!");
+         setError("something is wrong!");
       }
    };
 

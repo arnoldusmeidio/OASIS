@@ -20,6 +20,8 @@ export default function RoomDetail({ params }: { params: { slug: string } }) {
 
             const data = await response.json();
             setRoomGet(data.data);
+
+            console.log(data.data);
          } catch (error) {
             console.error("Error fetching room details:", error);
          } finally {
@@ -43,7 +45,7 @@ export default function RoomDetail({ params }: { params: { slug: string } }) {
                            {roomGet.roomPictures.map((picture: any, index: any) => (
                               <CarouselItem key={index}>
                                  <Image
-                                    src={picture.url || "/placeholder.jpg"}
+                                    src={roomGet.roomPictures?.[0]?.url || "/placeholder.jpg"}
                                     alt={`Room picture ${index + 1}`}
                                     width={1500}
                                     height={1000}
