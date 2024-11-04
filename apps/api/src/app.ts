@@ -26,7 +26,7 @@ const createApp = () => {
    const app = express();
    const limiter = rateLimit({
       windowMs: 1000 * 60,
-      max: 30,
+      max: 50,
    });
 
    // Middleware configuration

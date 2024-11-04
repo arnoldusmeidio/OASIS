@@ -55,7 +55,7 @@ export default function Tenant() {
                   router.refresh();
                }
                if (successMessage) {
-                  toast.success(successMessage, { duration: 1500 });
+                  toast(successMessage, { duration: 1500 });
                }
             }
          } catch (error) {
