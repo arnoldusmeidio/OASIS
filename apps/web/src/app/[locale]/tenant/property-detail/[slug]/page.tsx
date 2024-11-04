@@ -59,7 +59,7 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
    return (
       <div className="mx-auto w-full max-w-6xl p-4">
          {isLoading ? (
-            <h1>sabar ya compilingnya Lama...</h1>
+            <h1>Loading....</h1>
          ) : getProperty ? (
             <>
                <h1 className="my-5 text-2xl font-bold text-gray-800">{getProperty.name}</h1>
@@ -165,7 +165,7 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
                                        {room.type} (Capacity: {room.roomCapacity})
                                     </h3>
                                     <p className="text-sm text-gray-600">
-                                       Default Price:{" "}
+                                       Default Price IN IDR:{" "}
                                        {currencyLoading || !user || isLoading
                                           ? "Loading..."
                                           : !currencyRate
