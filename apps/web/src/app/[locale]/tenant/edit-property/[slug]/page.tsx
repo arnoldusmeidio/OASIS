@@ -92,16 +92,24 @@ export default function EditProperty({ params }: { params: { slug: string } }) {
 
    return (
       <Form {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)}>
+         <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10 space-y-6 rounded-lg bg-white p-6 shadow-lg">
+            <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">Edit Property</h2>
+
             {/* Property Name */}
             <FormField
                control={form.control}
                name="propertyName"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Property Name</FormLabel>
+                     <FormLabel className="text-lg font-medium">Property Name</FormLabel>
                      <FormControl>
-                        <Input disabled={isSubmitting} placeholder="Property Name" {...field} type="text" />
+                        <Input
+                           disabled={isSubmitting}
+                           placeholder="Enter Property Name"
+                           {...field}
+                           type="text"
+                           className="mt-1"
+                        />
                      </FormControl>
                   </FormItem>
                )}
@@ -113,23 +121,36 @@ export default function EditProperty({ params }: { params: { slug: string } }) {
                name="propertyAddress"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Property Address</FormLabel>
+                     <FormLabel className="text-lg font-medium">Property Address</FormLabel>
                      <FormControl>
-                        <Input disabled={isSubmitting} placeholder="Property Address" {...field} type="text" />
+                        <Input
+                           disabled={isSubmitting}
+                           placeholder="Enter Property Address"
+                           {...field}
+                           type="text"
+                           className="mt-1"
+                        />
                      </FormControl>
                      <FormMessage />
                   </FormItem>
                )}
             />
 
+            {/* Property City */}
             <FormField
                control={form.control}
                name="propertyCity"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Property City</FormLabel>
+                     <FormLabel className="text-lg font-medium">Property City</FormLabel>
                      <FormControl>
-                        <Input disabled={isSubmitting} placeholder="Property City" {...field} type="text" />
+                        <Input
+                           disabled={isSubmitting}
+                           placeholder="Enter Property City"
+                           {...field}
+                           type="text"
+                           className="mt-1"
+                        />
                      </FormControl>
                      <FormMessage />
                   </FormItem>
@@ -142,9 +163,15 @@ export default function EditProperty({ params }: { params: { slug: string } }) {
                name="propertyDescription"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Property Description</FormLabel>
+                     <FormLabel className="text-lg font-medium">Property Description</FormLabel>
                      <FormControl>
-                        <Input disabled={isSubmitting} placeholder="Property Description" {...field} type="text" />
+                        <Input
+                           disabled={isSubmitting}
+                           placeholder="Brief Description"
+                           {...field}
+                           type="text"
+                           className="mt-1"
+                        />
                      </FormControl>
                      <FormMessage />
                   </FormItem>
@@ -152,29 +179,19 @@ export default function EditProperty({ params }: { params: { slug: string } }) {
             />
 
             {/* Property Categories */}
-            <div>
-               <h3>Property Categories</h3>
-               {Object.values(Category).map((cat) => (
-                  <div key={cat} className="gap-5">
-                     <FormField
-                        control={form.control}
-                        name="category"
-                        render={({ field }) => (
-                           <FormItem>
-                              <RadioGroup
-                                 className="my-1 flex items-center space-x-2"
-                                 value={field.value}
-                                 onValueChange={field.onChange}
-                              >
-                                 <RadioGroupItem id={cat} value={cat} />
-                                 <Label htmlFor={cat}>{cat}</Label>
-                              </RadioGroup>
-                           </FormItem>
-                        )}
-                     />
-                  </div>
-               ))}
-            </div>
+            <fieldset className="mt-4">
+               <legend className="text-lg font-medium">Property Categories</legend>
+               <RadioGroup onValueChange={form.setValue.bind(form, "category")} className="mt-2 space-y-2">
+                  {Object.values(Category).map((cat) => (
+                     <FormItem key={cat} className="flex items-center gap-3">
+                        <RadioGroupItem value={cat} id={cat} />
+                        <Label htmlFor={cat} className="text-base text-gray-600">
+                           {cat}
+                        </Label>
+                     </FormItem>
+                  ))}
+               </RadioGroup>
+            </fieldset>
 
             {/* Property Images */}
             <FormField
@@ -182,7 +199,7 @@ export default function EditProperty({ params }: { params: { slug: string } }) {
                name="propertyPictures"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Property Images</FormLabel>
+                     <FormLabel className="text-lg font-medium">Property Images</FormLabel>
                      <div>
                         <Input
                            type="file"
@@ -190,16 +207,17 @@ export default function EditProperty({ params }: { params: { slug: string } }) {
                            multiple
                            onChange={onChange}
                            disabled={images.length >= 5}
+                           className="mt-2"
                         />
-                        <div className="mt-2 flex space-x-2">
+                        <div className="mt-2 flex flex-wrap gap-2">
                            {imagesPreview?.map((img, index) => (
                               <Image
                                  src={img}
                                  key={index}
                                  alt={`preview-${index}`}
-                                 className="border-gray h-24 w-24 rounded border-2 object-contain p-2 shadow"
-                                 width={50}
-                                 height={50}
+                                 className="h-24 w-24 rounded-lg border border-gray-300 object-cover shadow-md"
+                                 width={96}
+                                 height={96}
                               />
                            ))}
                         </div>
@@ -209,10 +227,19 @@ export default function EditProperty({ params }: { params: { slug: string } }) {
                )}
             />
 
-            <FormError message={error} />
-            <FormSuccess message={success} />
-            <Button className="w-full" type="submit" disabled={isSubmitting}>
-               Create Property
+            {/* Success and Error Messages */}
+            <div className="mt-4">
+               <FormError message={error} />
+               <FormSuccess message={success} />
+            </div>
+
+            {/* Submit Button */}
+            <Button
+               className="mt-6 w-full rounded-md bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700"
+               type="submit"
+               disabled={isSubmitting}
+            >
+               Update Property
             </Button>
          </form>
       </Form>
