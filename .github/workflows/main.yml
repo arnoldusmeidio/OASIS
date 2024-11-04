@@ -36,6 +36,15 @@ jobs:
               source: "./apps/web/.next, ./apps/web/*, ./apps/web/.*, ./apps/api, ./package*.json, ./turbo.json, ./.husky, ./ecosystem.config.cjs"
               target: "~/jcwd290402"
 
+         - name: Copy Email Template to Server
+           uses: appleboy/scp-action@master
+           with:
+              host: ${{ secrets.EC2_HOST }}
+              username: ${{ secrets.EC2_USERNAME }}
+              key: ${{ secrets.EC2_PRIVATE_KEY }}
+              source: "./apps/api/src/templates"
+              target: "~/jcwd290402/apps/api/dist/src"
+
          - name: Run App
            uses: appleboy/ssh-action@master
            with:
