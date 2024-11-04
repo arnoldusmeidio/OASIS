@@ -184,14 +184,14 @@ export async function topUpWallet(req: RequestWithUserId, res: Response) {
    }
 }
 
-export async function topUpNotification(req: Request, res: Response) {
-   const data = req.body;
+// export async function topUpNotification(req: Request, res: Response) {
+//    const data = req.body;
 
-   try {
-      updateWalletBalance(data);
-      res.status(200);
-   } catch (error) {
-      console.error(error);
-      return res.status(500);
-   }
-}
+//    try {
+//       updateWalletBalance(data);
+//       res.status(200);
+//    } catch (error) {
+//       console.error(error);
+//       return res.status(500);
+//    }
+// }
