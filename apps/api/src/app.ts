@@ -17,10 +17,7 @@ import room from "./routers/room-route";
 import { tenantGuard } from "@/middlewares/auth-middleware";
 import { error } from "./middlewares/error-middleware";
 import cookieParser from "cookie-parser";
-import { getAllPropertyBeta } from "./controllers/sample-controller";
-import { paymentNotification } from "./controllers/payment/midtrans-payment-controller";
-import updateBookingStatus from "./helpers/update-booking-status";
-import updateWalletBalance from "./helpers/update-wallet-balance";
+import updateNotifications from "./helpers/update-notifications-midtrans";
 
 const createApp = () => {
    const app = express();
@@ -79,18 +76,7 @@ const createApp = () => {
    app.post("/api/v1/notifications", async function paymentNotification(req: Request, res: Response) {
       const data = req.body;
       try {
-         updateBookingStatus(data);
-         res.status(200);
-      } catch (error) {
-         console.error(error);
-         return res.status(500);
-      }
-   });
-
-   app.post("/api/v1/topup", async function topupNotification(req: Request, res: Response) {
-      const data = req.body;
-      try {
-         updateWalletBalance(data);
+         updateNotifications(data);
          res.status(200);
       } catch (error) {
          console.error(error);
