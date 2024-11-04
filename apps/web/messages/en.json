@@ -6,7 +6,8 @@
          "logIn": "Log in",
          "profile": "Profile",
          "bookings": "Bookings",
-         "logOut": "Log out"
+         "logOut": "Log out",
+         "wallet": "Wallet"
       },
       "SearchBar": {
          "location": "Where do you want to stay",
