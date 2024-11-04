@@ -1,37 +1,25 @@
 import prisma from "@/prisma";
 import crypto from "crypto";
 
-export default async function updateWalletBalance(data: any) {
-   const hash = crypto
-      .createHash("sha512")
-      .update(`${data.order_id}${data.status_code}${data.gross_amount}${process.env.MIDTRANS_SERVER_KEY}`)
-      .digest("hex");
-
-   if (data.signature_key !== hash) {
-      return { status: "error", message: "Invalid signature key" };
-   }
-
-   let transactionStatus = data.transaction_status;
-   let fraudStatus = data.fraudStatus;
-
-   const wallet = await prisma.walletHistory.findUnique({
-      where: { id: data.order_id },
+export default async function updateWalletBalance(wallet: any, transactionStatus: any, fraudStatus: any, data: any) {
+   const walletHistory = await prisma.walletHistory.findUnique({
+      where: { id: wallet.id },
       include: { wallet: true },
    });
 
-   if (wallet) {
+   if (walletHistory) {
       if (transactionStatus === "capture") {
          if (fraudStatus === "accept") {
             await prisma.$transaction(async (tx) => {
                await tx.walletHistory.update({
-                  where: { id: data.order_id },
+                  where: { id: wallet.id },
                   data: {
                      value: data.gross_amount,
                      description: `Top up balance (${data.gross_amount}) using payment gateway`,
                   },
                });
                await tx.wallet.update({
-                  where: { id: wallet?.walletId },
+                  where: { id: walletHistory.walletId },
                   data: { balance: { increment: data.gross_amount } },
                });
             });
@@ -45,7 +33,7 @@ export default async function updateWalletBalance(data: any) {
                   },
                });
                await tx.wallet.update({
-                  where: { id: wallet?.walletId },
+                  where: { id: walletHistory.walletId },
                   data: { balance: { increment: data.gross_amount } },
                });
             });
