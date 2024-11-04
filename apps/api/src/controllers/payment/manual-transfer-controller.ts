@@ -190,6 +190,24 @@ export async function confirmBookingTf(req: RequestWithUserId, res: Response, ne
          }
       });
 
+      const updateDate = new Date(new Date(booking.endDate).getDate() + 1);
+      const updateJob = schedule.scheduleJob(updateDate, async () => {
+         try {
+            await prisma.booking.update({
+               where: {
+                  bookingNumber: booking?.bookingNumber,
+               },
+               data: {
+                  paymentStatus: "COMPLETED",
+               },
+            });
+         } catch (error) {
+            next(error);
+         } finally {
+            updateJob.cancel();
+         }
+      });
+
       return res.status(200).json({
          message: locale == "id" ? "Berhasil confirmasi" : "Confirmation success",
          ok: true,
