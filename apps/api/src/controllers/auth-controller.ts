@@ -8,6 +8,7 @@ import { authorizationUrl, oauth2Client } from "@/config/google";
 import { google } from "googleapis";
 import { getVerificationTokenByToken } from "@/lib/verification-token";
 import { getPasswordResetTokenByToken } from "@/lib/password-reset-token";
+import crypto from "crypto";
 
 // Register user
 export async function register(req: Request, res: Response, next: NextFunction) {
@@ -16,7 +17,23 @@ export async function register(req: Request, res: Response, next: NextFunction) 
       const parsedData = registerSchema.parse(req.body);
       const { name, password, role, token } = parsedData;
       const selectRole = {
-         ...(role == "customer" ? { customer: { create: {} } } : role == "tenant" ? { tenant: { create: {} } } : {}),
+         ...(role == "customer"
+            ? {
+                 customer: {
+                    create: {
+                       refCode: crypto.randomBytes(6).toString("hex").toUpperCase(),
+                    },
+                 },
+                 wallet: {
+                    create: {
+                       balance: 0,
+                       points: 0,
+                    },
+                 },
+              }
+            : role == "tenant"
+              ? { tenant: { create: {} } }
+              : {}),
       };
       const existingToken = await getVerificationTokenByToken(token);
 

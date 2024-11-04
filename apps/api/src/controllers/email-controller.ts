@@ -5,6 +5,9 @@ import { Request, Response, NextFunction } from "express";
 import prisma from "@/prisma";
 import { ZodError } from "zod";
 import { Resend } from "resend";
+import handlebars from "handlebars";
+import path from "path";
+import fs from "fs/promises";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -40,11 +43,18 @@ export async function emailVerification(req: Request, res: Response, next: NextF
       const token = await generateVerificationToken(email);
       const confirmationLink = `${process.env.CLIENT_PORT}/register/select-role?token=${token.token}&email=${email}`;
 
+      const templatePath = path.join(__dirname, "../../templates", "auth-email-templates.hbs");
+      const templateSource = await fs.readFile(templatePath, "utf-8");
+      const compiledTemplate = handlebars.compile(templateSource);
+      const html = compiledTemplate({
+         confirmationLink,
+      });
+
       const { error } = await resend.emails.send({
-         from: "Oasis <oasis.app@resend.dev>",
+         from: "Oasis <registration@oasis-resort.xyz>",
          to: [email],
          subject: "Email Confirmation (OASIS)",
-         html: `<p> Please confirm your email to continue the registration process by clicking on the following link: <a href="${confirmationLink}">Confirmation Link</a></p>`,
+         html: html,
       });
 
       if (error) {
@@ -112,11 +122,19 @@ export async function emailUpdateVerification(req: Request, res: Response, next:
       const token = await generateVerificationToken(email);
       const confirmationLink = `${process.env.CLIENT_PORT}/new-verification?token=${token.token}`;
 
+      const templatePath = path.join(__dirname, "../../templates", "update-email-templates.hbs");
+      const templateSource = await fs.readFile(templatePath, "utf-8");
+      const compiledTemplate = handlebars.compile(templateSource);
+      const html = compiledTemplate({
+         confirmationLink,
+         name: user.name,
+      });
+
       const { error } = await resend.emails.send({
-         from: "Oasis <oasis.app@resend.dev>",
+         from: "Oasis <email-update@oasis-resort.xyz>",
          to: [email],
          subject: "Email Confirmation (OASIS)",
-         html: `<p> Please confirm your email to update your email address by clicking on the following link: <a href="${confirmationLink}">Confirmation Link</a></p>`,
+         html: html,
       });
 
       if (error) {
@@ -161,11 +179,18 @@ export async function passwordResetEmail(req: Request, res: Response, next: Next
       const token = await generatePasswordResetToken(email);
       const resetLink = `${process.env.CLIENT_PORT}/new-password?token=${token.token}`;
 
+      const templatePath = path.join(__dirname, "../../templates", "reset-password-templates.hbs");
+      const templateSource = await fs.readFile(templatePath, "utf-8");
+      const compiledTemplate = handlebars.compile(templateSource);
+      const html = compiledTemplate({
+         resetLink,
+      });
+
       const { error } = await resend.emails.send({
-         from: "Oasis <oasis.app@resend.dev>",
+         from: "Oasis <password-reset@oasis-resort.xyz>",
          to: [email],
-         subject: "Reset Your Password (OASIS)",
-         html: `<p> To reset your password, click on the following link: <a href="${resetLink}">Reset Link</a></p>`,
+         subject: "Reset Password (OASIS)",
+         html: html,
       });
 
       if (error) {

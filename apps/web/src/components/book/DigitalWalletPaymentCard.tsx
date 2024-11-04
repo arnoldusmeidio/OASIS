@@ -15,6 +15,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
+import useCurrencyStore from "@/stores/useCurrencyStore";
+import { useUserStore } from "@/stores/useUserStore";
+import { currency } from "@/helpers/currency";
 
 type CardProps = React.ComponentProps<typeof Card>;
 
@@ -26,6 +29,10 @@ export default function DigitalPaymentCard({ className, ...props }: CardProps) {
    const router = useRouter();
    const params = useParams();
    const bookingNumber = params.slug;
+
+   const { currencyRate, getCurrencyRate } = useCurrencyStore();
+   const { user } = useUserStore();
+   const [currencyLoading, setCurrencyLoading] = useState(true);
 
    const [isLoading, setIsLoading] = useState(true);
    const [error, setError] = useState<string | undefined>("");
@@ -78,9 +85,17 @@ export default function DigitalPaymentCard({ className, ...props }: CardProps) {
          console.error(error);
       }
    };
+
    useEffect(() => {
       userGetter();
-   }, []);
+      if (user?.currency && user.currency != "IDR") {
+         setCurrencyLoading(true);
+         getCurrencyRate();
+         setCurrencyLoading(false);
+      } else {
+         setCurrencyLoading(false);
+      }
+   }, [user?.currency, getCurrencyRate]);
 
    async function onSubmit(value: z.infer<typeof FormSchema>) {
       try {
@@ -119,11 +134,29 @@ export default function DigitalPaymentCard({ className, ...props }: CardProps) {
                <div className="grid-cols mb-4 grid items-start pb-4 last:mb-0 last:pb-0">
                   <div className="space-y-1">
                      <p className="text-sm font-medium leading-none">• Balance:</p>
-                     <p className="text-muted-foreground text-sm">{userData?.wallet.balance}</p>
+                     <p className="text-muted-foreground text-sm">
+                        {currencyLoading || !userData || !bookingData || isLoading
+                           ? "Loading..."
+                           : !currencyRate
+                             ? currency(userData?.wallet.balance, "IDR", 1)
+                             : currency(userData?.wallet.balance, user?.currency, currencyRate)}
+                     </p>
                      <p className="text-sm font-medium leading-none">• Points:</p>
-                     <p className="text-muted-foreground text-sm">{userData?.wallet.points}</p>
+                     <p className="text-muted-foreground text-sm">
+                        {currencyLoading || !userData || !bookingData || isLoading
+                           ? "Loading..."
+                           : !currencyRate
+                             ? currency(userData?.wallet.points, "IDR", 1)
+                             : currency(userData?.wallet.points, user?.currency, currencyRate)}
+                     </p>
                      <p className="text-sm font-medium leading-none">• Total Price</p>
-                     <p className="text-muted-foreground text-sm">{bookingData?.amountToPay}</p>
+                     <p className="text-muted-foreground text-sm">
+                        {currencyLoading || !bookingData || isLoading
+                           ? "Loading..."
+                           : !currencyRate
+                             ? currency(bookingData?.amountToPay, "IDR", 1)
+                             : currency(bookingData?.amountToPay, user?.currency, currencyRate)}
+                     </p>
                      <p className="text-sm font-medium leading-none">• Booking Details</p>
                      <p className="text-muted-foreground text-sm">Booking Number: {bookingData?.bookingNumber}</p>
                      <p className="text-muted-foreground text-sm">{bookingData?.room.property.name}</p>

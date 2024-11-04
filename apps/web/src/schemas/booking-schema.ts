@@ -11,3 +11,19 @@ export const bookingSchema = z.object({
 });
 
 export type Task = z.infer<typeof bookingSchema>;
+
+export const bookDateSchema = z.object({
+   date: z
+      .object(
+         {
+            from: z.date({ required_error: "From date is required" }),
+            to: z.date({ invalid_type_error: "To date is required" }).optional(),
+         },
+         {
+            required_error: "Please select a date range",
+         },
+      )
+      .optional(),
+});
+
+export type FormTypeBookDate = z.infer<typeof bookDateSchema>;
