@@ -9,6 +9,9 @@ export const getSingleRoom = async (req: Request, res: Response, next: NextFunct
          where: {
             id: roomId,
          },
+         include: {
+            roomPictures: true,
+         },
       });
 
       if (!getRooms) res.status(404).json({ message: "rooms not found" });

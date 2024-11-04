@@ -197,13 +197,13 @@ export default function CreateProperty() {
                               onChange={onChange}
                               disabled={images.length >= 5}
                            />
-                           <div className="mt-2 flex space-x-2">
+                           <div className="mt-2 flex max-h-32 flex-wrap space-x-2 overflow-auto">
                               {imagesPreview?.map((img, index) => (
                                  <Image
                                     src={img}
                                     key={index}
                                     alt={`preview-${index}`}
-                                    className="border-gray h-24 w-24 rounded border-2 object-contain p-2 shadow"
+                                    className="h-24 w-24 rounded border-2 object-contain p-2 shadow"
                                     width={50}
                                     height={50}
                                  />
