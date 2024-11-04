@@ -60,7 +60,7 @@ export default function CreateReview({ params }: { params: { bookingNumber: stri
          }
       } catch (error) {
          console.error(error);
-         setError("you already Write the review!");
+         setError("something is wrong!");
       }
    };
 
