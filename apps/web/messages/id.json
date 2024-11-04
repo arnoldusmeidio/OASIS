@@ -6,7 +6,8 @@
          "logIn": "Masuk",
          "profile": "Profil",
          "bookings": "Pesanan",
-         "logOut": "Keluar"
+         "logOut": "Keluar",
+         "wallet": "Dompet"
       },
       "SearchBar": {
          "location": "Ingin menginap di mana?",

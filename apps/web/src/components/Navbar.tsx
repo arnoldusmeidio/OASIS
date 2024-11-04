@@ -58,6 +58,9 @@ export default function Navbar() {
                                  <Button variant={"ghost"} className="w-full justify-start" asChild>
                                     <Link href={"/user/bookings"}>{t("bookings")}</Link>
                                  </Button>
+                                 <Button variant={"ghost"} className="w-full justify-start" asChild>
+                                    <Link href={"/user/wallet"}>{t("wallet")}</Link>
+                                 </Button>
                               </div>
                               <div>
                                  <LogoutButton>
