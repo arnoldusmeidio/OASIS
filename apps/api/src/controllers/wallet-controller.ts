@@ -24,7 +24,7 @@ export async function getWallet(req: RequestWithUserId, res: Response, next: Nex
 
       const wallet = await prisma.wallet.findUnique({
          where: { id: user.id },
-         include: { WalletHistory: true },
+         include: { walletHistory: true },
       });
 
       if (!wallet)
@@ -32,7 +32,7 @@ export async function getWallet(req: RequestWithUserId, res: Response, next: Nex
             message: locale == "id" ? "Belum Registrasi Oasis Wallet" : "Oasis Wallet is not registered",
             ok: false,
          });
-      return res.status(201).json({ ok: true, data: { wallet } });
+      return res.status(201).json({ ok: true, data: wallet });
    } catch (error) {
       console.error(error);
       return res.status(500);

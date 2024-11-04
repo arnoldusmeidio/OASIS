@@ -53,7 +53,6 @@ export default function UserCard({ getUser }: Props) {
                            </TabsContent>
                         </Tabs>
                      </div>
-                     <WalletCard getUser={getUser} />
                   </div>
                )}
             </div>
