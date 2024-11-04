@@ -1,9 +1,6 @@
-import { z } from "zod";
+import * as z from "zod";
 
-export const ReviewSchema = z.object({
-   feedback: z
-      .string()
-      .min(10, { message: "Feedback should be at least 10 characters long" })
-      .max(500, { message: "Feedback should be less than 500 characters" })
-      .nonempty({ message: "Feedback is required" }),
+export const reviewSchema = z.object({
+   review: z.string().min(1, "Review cannot be empty").max(500, "Review should not exceed 500 characters"),
+   star: z.number().min(1, "Rating must be at least 1 star").max(5, "Rating cannot be more than 5 stars"),
 });
