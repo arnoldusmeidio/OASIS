@@ -128,8 +128,8 @@ export default function CreateReview({ params }: { params: { bookingNumber: stri
                      render={({ field }) => (
                         <FormItem>
                            <FormLabel>Rating</FormLabel>
-                           <div className="flex space-x-2">
-                              {[1, 2, 3, 4, 5].map((star) => (
+                           <div className="flex space-x-1">
+                              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((star) => (
                                  <button
                                     key={star}
                                     type="button"
