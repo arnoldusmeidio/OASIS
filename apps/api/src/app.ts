@@ -77,7 +77,7 @@ const createApp = () => {
       const data = req.body;
       try {
          updateNotifications(data);
-         res.status(200);
+         return res.status(200);
       } catch (error) {
          console.error(error);
          return res.status(500);

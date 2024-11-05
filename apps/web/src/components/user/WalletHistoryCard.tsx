@@ -9,6 +9,7 @@ import useCurrencyStore from "@/stores/useCurrencyStore";
 import { WalletTypes } from "@/types/wallet";
 import { Skeleton } from "../ui/skeleton";
 import WalletCard from "./WalletCard";
+import Image from "next/image";
 
 export default function WalletHistoryCard() {
    const { currencyRate, error, getCurrencyRate } = useCurrencyStore();
@@ -47,6 +48,24 @@ export default function WalletHistoryCard() {
          setCurrencyLoading(false);
       }
    }, [user?.currency, getCurrencyRate]);
+
+   if (!walletData) {
+      return (
+         <div className="flex flex-col gap-4 px-4 py-4">
+            <div className="flex justify-center gap-2 align-middle">
+               <Image
+                  alt="picture of people going on holiday"
+                  width={100}
+                  height={100}
+                  src={"/laptop.svg"}
+                  className="h-[300px] w-[300px] md:h-[500px] md:w-[500px]"
+               />
+            </div>
+            <h3 className="flex justify-center gap-2 align-middle">All cleared!</h3>
+            <div className="flex justify-center gap-2 align-middle"></div>
+         </div>
+      );
+   }
 
    return (
       <>

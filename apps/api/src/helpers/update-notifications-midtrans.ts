@@ -25,7 +25,7 @@ export default async function updateNotifications(data: any) {
       updateBookingStatus(booking, transactionStatus, fraudStatus);
    }
 
-   const wallet = await prisma.booking.findUnique({
+   const wallet = await prisma.walletHistory.findUnique({
       where: { id: data.order_id },
    });
    if (wallet) {
