@@ -110,6 +110,8 @@ export default function DigitalPaymentCard({ className, ...props }: CardProps) {
          if (!data.ok) {
             setSuccess("");
             setError(data.message);
+            toast.error(data.message, { duration: 1500 });
+            router.push("../");
          } else {
             setError("");
             setSuccess(data.message);
