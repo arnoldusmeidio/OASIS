@@ -5,14 +5,27 @@ import { useEffect, useState } from "react";
 import { Property } from "@/types/property-types";
 import { Card, CardContent } from "@/components/ui/card";
 import { APIProvider, Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import Autoplay from "embla-carousel-autoplay";
 import useCurrencyStore from "@/stores/useCurrencyStore";
 import { useUserStore } from "@/stores/useUserStore";
+import {
+   AlertDialog,
+   AlertDialogTrigger,
+   AlertDialogContent,
+   AlertDialogTitle,
+   AlertDialogDescription,
+   AlertDialogFooter,
+   AlertDialogCancel,
+   AlertDialogAction,
+   AlertDialogHeader,
+} from "@/components/ui/alert-dialog";
+
 import { currency } from "@/helpers/currency";
+import { toast } from "sonner";
 
 export default function PropertyDetails({ params }: { params: { slug: string } }) {
    const [getProperty, setGetProperty] = useState<Property>();
@@ -21,6 +34,8 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
    const { currencyRate, getCurrencyRate } = useCurrencyStore();
    const { user } = useUserStore();
    const [currencyLoading, setCurrencyLoading] = useState(true);
+   const [roomToDelete, setRoomToDelete] = useState<string | null>(null); // State to store room ID to delete
+   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
    useEffect(() => {
       const propertyGetter = async () => {
@@ -55,6 +70,31 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
 
       propertyGetter();
    }, [params.slug, user?.currency, getCurrencyRate]);
+
+   const deleteRoom = async (roomId: string) => {
+      try {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/room/${roomId}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+         });
+
+         if (response.ok) {
+            setGetProperty((prev) => {
+               if (!prev) return prev;
+               return {
+                  ...prev,
+                  room: prev.room.filter((room) => room.id !== roomId),
+               };
+            });
+            toast("room deleted successfully!");
+         } else {
+            toast.error("Failed to delete the room.");
+         }
+      } catch (error) {
+         console.error("Error deleting room:", error);
+      }
+   };
 
    return (
       <div className="mx-auto w-full max-w-6xl p-4">
@@ -173,13 +213,23 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
                                             : currency(room.defaultPrice, user?.currency, currencyRate)}
                                     </p>
                                  </div>
-                                 <div>
+                                 <div className="flex gap-2">
                                     <Button className="my-3 bg-blue-600 px-4 py-2 text-white hover:bg-blue-600">
                                        <Link
                                           href={`/tenant/edit-room/${room.id}?propertyId=${getProperty.id}&roomId=${room.id}`}
                                        >
                                           Edit Room
                                        </Link>
+                                    </Button>
+                                    {/* Delete Button */}
+                                    <Button
+                                       className="my-3 bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+                                       onClick={() => {
+                                          setRoomToDelete(room.id); // Set the selected room ID
+                                          setDeleteDialogOpen(true); // Open the delete confirmation dialog
+                                       }}
+                                    >
+                                       Delete Room
                                     </Button>
                                  </div>
                               </div>
@@ -201,16 +251,39 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
                               <Pin />
                            </AdvancedMarker>
                            {userLoc && (
-                              <>
-                                 <AdvancedMarker position={userLoc}>
-                                    <Pin />
-                                 </AdvancedMarker>
-                              </>
+                              <AdvancedMarker position={userLoc}>
+                                 <Pin />
+                              </AdvancedMarker>
                            )}
                         </Map>
                      </APIProvider>
                   </div>
                </div>
+
+               {/* Delete Confirmation Dialog */}
+               <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                  <AlertDialogContent>
+                     <AlertDialogHeader>
+                        <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
+                        <AlertDialogDescription>
+                           Are you sure you want to delete this room? This action cannot be undone.
+                        </AlertDialogDescription>
+                     </AlertDialogHeader>
+                     <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                           onClick={() => {
+                              if (roomToDelete) {
+                                 deleteRoom(roomToDelete);
+                              }
+                              setDeleteDialogOpen(false);
+                           }}
+                        >
+                           Confirm
+                        </AlertDialogAction>
+                     </AlertDialogFooter>
+                  </AlertDialogContent>
+               </AlertDialog>
 
                {/* Booking and Amenities */}
                <div className="mt-10 flex justify-between">
@@ -225,7 +298,7 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
                </div>
             </>
          ) : (
-            <p className="text-center text-gray-600">No property found.</p> // Fallback if getProperty is undefined
+            <h2>Property not found</h2>
          )}
       </div>
    );
