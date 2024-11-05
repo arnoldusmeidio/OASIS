@@ -10,6 +10,9 @@ import { toast } from "sonner";
 import { checkRoomBooking } from "@/helpers/check-room-booking";
 import { RoomStatus } from "@/types/room-status";
 import { checkRoomPrice } from "@/helpers/check-room-price";
+import useCurrencyStore from "@/stores/useCurrencyStore";
+import { useUserStore } from "@/stores/useUserStore";
+import { currency } from "@/helpers/currency";
 
 interface TenantDatePickerProps {
    roomId: string;
@@ -28,6 +31,9 @@ export default function TenantDatePicker({ roomId, roomStatus, setTanggal }: Ten
    const [customPrice, setCustomPrice] = useState<number | undefined>(undefined);
    const [numberOfMonths, setNumberOfMonths] = useState<number>(2);
    const [tenantRoomStatus, setTenantRoomStatus] = useState<RoomStatus>();
+   const { user } = useUserStore();
+   const [currencyLoading, setCurrencyLoading] = useState(true);
+   const { currencyRate, getCurrencyRate } = useCurrencyStore();
 
    // Handle date selection
    const handleSelect = (selectedDate: DateRange | undefined) => {
@@ -46,7 +52,14 @@ export default function TenantDatePicker({ roomId, roomStatus, setTanggal }: Ten
       }
 
       fetchPrices();
-   }, []);
+      if (user?.currency && user.currency != "IDR") {
+         setCurrencyLoading(true);
+         getCurrencyRate();
+         setCurrencyLoading(false);
+      } else {
+         setCurrencyLoading(false);
+      }
+   }, [user?.currency, getCurrencyRate]);
 
    // Add special date with custom price
    const handleAddSpecialDate = () => {
@@ -135,7 +148,12 @@ export default function TenantDatePicker({ roomId, roomStatus, setTanggal }: Ten
             {specialDates.map((item, index) => (
                <div key={index} className="flex items-center justify-between">
                   <span>
-                     {format(item.range.from!, "LLL dd, y")} - {format(item.range.to!, "LLL dd, y")} : ${item.price}
+                     {format(item.range.from!, "LLL dd, y")} - {format(item.range.to!, "LLL dd, y")} :{" "}
+                     {currencyLoading || !user
+                        ? "Loading..."
+                        : !currencyRate
+                          ? currency(item.price, "IDR", 1)
+                          : currency(item.price, user?.currency, currencyRate)}
                   </span>
                   <Button variant="destructive" type="button" onClick={() => handleRemoveSpecialDate(index)}>
                      Remove
