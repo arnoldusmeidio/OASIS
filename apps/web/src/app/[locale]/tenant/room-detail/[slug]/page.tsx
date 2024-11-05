@@ -26,8 +26,6 @@ export default function RoomDetail({ params }: { params: { slug: string } }) {
 
             const data = await response.json();
             setRoomGet(data.data);
-
-            console.log(data.data);
          } catch (error) {
             console.error("Error fetching room details:", error);
          } finally {

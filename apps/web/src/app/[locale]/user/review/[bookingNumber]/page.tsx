@@ -1,7 +1,7 @@
 "use client";
 
 import * as z from "zod";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { reviewSchema } from "@/schemas/review-schemas";
@@ -20,6 +20,8 @@ export default function CreateReview({ params }: { params: { bookingNumber: stri
    const router = useRouter();
    const [error, setError] = useState<string | undefined>(undefined);
    const [success, setSuccess] = useState<string | undefined>(undefined);
+   const [isReviewDisabled, setIsReviewDisabled] = useState(false);
+   const [review, setReview] = useState();
 
    const form = useForm<z.infer<typeof reviewSchema>>({
       resolver: zodResolver(reviewSchema),
@@ -34,7 +36,36 @@ export default function CreateReview({ params }: { params: { bookingNumber: stri
       formState: { isSubmitting },
    } = form;
 
+   useEffect(() => {
+      const checkExistingReviews = async () => {
+         try {
+            const response = await fetch(
+               `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users/review/${params.bookingNumber}/`,
+               {
+                  method: "GET",
+                  credentials: "include",
+               },
+            );
+
+            if (response.ok) {
+               const data = await response.json();
+
+               if (data.data) {
+                  setIsReviewDisabled(true);
+               }
+            }
+         } catch (error) {
+            console.error("Error checking review existence:", error);
+            setError("Failed to check review status.");
+         }
+      };
+
+      checkExistingReviews();
+   }, [params.bookingNumber]);
+
    const onSubmit = async (values: z.infer<typeof reviewSchema>) => {
+      if (isReviewDisabled) return;
+
       try {
          const response = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users/review/${params.bookingNumber}/`,
@@ -60,7 +91,7 @@ export default function CreateReview({ params }: { params: { bookingNumber: stri
          }
       } catch (error) {
          console.error(error);
-         setError("something is wrong!");
+         setError("Something is wrong!");
       }
    };
 
@@ -84,7 +115,11 @@ export default function CreateReview({ params }: { params: { bookingNumber: stri
          <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                <CardContent className="mt-4 space-y-4">
-                  <p className="text-center text-gray-600">We would love to hear your feedback on this property.</p>
+                  <p className="text-center text-gray-600">
+                     {isReviewDisabled
+                        ? "You have already submitted a review."
+                        : "We would love to hear your feedback on this property."}
+                  </p>
 
                   {/* Star Rating */}
                   <FormField
@@ -99,12 +134,11 @@ export default function CreateReview({ params }: { params: { bookingNumber: stri
                                     key={star}
                                     type="button"
                                     onClick={() => field.onChange(star)}
+                                    disabled={isReviewDisabled}
                                     className="focus:outline-none"
                                  >
                                     <Star
-                                       className={`h-6 w-6 ${
-                                          star <= field.value ? "text-yellow-500" : "text-gray-300"
-                                       }`}
+                                       className={`h-6 w-6 ${star <= field.value ? "text-yellow-500" : "text-gray-300"}`}
                                     />
                                  </button>
                               ))}
@@ -123,7 +157,7 @@ export default function CreateReview({ params }: { params: { bookingNumber: stri
                            <FormLabel>Your Review</FormLabel>
                            <FormControl>
                               <Textarea
-                                 disabled={isSubmitting}
+                                 disabled={isSubmitting || isReviewDisabled}
                                  placeholder="Write your review here"
                                  {...field}
                                  className="mt-1 h-32 w-full resize-none rounded-md border p-2"
@@ -139,8 +173,8 @@ export default function CreateReview({ params }: { params: { bookingNumber: stri
                <FormSuccess message={success} />
 
                <CardFooter className="mt-4 flex justify-end">
-                  <Button className="w-full" type="submit" disabled={isSubmitting}>
-                     Submit Review
+                  <Button className="w-full" type="submit" disabled={isReviewDisabled}>
+                     {isReviewDisabled ? "Review Submitted" : "Submit Review"}
                   </Button>
                </CardFooter>
             </form>
