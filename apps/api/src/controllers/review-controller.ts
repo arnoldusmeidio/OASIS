@@ -9,8 +9,6 @@ export const createReview = async (req: Request, res: Response, next: NextFuncti
       const { bookingNumber } = req.params;
       const { review, star } = req.body;
 
-      console.log(req.params);
-
       if (!review || star === undefined || !bookingNumber) {
          return res.status(400).json({ message: "Missing required fields", ok: false });
       }
@@ -27,7 +25,6 @@ export const createReview = async (req: Request, res: Response, next: NextFuncti
       });
 
       const customerId = user?.customer?.id;
-      console.log("Customer ID:", customerId);
 
       if (!customerId) {
          return res.status(400).json({ message: "Customer Id not found" });
