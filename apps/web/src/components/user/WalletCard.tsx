@@ -15,14 +15,8 @@ import { useState, useEffect } from "react";
 import { currency } from "@/helpers/currency";
 import { useTranslations } from "next-intl";
 import useCurrencyStore from "@/stores/useCurrencyStore";
-import { WalletTypes } from "@/types/wallet";
 
-interface Props {
-   eventGetter: () => void;
-   walletData: WalletTypes;
-}
-
-export default function WalletCard({ eventGetter }: Props) {
+export default function WalletCard() {
    const { user } = useUserStore();
    const [currencyLoading, setCurrencyLoading] = useState(true);
    const { currencyRate, error, getCurrencyRate } = useCurrencyStore();
