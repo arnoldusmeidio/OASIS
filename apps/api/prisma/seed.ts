@@ -106,21 +106,9 @@ async function inputData() {
    const uniqueIdBooking52 = crypto.randomBytes(3).toString("hex").toUpperCase();
    const uniqueIdBooking53 = crypto.randomBytes(3).toString("hex").toUpperCase();
    const uniqueIdBooking54 = crypto.randomBytes(3).toString("hex").toUpperCase();
-
-   const yamada = await prisma.user.create({
-      data: {
-         name: "Yamada Darkness",
-         email: "yamada123@mail.com",
-         password: hashedPassword,
-         customer: {
-            create: {
-               refCode: crypto.randomBytes(6).toString("hex").toUpperCase(),
-            },
-         },
-         accountProvider: "CREDENTIALS",
-         wallet: { create: {} },
-      },
-   });
+   const uniqueIdBooking55 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking56 = crypto.randomBytes(3).toString("hex").toUpperCase();
+   const uniqueIdBooking57 = crypto.randomBytes(3).toString("hex").toUpperCase();
 
    const budi = await prisma.user.create({
       data: {
@@ -2551,6 +2539,55 @@ async function inputData() {
                         review: "Spacious rooms and a great restaurant, highly recommended.",
                         star: 9,
                         createdAt: new Date(new Date("2025-11-15").setHours(0, 0, 0, 0)),
+                     },
+                  ],
+               },
+            },
+         },
+         accountProvider: "CREDENTIALS",
+         wallet: { create: {} },
+      },
+   });
+
+   const yamada = await prisma.user.create({
+      data: {
+         name: "Yamada Darkness",
+         email: "yamada123@mail.com",
+         password: hashedPassword,
+         customer: {
+            create: {
+               refCode: crypto.randomBytes(6).toString("hex").toUpperCase(),
+               bookings: {
+                  create: [
+                     {
+                        id: uniqueIdBooking55,
+                        startDate: new Date(new Date("2024-02-01").setHours(0, 0, 0, 0)),
+                        endDate: new Date(new Date("2024-02-04").setHours(0, 0, 0, 0)),
+                        createdAt: new Date(new Date("2024-01-26").setHours(0, 0, 0, 0)),
+                        bookingNumber: uniqueIdBooking55,
+                        paymentStatus: "COMPLETED",
+                        roomId: uniqueIdRoom10,
+                        amountToPay: 3500000,
+                     },
+                     {
+                        id: uniqueIdBooking56,
+                        startDate: new Date(new Date("2024-04-03").setHours(0, 0, 0, 0)),
+                        endDate: new Date(new Date("2024-04-06").setHours(0, 0, 0, 0)),
+                        createdAt: new Date(new Date("2024-03-04").setHours(0, 0, 0, 0)),
+                        bookingNumber: uniqueIdBooking56,
+                        paymentStatus: "COMPLETED",
+                        roomId: uniqueIdRoom5,
+                        amountToPay: 2000000,
+                     },
+                     {
+                        id: uniqueIdBooking57,
+                        startDate: new Date(new Date("2024-05-03").setHours(0, 0, 0, 0)),
+                        endDate: new Date(new Date("2024-05-06").setHours(0, 0, 0, 0)),
+                        createdAt: new Date(new Date("2024-04-04").setHours(0, 0, 0, 0)),
+                        bookingNumber: uniqueIdBooking57,
+                        paymentStatus: "COMPLETED",
+                        roomId: uniqueIdRoom14,
+                        amountToPay: 2000000,
                      },
                   ],
                },
