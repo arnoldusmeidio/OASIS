@@ -15,6 +15,7 @@ import { useState, useEffect } from "react";
 import { currency } from "@/helpers/currency";
 import { useTranslations } from "next-intl";
 import useCurrencyStore from "@/stores/useCurrencyStore";
+import { WalletTypes } from "@/types/wallet";
 
 export default function WalletCard() {
    const { user } = useUserStore();
