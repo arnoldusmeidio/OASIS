@@ -32,9 +32,7 @@ export default function RedeemCodeCard({ getUser }: Props) {
 
          const resData = await res.json();
          if (resData.ok) {
-            toast(`${t("toastSuccess")}`, {
-               description: `${t("toastDescription")}`,
-            });
+            toast(resData.message, { duration: 1500 });
             getUser();
          } else {
             toast.error(`${t("toastError")}`, {
