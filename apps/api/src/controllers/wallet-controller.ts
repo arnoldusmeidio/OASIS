@@ -97,7 +97,7 @@ export async function redeemRefCode(req: RequestWithUserId, res: Response, next:
             data: {
                walletId: user.id,
                description: `Referral Code Redemption`,
-               value: 20000,
+               value: 10000,
                types: "INCOME",
                bp: "POINTS",
             },
@@ -107,7 +107,7 @@ export async function redeemRefCode(req: RequestWithUserId, res: Response, next:
             data: {
                walletId: validRefCode.id,
                description: `Referral Code Redemption`,
-               value: 10000,
+               value: 20000,
                types: "INCOME",
                bp: "POINTS",
             },

@@ -1,13 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
 import { currency } from "@/helpers/currency";
 import { useUserStore } from "@/stores/useUserStore";
 import useCurrencyStore from "@/stores/useCurrencyStore";
 import { WalletTypes } from "@/types/wallet";
-import { Skeleton } from "../ui/skeleton";
 import WalletCard from "./WalletCard";
 import Image from "next/image";
 
@@ -49,63 +47,57 @@ export default function WalletHistoryCard() {
       }
    }, [user?.currency, getCurrencyRate]);
 
-   if (!walletData) {
-      return (
-         <div className="flex flex-col gap-4 px-4 py-4">
-            <div className="flex justify-center gap-2 align-middle">
-               <Image
-                  alt="picture of people going on holiday"
-                  width={100}
-                  height={100}
-                  src={"/laptop.svg"}
-                  className="h-[300px] w-[300px] md:h-[500px] md:w-[500px]"
-               />
-            </div>
-            <h3 className="flex justify-center gap-2 align-middle">All cleared!</h3>
-            <div className="flex justify-center gap-2 align-middle"></div>
-         </div>
-      );
-   }
-
    return (
       <>
-         {isLoading || !walletData ? (
-            // <h1>Loading...</h1>
-            <Skeleton className="h-[750px] w-full" />
-         ) : (
-            <div className="flex h-full w-full flex-col gap-4 self-start p-8">
-               <div className="flex w-[50%] self-center">
-                  <WalletCard eventGetter={eventGetter} walletData={walletData} />
+         <div className="flex h-full w-full flex-col gap-4 self-start p-8">
+            <div className="flex w-[50%] self-center">
+               <WalletCard />
+            </div>
+            {isLoading || walletData?.walletHistory.length === 0 ? (
+               <div className="flex flex-col gap-4 px-4 py-4">
+                  <div className="flex justify-center gap-2 align-middle">
+                     <Image
+                        alt="picture of people going on holiday"
+                        width={100}
+                        height={100}
+                        src={"/laptop.svg"}
+                        className="h-[300px] w-[300px] md:h-[500px] md:w-[500px]"
+                     />
+                  </div>
+                  <h3 className="flex justify-center gap-2 align-middle">No transaction has been made!</h3>
                </div>
-               {walletData?.walletHistory?.map((e, index: number) => (
-                  <div key={e.id}>
-                     <Card className="w-full shadow-md">
-                        <CardHeader>
-                           <CardTitle>{e.types}</CardTitle>
-                           <CardDescription>{format(e.createdAt, "LLL dd, y")}</CardDescription>
-                        </CardHeader>
-                        <CardContent className="grid gap-4">
-                           <div>
-                              <div className="grid-cols mb-4 grid items-start pb-4 last:mb-0 last:pb-0">
-                                 <div className="space-y-1">
-                                    <p className="text-sm font-medium leading-none">
-                                       {currencyLoading
-                                          ? "Loading..."
-                                          : !currencyRate
-                                            ? currency(e.value, "IDR", 1)
-                                            : currency(e.value, user?.currency, currencyRate)}
-                                    </p>
-                                    <p className="text-muted-foreground text-sm">{e.description}</p>
+            ) : (
+               <div className="flex h-full w-full flex-col gap-4 self-start p-8">
+                  {walletData?.walletHistory?.map((e, index: number) => (
+                     <div key={e.id}>
+                        <Card className="w-full shadow-md">
+                           <CardHeader>
+                              <CardTitle>{e.types}</CardTitle>
+                              <CardDescription>{format(e.createdAt, "LLL dd, y")}</CardDescription>
+                           </CardHeader>
+                           <CardContent className="grid gap-4">
+                              <div>
+                                 <div className="grid-cols mb-4 grid items-start pb-4 last:mb-0 last:pb-0">
+                                    <div className="space-y-1">
+                                       <p className="text-sm font-medium leading-none">
+                                          {currencyLoading
+                                             ? "Loading..."
+                                             : !currencyRate
+                                               ? currency(e.value, "IDR", 1)
+                                               : currency(e.value, user?.currency, currencyRate)}
+                                       </p>
+                                       <p className="text-muted-foreground text-sm">{e.description}</p>
+                                    </div>
                                  </div>
                               </div>
-                           </div>
-                        </CardContent>
-                        <CardFooter className="flex gap-4"></CardFooter>
-                     </Card>
-                  </div>
-               ))}
-            </div>
-         )}
+                           </CardContent>
+                           <CardFooter className="flex gap-4"></CardFooter>
+                        </Card>
+                     </div>
+                  ))}
+               </div>
+            )}
+         </div>
       </>
    );
 }
