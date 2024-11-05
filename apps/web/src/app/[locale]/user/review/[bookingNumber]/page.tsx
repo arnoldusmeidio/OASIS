@@ -122,26 +122,29 @@ export default function CreateReview({ params }: { params: { bookingNumber: stri
                   </p>
 
                   {/* Star Rating */}
+                  {/* Star Rating */}
                   <FormField
                      control={form.control}
                      name="star"
                      render={({ field }) => (
                         <FormItem>
-                           <FormLabel>Rating</FormLabel>
-                           <div className="flex space-x-2">
-                              {[1, 2, 3, 4, 5].map((star) => (
-                                 <button
-                                    key={star}
-                                    type="button"
-                                    onClick={() => field.onChange(star)}
-                                    disabled={isReviewDisabled}
-                                    className="focus:outline-none"
-                                 >
-                                    <Star
-                                       className={`h-6 w-6 ${star <= field.value ? "text-yellow-500" : "text-gray-300"}`}
-                                    />
-                                 </button>
-                              ))}
+                           <FormLabel className="text-center">Rating</FormLabel>
+                           <div className="flex justify-center">
+                              <div className="flex space-x-1">
+                                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((star) => (
+                                    <button
+                                       key={star}
+                                       type="button"
+                                       onClick={() => field.onChange(star)}
+                                       disabled={isReviewDisabled}
+                                       className="focus:outline-none"
+                                    >
+                                       <Star
+                                          className={`h-6 w-6 ${star <= field.value ? "text-yellow-500" : "text-gray-300"}`}
+                                       />
+                                    </button>
+                                 ))}
+                              </div>
                            </div>
                            <FormMessage />
                         </FormItem>
