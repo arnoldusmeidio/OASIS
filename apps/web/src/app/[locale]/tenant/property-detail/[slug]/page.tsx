@@ -40,7 +40,7 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
    useEffect(() => {
       const propertyGetter = async () => {
          try {
-            const get = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/property/${params.slug}`, {
+            const get = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/property/${params.slug}`, {
                method: "GET",
                headers: { "Content-Type": "application/json" },
                credentials: "include",
@@ -73,7 +73,7 @@ export default function PropertyDetails({ params }: { params: { slug: string } }
 
    const deleteRoom = async (roomId: string) => {
       try {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/room/${roomId}`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/room/${roomId}`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
             credentials: "include",

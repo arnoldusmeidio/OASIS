@@ -28,7 +28,7 @@ export default function SelectRolePage() {
 
    const onSubmit = async (values: z.infer<typeof updateRoleSchema>) => {
       try {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users/role`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/users/role`, {
             method: "PUT",
             headers: {
                "Content-Type": "application/json",

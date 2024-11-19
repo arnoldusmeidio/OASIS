@@ -48,8 +48,8 @@ export default function Home() {
 
             // Fetch user and properties concurrently
             const [userResponse, propertiesResponse] = await Promise.all([
-               fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users`, { credentials: "include" }),
-               fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/property/popular`, { credentials: "include" }),
+               fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/users`, { credentials: "include" }),
+               fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/property/popular`, { credentials: "include" }),
             ]);
 
             const userData = await userResponse.json();

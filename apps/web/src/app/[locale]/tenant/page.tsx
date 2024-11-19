@@ -44,7 +44,7 @@ export default function Tenant() {
    useEffect(() => {
       async function getUser() {
          try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/users`, {
                credentials: "include",
             });
             const data = await res.json();
@@ -69,7 +69,7 @@ export default function Tenant() {
 
    const fetchProperties = async (pages = 1) => {
       try {
-         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/tenant?page=${pages}`, {
+         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/tenant?page=${pages}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -84,7 +84,7 @@ export default function Tenant() {
 
    const handleDelete = async (id: string) => {
       try {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/tenant/${id}`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/tenant/${id}`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
             credentials: "include",

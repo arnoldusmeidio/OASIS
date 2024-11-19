@@ -42,7 +42,7 @@ export default function NewPasswordForm() {
 
    const onSubmit = async (values: z.infer<typeof newPasswordSchema>) => {
       try {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/auth/user/password`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/auth/user/password`, {
             method: "PUT",
             headers: {
                "Content-Type": "application/json",

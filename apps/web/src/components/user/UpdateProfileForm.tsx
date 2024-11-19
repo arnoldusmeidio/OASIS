@@ -48,7 +48,7 @@ export default function UpdateProfileForm({ getUser }: Props) {
 
    const onSubmit = async (values: z.infer<typeof profileSchema>) => {
       try {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/users`, {
             method: "PUT",
             headers: {
                "Content-Type": "application/json",

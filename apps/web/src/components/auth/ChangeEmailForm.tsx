@@ -48,7 +48,7 @@ export default function ChangeEmailForm() {
 
    const onSubmit = async (values: z.infer<typeof emailVerificationSchema>) => {
       try {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/auth/user/email`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/auth/user/email`, {
             method: "POST",
             headers: {
                "Content-Type": "application/json",

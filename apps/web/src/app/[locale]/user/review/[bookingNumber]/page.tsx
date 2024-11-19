@@ -40,7 +40,7 @@ export default function CreateReview({ params }: { params: { bookingNumber: stri
       const checkExistingReviews = async () => {
          try {
             const response = await fetch(
-               `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users/review/${params.bookingNumber}/`,
+               `${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/users/review/${params.bookingNumber}/`,
                {
                   method: "GET",
                   credentials: "include",
@@ -68,7 +68,7 @@ export default function CreateReview({ params }: { params: { bookingNumber: stri
 
       try {
          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users/review/${params.bookingNumber}/`,
+            `${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/users/review/${params.bookingNumber}/`,
             {
                method: "POST",
                headers: {

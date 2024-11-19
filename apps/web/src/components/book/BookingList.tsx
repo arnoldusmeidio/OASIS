@@ -115,7 +115,7 @@ export default function BookingList({ eventGetter, bookingData }: Props) {
                                  onClick={async () => {
                                     try {
                                        const res = await fetch(
-                                          `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/payments/confirm/${e.bookingNumber}`,
+                                          `${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/payments/confirm/${e.bookingNumber}`,
                                           {
                                              method: "POST",
                                              headers: { "Content-Type": "application/json" },
@@ -159,7 +159,7 @@ export default function BookingList({ eventGetter, bookingData }: Props) {
                                           onClick={async () => {
                                              try {
                                                 const res = await fetch(
-                                                   `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings/${e.bookingNumber}`,
+                                                   `${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/bookings/${e.bookingNumber}`,
                                                    {
                                                       method: "DELETE",
                                                       headers: { "Content-Type": "application/json" },

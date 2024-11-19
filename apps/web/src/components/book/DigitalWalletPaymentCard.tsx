@@ -49,7 +49,7 @@ export default function DigitalPaymentCard({ className, ...props }: CardProps) {
 
    const eventGetter = async () => {
       try {
-         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings/${bookingNumber}`, {
+         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/bookings/${bookingNumber}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -70,7 +70,7 @@ export default function DigitalPaymentCard({ className, ...props }: CardProps) {
 
    const userGetter = async () => {
       try {
-         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users`, {
+         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/users`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -99,7 +99,7 @@ export default function DigitalPaymentCard({ className, ...props }: CardProps) {
 
    async function onSubmit(value: z.infer<typeof FormSchema>) {
       try {
-         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/payments/digital/${bookingNumber}`, {
+         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/payments/digital/${bookingNumber}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",

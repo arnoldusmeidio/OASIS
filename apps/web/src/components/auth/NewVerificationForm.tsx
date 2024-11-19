@@ -27,7 +27,7 @@ export default function NewVerificationForm() {
    useEffect(() => {
       async function updateEmail() {
          try {
-            const user = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/auth/user/email`, {
+            const user = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/auth/user/email`, {
                method: "PUT",
                headers: {
                   "Content-Type": "application/json",

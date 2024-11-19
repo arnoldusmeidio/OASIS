@@ -24,7 +24,7 @@ export default function BookingCard() {
 
    const eventGetter = async () => {
       try {
-         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings/advanced/${sort}${filter}`, {
+         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/bookings/advanced/${sort}${filter}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",

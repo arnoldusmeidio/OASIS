@@ -22,7 +22,7 @@ export default function ReviewPaymentProof({ className, ...props }: CardProps) {
 
    const eventGetter = async () => {
       try {
-         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/orders/${bookingNumber}`, {
+         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/orders/${bookingNumber}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -77,7 +77,7 @@ export default function ReviewPaymentProof({ className, ...props }: CardProps) {
                         onClick={async () => {
                            try {
                               const res = await fetch(
-                                 `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/orders/${bookingNumber}/1`,
+                                 `${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/orders/${bookingNumber}/1`,
                                  {
                                     method: "POST",
                                     headers: { "Content-Type": "application/json" },
@@ -102,7 +102,7 @@ export default function ReviewPaymentProof({ className, ...props }: CardProps) {
                         onClick={async () => {
                            try {
                               const res = await fetch(
-                                 `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/orders/${bookingNumber}/0`,
+                                 `${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/orders/${bookingNumber}/0`,
                                  {
                                     method: "POST",
                                     headers: { "Content-Type": "application/json" },

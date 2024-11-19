@@ -44,7 +44,7 @@ export default function Room() {
       const fetchRoomStatus = async () => {
          if (!roomId) return;
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/room/${roomId}`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/room/${roomId}`, {
             method: "GET",
             credentials: "include",
          });
@@ -103,7 +103,7 @@ export default function Room() {
          images.forEach((file) => formData.append("roomPictures", file));
          formData.append("specialDates", JSON.stringify(specialDates));
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/room/${roomId}`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/room/${roomId}`, {
             method: "PUT",
             body: formData,
             credentials: "include",
