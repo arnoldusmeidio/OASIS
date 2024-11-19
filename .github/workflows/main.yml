@@ -3,8 +3,6 @@ name: Deploy to EC2
 on:
    push:
       branches: [main]
-   pull_request_review:
-      types: [submitted]
 
 jobs:
    deploy:
@@ -23,8 +21,9 @@ jobs:
 
          - name: Build Project
            run: |
+              cd apps/api
               npm ci
-              npx prisma generate --schema=./apps/api/prisma/schema.prisma
+              npx prisma generate --schema=./prisma/schema.prisma
               npm run build
 
          - name: Copy Files to Server
@@ -33,7 +32,7 @@ jobs:
               host: ${{ secrets.EC2_HOST }}
               username: ${{ secrets.EC2_USERNAME }}
               key: ${{ secrets.EC2_PRIVATE_KEY }}
-              source: "./apps/web/.next, ./apps/web/*, ./apps/web/.*, ./apps/api, ./package*.json, ./turbo.json, ./.husky, ./ecosystem.config.cjs"
+              source: "./apps/api, ./package*.json, ./turbo.json, ./.husky, ./ecosystem.config.cjs"
               target: "~/jcwd290402"
 
          - name: Run App

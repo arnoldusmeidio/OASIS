@@ -19,7 +19,7 @@ export default function WalletHistoryCard() {
    const [walletData, setWalletData] = useState<WalletTypes>();
    const eventGetter = async () => {
       try {
-         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/wallets`, {
+         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/wallets`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",

@@ -14,7 +14,7 @@ export default function ProfilePage() {
 
    async function getUser() {
       try {
-         const user = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users`, {
+         const user = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/users`, {
             credentials: "include",
          });
          const data = await user.json();

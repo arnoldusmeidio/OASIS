@@ -34,7 +34,7 @@ export default function BookingCheckout({ className, ...props }: CardProps) {
 
    const eventGetter = async () => {
       try {
-         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings/${bookingNumber}`, {
+         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/bookings/${bookingNumber}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -75,7 +75,7 @@ export default function BookingCheckout({ className, ...props }: CardProps) {
             ev.preventDefault();
             try {
                const response = await fetch(
-                  `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/payments/midtrans/${bookingNumber}`,
+                  `${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/payments/midtrans/${bookingNumber}`,
                   {
                      method: "POST",
                      headers: {

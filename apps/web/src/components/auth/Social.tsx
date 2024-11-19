@@ -12,7 +12,7 @@ interface LabelProps {
 export default function Social({ label }: LabelProps) {
    const router = useRouter();
    const onClick = () => {
-      router.push(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/auth/google`);
+      router.push(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/auth/google`);
    };
 
    return (

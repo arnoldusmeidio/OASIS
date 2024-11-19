@@ -18,7 +18,7 @@ export default function RoomDetail({ params }: { params: { slug: string } }) {
    useEffect(() => {
       const roomGetter = async () => {
          try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/room/${params.slug}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/room/${params.slug}`, {
                method: "GET",
                headers: { "Content-Type": "application/json" },
                credentials: "include",

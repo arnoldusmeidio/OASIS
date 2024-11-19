@@ -23,7 +23,7 @@ export default function RedeemCodeCard({ getUser }: Props) {
       const data = { refCode };
 
       try {
-         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/wallets`, {
+         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/wallets`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),

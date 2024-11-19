@@ -111,7 +111,7 @@ export default function OrderList({ eventGetter, orderData }: Props) {
                                                          onClick={async () => {
                                                             try {
                                                                const res = await fetch(
-                                                                  `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/orders/${booking.bookingNumber}`,
+                                                                  `${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/orders/${booking.bookingNumber}`,
                                                                   {
                                                                      method: "DELETE",
                                                                      headers: { "Content-Type": "application/json" },
