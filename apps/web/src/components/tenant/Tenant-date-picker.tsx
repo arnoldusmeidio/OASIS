@@ -42,7 +42,7 @@ export default function TenantDatePicker({ roomId, roomStatus, setTanggal }: Ten
 
    useEffect(() => {
       async function fetchPrices() {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/room/${roomId}/status`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/room/${roomId}/status`, {
             method: "GET",
             credentials: "include",
          });

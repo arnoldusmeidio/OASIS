@@ -66,7 +66,7 @@ export default function Room() {
          formData.append("roomCapacity", values.roomCapacity.toString());
          images.forEach((file) => formData.append("roomPictures", file));
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/room/${propertyId}`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/room/${propertyId}`, {
             method: "POST",
             body: formData,
             credentials: "include",

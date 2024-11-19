@@ -49,7 +49,7 @@ export default function ChangeProfilePictureForm({ getUser }: Props) {
       });
 
       try {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/users/picture`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/users/picture`, {
             method: "PUT",
             body: formData,
             credentials: "include",

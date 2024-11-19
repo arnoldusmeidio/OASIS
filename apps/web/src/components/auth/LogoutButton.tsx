@@ -16,7 +16,7 @@ export default function LogoutButton({ children, mode = "redirect", asChild }: L
 
    const onClick = async () => {
       try {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/auth/logout`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/auth/logout`, {
             method: "POST",
             headers: {
                "Content-Type": "application/json",

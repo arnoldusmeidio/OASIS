@@ -14,7 +14,7 @@ export default function OrderBody() {
    const [orderData, setOrderData] = useState<Property[]>([]);
    const eventGetter = async () => {
       try {
-         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/orders`, {
+         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/orders`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",

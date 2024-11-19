@@ -66,7 +66,7 @@ export default function CreateProperty() {
          formData.append("propertyCity", values.propertyCity);
          images.forEach((file) => formData.append("propertyPictures", file));
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/tenant/`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/tenant/`, {
             method: "POST",
             body: formData,
             credentials: "include",

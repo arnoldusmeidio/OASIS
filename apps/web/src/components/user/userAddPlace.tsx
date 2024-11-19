@@ -66,7 +66,7 @@ export default function Places() {
    useEffect(() => {
       async function getPlaces() {
          try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/property`);
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/property`);
             const { data } = await response.json();
             setPlaces(data);
          } catch (error) {

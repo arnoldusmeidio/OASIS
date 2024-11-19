@@ -66,7 +66,7 @@ export default function EditProperty({ params }: { params: { slug: string } }) {
          formData.append("category", values.category);
          images.forEach((file) => formData.append("propertyPictures", file));
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/tenant/${params.slug}`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/tenant/${params.slug}`, {
             method: "PUT",
             body: formData,
             credentials: "include",

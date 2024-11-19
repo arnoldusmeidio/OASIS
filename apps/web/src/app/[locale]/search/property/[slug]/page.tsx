@@ -27,7 +27,7 @@ export default function SearchedPropertyPage({ params }: { params: { slug: strin
 
    const getProperty = async () => {
       try {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/property/${params.slug}`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/property/${params.slug}`, {
             credentials: "include",
          });
          const data = await response.json();

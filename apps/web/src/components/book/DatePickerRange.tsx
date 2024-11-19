@@ -61,7 +61,7 @@ export default function DatePickerForm({ className, roomId, currencyRate }: Date
          }
 
          setError("");
-         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings/${roomId}`, {
+         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/bookings/${roomId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(values),
@@ -96,7 +96,7 @@ export default function DatePickerForm({ className, roomId, currencyRate }: Date
 
    useEffect(() => {
       async function fetchPrices() {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/bookings/${roomId}/status`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/bookings/${roomId}/status`, {
             method: "GET",
             credentials: "include",
          });

@@ -122,6 +122,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
          httpOnly: false,
          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30 * 365),
          sameSite: "lax",
+         domain: process.env.COOKIE_DOMAIN,
       });
 
       return res
@@ -132,6 +133,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
                : new Date(Date.now() + 1000 * 60 * 60 * 24),
             sameSite: "none", // need to change on production to be true
             secure: true, // turn off while check on thunderclient
+            domain: process.env.COOKIE_DOMAIN,
          })
          .status(200)
          .json({ message: locale == "id" ? "Berhasil masuk" : "Login success", ok: true, role });
@@ -217,6 +219,7 @@ export async function googleLoginCallback(req: Request, res: Response, next: Nex
          httpOnly: false,
          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30 * 365),
          sameSite: "lax",
+         domain: process.env.COOKIE_DOMAIN,
       });
 
       const successMessage = locale == "id" ? "Berhasil masuk" : "Login success";
@@ -227,6 +230,7 @@ export async function googleLoginCallback(req: Request, res: Response, next: Nex
             expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
             sameSite: "none", // need to change on production to be true
             secure: true, // turn off while check on thunderclient
+            domain: process.env.COOKIE_DOMAIN,
          })
          .redirect(
             role == "tenant"

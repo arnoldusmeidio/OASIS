@@ -44,7 +44,7 @@ export default function RegisterForm() {
 
    const onSubmit = async (values: z.infer<typeof emailVerificationSchema>) => {
       try {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/auth/email-verification`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/v1/auth/email-verification`, {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
