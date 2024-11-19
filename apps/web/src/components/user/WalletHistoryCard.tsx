@@ -51,9 +51,6 @@ export default function WalletHistoryCard() {
    return (
       <>
          <div className="flex h-full w-full flex-col gap-4 self-start p-8">
-            <div className="flex w-[50%] self-center">
-               <WalletCard />
-            </div>
             {isLoading || walletData?.walletHistory.length === 0 ? (
                <div className="flex flex-col gap-4 px-4 py-4">
                   <div className="flex justify-center gap-2 align-middle">
