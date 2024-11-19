@@ -21,8 +21,8 @@ jobs:
 
          - name: Build Project
            run: |
-              cd apps/api
               npm ci
+              cd apps/api
               npx prisma generate --schema=./prisma/schema.prisma
               npm run build
 

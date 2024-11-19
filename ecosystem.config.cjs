@@ -10,7 +10,7 @@ module.exports = {
       {
          namespace: "Oasis Project",
          name: "api",
-         script: "turbo serve",
+         script: "npm run serve",
          cwd: "./apps/api",
          watch: ".",
       },
